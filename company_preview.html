@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Easy-DART | 기업 파헤치기</title>
+  <!-- Google Fonts: Pretendard & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Pretendard', 'Outfit', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              lime: '#10B981',
+              limeDark: '#059669',
+              yellow: '#FACC15',
+              orange: '#FF6B00',
+              purple: '#8B5CF6',
+              dark: '#0F172A',
+            }
+          },
+          boxShadow: {
+            'subtle': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+            'hover': '0 12px 30px -4px rgba(0, 0, 0, 0.12)',
+            'glow': '0 0 25px rgba(16, 185, 129, 0.25)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #F8FAFC;
+      color: #1E293B;
+    }
+    .gradient-hero {
+      background: linear-gradient(135deg, #ECFDF5 0%, #F0FDF4 50%, #FEF3C7 100%);
+    }
+    .card-transition {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .pulse-dot {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.1); }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-emerald-100 selection:text-emerald-900">
+
+  <!-- 1. GNB Navigation Bar (2개 메뉴: 기업 파헤치기 / 퀴즈) -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Logo & Brand -->
+      <div class="flex items-center space-x-8">
+        <a href="company_preview.html" class="flex items-center space-x-2.5 group">
+          <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-black text-xl shadow-md group-hover:scale-105 transition-transform">
+            📈
+          </div>
+          <div>
+            <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Easy-DART</span>
+            <span class="hidden sm:inline-block ml-2 text-xs font-semibold px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200">20대 일상 기업</span>
+          </div>
+        </a>
+
+        <!-- Navigation Tabs -->
+        <nav class="flex items-center space-x-2">
+          <a href="company_preview.html" class="px-4 py-2 rounded-xl text-sm font-bold bg-slate-900 text-white shadow-sm flex items-center gap-1.5 transition-all">
+            <i data-lucide="sparkles" class="w-4 h-4 text-emerald-400"></i> 기업 파헤치기
+          </a>
+          <a href="quiz_preview.html" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors flex items-center gap-1.5">
+            <i data-lucide="gamepad-2" class="w-4 h-4"></i> 퀴즈
+          </a>
+        </nav>
+      </div>
+
+      <!-- Right Simple Status -->
+      <div class="flex items-center space-x-3">
+        <div class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-600 rounded-full text-xs font-semibold border border-slate-200">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span>DART 전자공시 실시간 연동</span>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10 flex-1">
+    
+    <!-- 2. Hero Section : "오늘 내가 쓴 돈 퀵 환산기" -->
+    <section class="gradient-hero rounded-3xl p-6 sm:p-8 border border-emerald-100 shadow-subtle relative overflow-hidden">
+      <div class="absolute -right-12 -bottom-12 w-64 h-64 bg-emerald-200/40 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <!-- Left: Input & Trigger -->
+        <div class="lg:col-span-6 space-y-4">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-bold shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-emerald-300 pulse-dot"></span>
+            내 소비 ➡️ 기업 실적 환산기
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 leading-tight">
+            "내가 쓴 돈, 그 기업은 <br class="hidden sm:inline"/>
+            <span class="text-emerald-700 underline decoration-emerald-400 decoration-wavy">얼마나 남겨먹었을까?</span>"
+          </h1>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            평소 자주 결제하는 브랜드와 금액을 입력해보세요. <br class="hidden sm:inline"/>
+            DART 정기공시 데이터 기반으로 실제 제품 몇 개치 순이익인지 즉시 환산해 드려요!
+          </p>
+
+          <!-- Input Group -->
+          <div class="bg-white p-2.5 rounded-2xl shadow-sm border border-slate-200 flex flex-col sm:flex-row items-center gap-2">
+            <select id="brandSelect" onchange="calculateMetaphor()" class="w-full sm:w-44 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-700 outline-none focus:border-emerald-500 cursor-pointer">
+              <option value="olive">🧴 CJ올리브영 (화장품)</option>
+              <option value="daiso">🛒 아성다이소 (생필품)</option>
+              <option value="starbucks">☕ 스타벅스 (카페)</option>
+              <option value="hyundai">🚗 현대자동차 (차량/주유)</option>
+              <option value="kakao">🎁 카카오 (선물/이모티콘)</option>
+              <option value="baemin">🛵 배달의민족 (치킨/배달)</option>
+            </select>
+            <div class="relative flex-1 w-full">
+              <input id="spendInput" type="number" value="35000" oninput="calculateMetaphor()" class="w-full bg-transparent font-bold text-sm text-slate-800 px-3 py-2 outline-none" placeholder="결제 금액 입력" />
+              <span class="absolute right-3 top-2 text-xs font-bold text-slate-400">원 결제</span>
+            </div>
+            <button onclick="calculateMetaphor()" class="w-full sm:w-auto px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs rounded-xl transition-all shadow-md flex items-center justify-center gap-1 shrink-0">
+              환산하기 <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Metaphor Result Card -->
+        <div class="lg:col-span-6">
+          <div id="resultCard" class="bg-white/90 backdrop-blur-md rounded-2xl p-6 border border-emerald-200 shadow-hover relative">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+              <div class="flex items-center gap-3">
+                <div id="resultIcon" class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl shadow-inner">
+                  🧴
+                </div>
+                <div>
+                  <h3 id="resultTitle" class="font-extrabold text-base text-slate-900">CJ올리브영 체감 분석</h3>
+                  <p id="resultSub" class="text-xs text-slate-500">최근 공시 영업이익률 약 12.2% 적용</p>
+                </div>
+              </div>
+              <span class="text-xs font-bold px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-lg border border-emerald-100">공시 기반</span>
+            </div>
+
+            <!-- Main Calculation Highlight -->
+            <div class="py-5 text-center space-y-1">
+              <p class="text-xs text-slate-500 font-medium">당신이 결제한 <span id="dispSpend" class="font-bold text-slate-800">35,000원</span>으로</p>
+              <p class="text-xl sm:text-2xl font-black text-emerald-800 leading-snug">
+                "올리브영은 <span id="dispMetaphor" class="text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-lg border border-emerald-100">독도토너 1.4병</span>의 순이익을 남겼어요!"
+              </p>
+              <p id="dispMargin" class="text-xs text-slate-500 pt-1">
+                순수 기업 이익금 환산액 : <span class="font-bold text-slate-800">약 4,270원</span>
+              </p>
+            </div>
+
+            <!-- Bottom Action -->
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+              <span class="text-slate-500 font-medium">해당 기업의 사업보고서가 궁금하다면?</span>
+              <button onclick="openCompanyModal('olive')" class="font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 underline underline-offset-4">
+                공시 3줄 요약 보러가기 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 기업 파헤치기 전용 검색 & 필터 영역 (20개 일상 기업) -->
+    <section class="space-y-6">
+      
+      <!-- Section Header & Search Bar -->
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2">
+            <span>🔍</span> 20대 일상 기업 공시 파헤치기
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">
+            반도체/바이오는 잠시 접어두고! 평소 내가 돈 쓰는 친숙한 20개 기업들의 공시문서를 쉽게 분석해 보세요.
+          </p>
+        </div>
+
+        <!-- 기업 검색창 (페이지 내부에 위치) -->
+        <div class="relative w-full md:w-80">
+          <input 
+            type="text" 
+            id="companySearchInput" 
+            onkeyup="filterCompanies()" 
+            placeholder="기업명 검색 (예: 다이소, 하이브, 올리브영)" 
+            class="w-full bg-white border border-slate-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 text-xs sm:text-sm rounded-2xl py-3 pl-10 pr-4 outline-none shadow-sm transition-all" 
+          />
+          <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400"></i>
+        </div>
+      </div>
+
+      <!-- Category Filter Tabs (20개 기업을 4대 카테고리로 5개씩 분류) -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+        <button onclick="setCategoryFilter('all')" class="category-btn active px-4 py-2 rounded-xl text-xs font-bold bg-slate-900 text-white shadow-sm shrink-0">
+          전체 기업 (20)
+        </button>
+        <button onclick="setCategoryFilter('beauty')" class="category-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 shrink-0">
+          🧴 뷰티 / 패션 (5)
+        </button>
+        <button onclick="setCategoryFilter('tech')" class="category-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 shrink-0">
+          💬 IT / 플랫폼 / 콘텐츠 (5)
+        </button>
+        <button onclick="setCategoryFilter('fnb')" class="category-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 shrink-0">
+          ☕ 카페 / 푸드 / 배달 (5)
+        </button>
+        <button onclick="setCategoryFilter('mobility')" class="category-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 shrink-0">
+          🚗 모빌리티 / 라이프 (5)
+        </button>
+      </div>
+
+      <!-- 20개 기업 카드 그리드 (동적 렌더링) -->
+      <div id="companyGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Javascript renders 20 company cards dynamically -->
+      </div>
+
+      <!-- No Results Message -->
+      <div id="noResults" class="hidden py-16 text-center space-y-2">
+        <p class="text-3xl">🔎</p>
+        <p class="text-sm font-bold text-slate-700">검색 결과가 없습니다.</p>
+        <p class="text-xs text-slate-400">다른 일상 기업 이름으로 검색해 보세요!</p>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- 4. 기업 공시 상세 파헤치기 모달 (AI 3줄 요약 & 쉬운 재무제표) -->
+  <div id="companyModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 sm:p-6">
+    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-2xl relative border border-slate-100">
+      
+      <!-- Modal Close Button -->
+      <button onclick="closeCompanyModal()" class="absolute right-5 top-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+
+      <!-- Modal Content Placeholder -->
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200/80 py-6 mt-12 text-center text-xs text-slate-400">
+    <div class="max-w-7xl mx-auto px-4 space-y-2">
+      <p class="font-semibold text-slate-600">📈 Easy-DART — 주린이를 위한 20대 일상 기업 전자공시 해설 플랫폼</p>
+      <p>금융감독원 Open DART API 기반 데이터 분석 및 AI 요약 제공 • 투자 권유 목적이 아닌 정보 제공용 서비스입니다.</p>
+    </div>
+  </footer>
+
+  <!-- Interactive Scripts (20개 기업 전체 데이터 포함) -->
+  <script>
+    // 20개 일상 기업 마스터 데이터
+    const companiesData = [
+      // 1. 뷰티 & 패션 (5개)
+      {
+        id: 'olive',
+        name: 'CJ올리브영',
+        category: 'beauty',
+        categoryName: '뷰티 & 헬스케어',
+        icon: '🧴',
+        statusBadge: '성장세 📈',
+        keywords: '올리브영 cj올리브영 화장품 스킨 독도토너',
+        metaphor: '연간 매출 3.8조 원 돌파! 전 국민이 립밤 10개씩 구매한 규모',
+        stat1: { label: '영업이익률', val: '12.2%' },
+        stat2: { label: '온라인 비중', val: '30.6%' },
+        docName: '2023 정기 사업보고서',
+        summary: [
+          '연간 매출 3조 8,682억 원(+39%)으로 역대 최대 실적을 달성했어요.',
+          '오늘드림(당일 배송) 인기로 온라인 매출 비중이 사상 처음 30%를 돌파했습니다.',
+          '영업이익률 12.2%로 일반 마트/백화점(3~5%) 대비 3배 이상 압도적인 수익성을 기록했습니다.'
+        ],
+        goodPoints: ['압도적인 오프라인 매장 독점력', 'K-뷰티 외국인 관광객 매출 200% 폭증', '자체 PB브랜드 고마진'],
+        risks: ['공정위 규제 및 납품업체 상생 이슈', '국내 시장 포화에 따른 해외 확장 과제']
+      },
+      {
+        id: 'musinsa',
+        name: '무신사',
+        category: 'beauty',
+        categoryName: '패션 & 커머스',
+        icon: '👕',
+        statusBadge: '거래액 4조 🛍️',
+        keywords: '무신사 패션 옷 쇼핑 29cm',
+        metaphor: '연간 거래액 4조 돌파! 5만 원짜리 맨투맨 8,000만 장 거래 규모',
+        stat1: { label: '연간 매출', val: '9,931억 원' },
+        stat2: { label: '회원 수', val: '1,500만 명' },
+        docName: '2023 감사보고서',
+        summary: [
+          '연간 거래액 4조 원을 돌파하며 국내 1등 패션 플랫폼으로 확고히 자리잡았습니다.',
+          '29CM와 스타일쉐어 합병 시너지로 여성 패션 카테고리 점유율을 크게 확대했습니다.',
+          '오프라인 플래그십 매장(홍대, 성수 등) 진출로 고객 접점을 넓히고 있습니다.'
+        ],
+        goodPoints: ['1030 세대 패션 시장 지배력', '29CM 인수로 여성 고객층 대폭 확보'],
+        risks: ['알리/테무 등 C-커머스 초저가 공세', '오프라인 투자에 따른 단기 마진 압박']
+      },
+      {
+        id: 'amore',
+        name: '아모레퍼시픽',
+        category: 'beauty',
+        categoryName: 'K-뷰티 코스메틱',
+        icon: '💄',
+        statusBadge: '체질개선 🔄',
+        keywords: '아모레퍼시픽 설화수 이니스프리 코스알엑스',
+        metaphor: '코스알엑스 인수로 미국 아마존 화장품 1위 달성!',
+        stat1: { label: '글로벌 매출', val: '북미/유럽 +58%' },
+        stat2: { label: '대표 브랜드', val: '설화수, 라네즈' },
+        docName: '2023 사업보고서',
+        summary: [
+          '중국 의존도를 낮추고 미국·유럽·일본 시장으로 수출 다변화에 성공했습니다.',
+          '스킨케어 브랜드 코스알엑스(COSRX)를 인수해 글로벌 틱톡 메가히트를 쳤습니다.',
+          '면세점 부진을 극복하고 북미/EMEA 지역 매출이 50% 이상 급성장했습니다.'
+        ],
+        goodPoints: ['북미 시장 성공적 안착', '코스알엑스 실적 연결 편입 시너지'],
+        risks: ['중국 시장 회복 지연', '글로벌 뷰티 경쟁 심화']
+      },
+      {
+        id: 'ably',
+        name: '에이블리 (에이블리코퍼레이션)',
+        category: 'beauty',
+        categoryName: 'AI 스타일 커머스',
+        icon: '👗',
+        statusBadge: '첫 연간흑자 🎉',
+        keywords: '에이블리 여성의류 쇼핑몰 뷰티 10대',
+        metaphor: '1020 여성 앱 사용자 1위! 론칭 후 첫 연간 흑자 달성!',
+        stat1: { label: '연간 매출', val: '2,595억 원' },
+        stat2: { label: '영업이익', val: '33억 (흑자전환)' },
+        docName: '2023 감사보고서',
+        summary: [
+          '창사 이래 처음으로 연간 영업이익 흑자 전환에 성공했습니다.',
+          'AI 개인화 추천 알고리즘으로 패션뿐 아니라 뷰티, 라이프까지 장바구니를 확장했습니다.',
+          '월간 활성 사용자(MAU) 약 800만 명으로 1020 여성 1위 앱을 유지 중입니다.'
+        ],
+        goodPoints: ['강력한 AI 추천 기술력', '패션 ➡️ 뷰티/웹툰으로 카테고리 확장 성공'],
+        risks: ['커머스 간 무료배송 출혈 경쟁', '소호몰 입점 수수료 의존도']
+      },
+      {
+        id: 'fnf',
+        name: 'F&F (에프앤에프)',
+        category: 'beauty',
+        categoryName: 'K-패션 & 아웃도어',
+        icon: '🧢',
+        statusBadge: '해외대박 🌏',
+        keywords: '에프앤에프 mlb 디스커버리 모자 패딩',
+        metaphor: '중국에서만 MLB 모자/의류 1조 원 넘게 팔아치운 저력!',
+        stat1: { label: '영업이익률', val: '22.8% (초고마진)' },
+        stat2: { label: '중국 매장수', val: '1,100여 개' },
+        docName: '2023 사업보고서',
+        summary: [
+          'MLB 브랜드의 중국 내 폭발적 인기로 패션업계 최고 수준인 22.8% 영업이익률을 달성했습니다.',
+          '디스커버리(Discovery)와 MLB 라이선스를 기반으로 글로벌 브랜드 파워를 구축했습니다.',
+          '엔터테인먼트 및 테니스/골프 브랜드 인수로 포트폴리오를 다변화하고 있습니다.'
+        ],
+        goodPoints: ['패션업계 독보적 20%대 마진율', '중국 및 아시아 시장 성공'],
+        risks: ['해외 라이선스 브랜드 계약 의존', '중국 내 소비 경기 둔화 가능성']
+      },
+
+      // 2. IT & 플랫폼 & 콘텐츠 (5개)
+      {
+        id: 'naver',
+        name: '네이버',
+        category: 'tech',
+        categoryName: '포털 & 커머스 & AI',
+        icon: '🟢',
+        statusBadge: '매출 9.6조 🌐',
+        keywords: '네이버 웹툰 네이버페이 스마트스토어 ai',
+        metaphor: '연간 매출 9.6조! 대한민국 전 국민이 네이버 쇼핑 20만 원씩 이용',
+        stat1: { label: '연간 매출', val: '9조 6,706억' },
+        stat2: { label: '영업이익', val: '1조 4,888억' },
+        docName: '2023 사업보고서',
+        summary: [
+          '검색, 커머스, 페이, 웹툰, 클라우드 전 사업부가 고르게 성장해 역대 최대 매출을 기록했습니다.',
+          '생성형 AI 하이퍼클로바X를 공개하며 B2B AI 솔루션 시장을 선점하고 있습니다.',
+          '포시마크(Poshmark) 인수를 통해 북미 C2C 커머스 시장에 진출했습니다.'
+        ],
+        goodPoints: ['압도적인 국내 검색 & 쇼핑 생태계', '네이버웹툰 미국 나스닥 상장'],
+        risks: ['유튜브/인스타그램에 검색 점유율 일부 분산', '글로벌 빅테크 AI 경쟁']
+      },
+      {
+        id: 'kakao',
+        name: '카카오',
+        category: 'tech',
+        categoryName: '메신저 & 콘텐츠',
+        icon: '💬',
+        statusBadge: '조정기 ⚠️',
+        keywords: '카카오 카카오톡 선물하기 이모티콘 톡비즈',
+        metaphor: '선물하기 거래액 2.5조! 국민 1인당 커피 12잔씩 선물한 셈',
+        stat1: { label: '카톡 이용자', val: '4,800만 명' },
+        stat2: { label: '연간 매출', val: '7조 5,570억' },
+        docName: '2023 사업보고서',
+        summary: [
+          '카카오톡 4,800만 국민 락인 효과를 기반으로 톡비즈와 선물하기가 견고하게 유지되었습니다.',
+          'AI 연구비와 신사업 인프라 투자 확대로 영업이익은 다소 감소했습니다.',
+          '본업인 카카오톡 중심의 메신저 고도화(카나나 AI)와 비핵심 계열사 정리에 집중하고 있습니다.'
+        ],
+        goodPoints: ['국민 메신저 기반 강력한 현금흐름', '선물하기 시장 독점적 지위'],
+        risks: ['AI 연구개발비 증가', '지배구조 및 규제 리스크']
+      },
+      {
+        id: 'daangn',
+        name: '당근 (당근마켓)',
+        category: 'tech',
+        categoryName: '지역 생활 커뮤니티',
+        icon: '🥕',
+        statusBadge: '첫 흑자달성 🎉',
+        keywords: '당근 당근마켓 중고거래 당근페이 동네생활',
+        metaphor: '가입자 3,600만 명! 동네 광고 매출 급증으로 사상 첫 흑자 달성!',
+        stat1: { label: '연간 매출', val: '1,276억 원' },
+        stat2: { label: '영업이익', val: '173억 (흑자)' },
+        docName: '2023 감사보고서',
+        summary: [
+          '동네 소상공인 지역 광고와 당근페이 성장에 힘입어 론칭 8년 만에 첫 연간 흑자를 냈습니다.',
+          '가입자 3,600만 명, 주간 이용자 1,200만 명의 강력한 지역 커뮤니티 트래픽을 입증했습니다.',
+          '캐나다, 영국, 일본 등 해외 시장(Karrot) 진출을 적극적으로 추진하고 있습니다.'
+        ],
+        goodPoints: ['중고거래를 넘어선 하이퍼로컬 광고 수익화', '압도적인 MAU'],
+        risks: ['전문 리셀러 및 분쟁 대응 비용', '해외 진출 초기 마케팅비 발생']
+      },
+      {
+        id: 'hybe',
+        name: '하이브 (HYBE)',
+        category: 'tech',
+        categoryName: '엔터 & 글로벌 팬덤',
+        icon: '🎤',
+        statusBadge: '매출 2조 🎵',
+        keywords: '하이브 bts 세븐틴 뉴진스 위버스 엔터',
+        metaphor: '연간 앨범 판매 4,300만 장! K-POP 엔터 최초 매출 2조 돌파!',
+        stat1: { label: '연간 매출', val: '2조 1,780억' },
+        stat2: { label: '음반 판매량', val: '4,360만 장' },
+        docName: '2023 사업보고서',
+        summary: [
+          'BTS 군 복무 중에도 세븐틴, 투모로우바이투게더, 뉴진스 등 멀티레이블 활약으로 사상 최대 매출을 달성했습니다.',
+          '팬덤 플랫폼 위버스(Weverse)의 글로벌 유료 결제 및 MAU가 지속적으로 성장했습니다.',
+          '미국 현지화 아이돌(캣츠아이) 프로젝트 등 글로벌 현지화 전략을 펼치고 있습니다.'
+        ],
+        goodPoints: ['멀티레이블 시스템의 실적 분산 성공', '위버스 플랫폼의 고마진 굿즈/멤버십'],
+        risks: ['레이블 갈등 및 아티스트 전속계약 리스크', '핵심 아티스트 의존도']
+      },
+      {
+        id: 'krafton',
+        name: '크래프톤',
+        category: 'tech',
+        categoryName: '게임 & 글로벌 IP',
+        icon: '🎮',
+        statusBadge: '영업익 7,600억 🚀',
+        keywords: '크래프톤 배틀그라운드 펍지 치킨 모바일게임',
+        metaphor: '배틀그라운드 인도(BGMI) 대박! 게임업계 최고 수준 40% 영업이익률!',
+        stat1: { label: '연간 매출', val: '1조 9,106억' },
+        stat2: { label: '영업이익률', val: '40.2% (초대박)' },
+        docName: '2023 사업보고서',
+        summary: [
+          '배틀그라운드 PC/콘솔 무료화 및 모바일 인도 서비스 재개로 역대 최대 영업이익(7,680억)을 거뒀습니다.',
+          '해외 매출 비중이 94%에 달해 국내 게임사 중 가장 뛰어난 글로벌 수출 경쟁력을 증명했습니다.',
+          '인공지능(Deep Learning) 기술을 활용한 차세대 게임 개발에 적극 투자 중입니다.'
+        ],
+        goodPoints: ['독보적인 40%대 영업이익률', '94%에 달하는 탄탄한 해외 매출'],
+        risks: ['배틀그라운드 단일 IP에 대한 높은 의존도', '신작 흥행 불확실성']
+      },
+
+      // 3. 카페 & 푸드 & 배달 (5개)
+      {
+        id: 'starbucks',
+        name: '스타벅스 (SCK컴퍼니)',
+        category: 'fnb',
+        categoryName: '커피 & F&B',
+        icon: '☕',
+        statusBadge: '안정적 ☕',
+        keywords: '스타벅스 sck 커피 아메리카노 사이렌오더',
+        metaphor: '하루 커피 120만 잔! 1.8초마다 아메리카노 1잔씩 팔리는 규모',
+        stat1: { label: '연간 매출', val: '2조 9,295억' },
+        stat2: { label: '전국 매장수', val: '1,890개점' },
+        docName: '2023 감사보고서',
+        summary: [
+          '연간 매출 약 2조 9,295억 원으로 한국 커피 시장 1등을 굳건히 지켰습니다.',
+          '원두 및 우유 가격 인상에도 불구하고 사이렌오더와 프리미엄 MD 판매로 선방했습니다.',
+          '전국 1,890개 전 매장 직영 체제로 안정적인 품질 관리와 현금 흐름을 보여줍니다.'
+        ],
+        goodPoints: ['스타벅스 카드 선불충전금 유입으로 막강한 현금력', '두터운 충성 고객층'],
+        risks: ['저가 커피(메가커피/컴포즈)의 매장수 추격', '원두/인건비 원가 상승']
+      },
+      {
+        id: 'baemin',
+        name: '우아한형제들 (배달의민족)',
+        category: 'fnb',
+        categoryName: '배달 & 커머스',
+        icon: '🛵',
+        statusBadge: '영업익 7,000억 🍗',
+        keywords: '배달의민족 우아한형제들 배민 치킨 b마트',
+        metaphor: '영업이익 7,000억 원! 치킨 3,500만 마리 순이익에 해당하는 규모',
+        stat1: { label: '연간 매출', val: '3조 4,155억' },
+        stat2: { label: '영업이익률', val: '20.5% (초고마진)' },
+        docName: '2023 감사보고서',
+        summary: [
+          '연간 매출 3.4조, 영업이익 약 7,000억 원으로 역대 최고 실적(어닝 서프라이즈)을 기록했습니다.',
+          '알뜰배달 도입과 배달 동선 최적화로 배달비 원가를 대폭 절감했습니다.',
+          'B마트(퀵커머스)가 흑자 전환에 성공하며 신성장 동력을 확보했습니다.'
+        ],
+        goodPoints: ['국내 배달 앱 점유율 65% 독점', 'B마트 흑자 전환 시너지'],
+        risks: ['쿠팡이츠의 무료배달 공세', '자영업자 수수료 갈등 이슈']
+      },
+      {
+        id: 'cj_food',
+        name: 'CJ제일제당',
+        category: 'fnb',
+        categoryName: 'K-푸드 & 바이오',
+        icon: '🥟',
+        statusBadge: '비비고 글로벌 🥟',
+        keywords: 'cj제일제당 비비고 만두 햇반 슈완스',
+        metaphor: '미국 만두 시장 점유율 1위! 비비고 만두로만 글로벌 1조 원 돌파!',
+        stat1: { label: '식품 매출', val: '11조 2,644억' },
+        stat2: { label: '미국 점유율', val: '만두 1위 (42%)' },
+        docName: '2023 사업보고서',
+        summary: [
+          '미국 냉동식품 1위 자회사 슈완스와 비비고 만두/치킨/가공밥의 글로벌 대성공을 거뒀습니다.',
+          '국내에서는 햇반, 비비고, 고메 등 프리미엄 HMR 시장을 선도하고 있습니다.',
+          '고수익 바이오/발효 아미노산 사업부의 실적 턴어라운드가 진행 중입니다.'
+        ],
+        goodPoints: ['미국/유럽 시장에서 비비고 브랜드 성공', '독보적인 가공식품 R&D 경쟁력'],
+        risks: ['국제 곡물 가격 및 원당 가격 변동', '국내 내수 소비 침체']
+      },
+      {
+        id: 'bgf',
+        name: 'BGF리테일 (CU 편의점)',
+        category: 'fnb',
+        categoryName: '편의점 유통',
+        icon: '🏪',
+        statusBadge: '연세대빵 신드롬 🥖',
+        keywords: 'bgf리테일 cu 편의점 연세우유빵 편스토랑',
+        metaphor: '전국 CU 매장 17,700개! 연세우유 생크림빵 5,000만 개 판매!',
+        stat1: { label: '연간 매출', val: '8조 1,948억' },
+        stat2: { label: '전국 점포수', val: '17,762개점' },
+        docName: '2023 사업보고서',
+        summary: [
+          '연세우유 크림빵, PB 득템시리즈 등 차별화된 상품 기획으로 연 매출 8조를 돌파했습니다.',
+          '1인 가구 증가에 맞춘 소용량 신선식품과 주류 특화 매장으로 객단가를 높였습니다.',
+          '몽골, 말레이시아, 카자흐스탄 등 K-편의점 해외 수출을 확장하고 있습니다.'
+        ],
+        goodPoints: ['트렌드를 주도하는 메가 히트 PB 기획력', '안정적인 1인 가구 근거리 유통망'],
+        risks: ['국내 편의점 출점 포화', '최저임금 인상에 따른 가맹점 상생 비용']
+      },
+      {
+        id: 'ottogi',
+        name: '오뚜기',
+        category: 'fnb',
+        categoryName: '종합 식품',
+        icon: '🍜',
+        statusBadge: '갓뚜기 💛',
+        keywords: '오뚜기 진라면 카레 케찹 오뚜기밥',
+        metaphor: '진라면 연간 7억 개 판매! 전 국민이 1년에 14봉지씩 끓여먹은 셈',
+        stat1: { label: '연간 매출', val: '3조 4,545억' },
+        stat2: { label: '영업이익', val: '2,549억 원' },
+        docName: '2023 사업보고서',
+        summary: [
+          '진라면, 3분카레, 케찹, 마요네즈 등 서민 장바구니 필수 제품군으로 연 매출 3.4조를 기록했습니다.',
+          '방탄소년단(BTS) 진을 모델로 한 진라면 글로벌 마케팅으로 해외 수출이 급증했습니다.',
+          '가격 대비 높은 품질과 착한 기업 이미지로 두터운 브랜드 신뢰를 유지하고 있습니다.'
+        ],
+        goodPoints: ['카레/케찹 등 1등 독점 품목 30여 개 보유', '진라면 해외 수출 가속화'],
+        risks: ['라면/가공식품 정부 물가 안정 압박', '원자재(밀가루/팜유) 수입 단가']
+      },
+
+      // 4. 모빌리티 & 라이프스타일 (5개)
+      {
+        id: 'hyundai',
+        name: '현대자동차',
+        category: 'mobility',
+        categoryName: '모빌리티 & 완성차',
+        icon: '🚗',
+        statusBadge: '영업익 15조 🚀',
+        keywords: '현대차 현대자동차 아반떼 싼타페 제네시스 전기차',
+        metaphor: '연간 영업이익 15조 원 신기록! 아반떼 75만 대 순마진 규모',
+        stat1: { label: '영업이익', val: '15조 1,269억' },
+        stat2: { label: '글로벌 순위', val: '완성차 TOP 3' },
+        docName: '2023 사업보고서',
+        summary: [
+          '영업이익 15조 1,269억 원으로 삼성전자를 제치고 대한민국 기업 영업이익 1위에 등극했습니다.',
+          '고수익 SUV(싼타페/투싼)와 제네시스 프리미엄 판매 비중이 실적을 견인했습니다.',
+          '하이브리드(HEV) 차종의 폭발적인 인기로 글로벌 전기차 둔화를 성공적으로 방어했습니다.'
+        ],
+        goodPoints: ['글로벌 최고 수준의 하이브리드 기술력', '제네시스 브랜드의 안착'],
+        risks: ['미국/유럽의 전기차 보조금 및 관세 리스크', '글로벌 고금리 신차 수요 둔화']
+      },
+      {
+        id: 'kia',
+        name: '기아 (KIA)',
+        category: 'mobility',
+        categoryName: '모빌리티 & 레저차량',
+        icon: '🚘',
+        statusBadge: '영업익률 11.6% 🔥',
+        keywords: '기아 기아차 카니발 쏘렌토 ev9 스포티지',
+        metaphor: '쏘렌토·카니발 품귀 현상! 글로벌 완성차 최고 수준 두 자릿수 마진율!',
+        stat1: { label: '영업이익', val: '11조 6,079억' },
+        stat2: { label: '영업이익률', val: '11.6% (글로벌 톱)' },
+        docName: '2023 사업보고서',
+        summary: [
+          '연간 영업이익 11조 6,000억 원, 영업이익률 11.6%로 테슬라를 앞서는 수익성을 기록했습니다.',
+          'RV(레저용 차량) 쏘렌토, 카니발, 스포티지가 국내외에서 역대급 판매고를 올렸습니다.',
+          'PBV(목적기반 모빌리티) 신사업을 통해 미래 배송/물류 차량 시장을 준비하고 있습니다.'
+        ],
+        goodPoints: ['RV 라인업의 압도적 시장 선호도', '업계 최고 수준의 원가 관리 능력'],
+        risks: ['노사 관계 및 생산 유연성', '신흥국 전기차 시장 경쟁']
+      },
+      {
+        id: 'daiso',
+        name: '아성다이소',
+        category: 'mobility',
+        categoryName: '균일가 생활용품',
+        icon: '🛒',
+        statusBadge: '매출 3조 돌파 🪙',
+        keywords: '아성다이소 다이소 천원 뷰티 리들샷 생필품',
+        metaphor: '연간 매출 3조 원 돌파! 1,000원짜리 생필품 30억 개 판매한 규모',
+        stat1: { label: '연간 매출', val: '3조 4,604억' },
+        stat2: { label: '1000원 비중', val: '약 50% 유지' },
+        docName: '2023 감사보고서',
+        summary: [
+          '고물가 시대에 가성비 열풍을 타고 사상 처음으로 연 매출 3조 원을 돌파했습니다.',
+          'VT 리들샷 등 5,000원 이하 다이소 뷰티 화장품이 품절 대란을 일으키며 뷰티 성지로 떠올랐습니다.',
+          '일본 지분을 전량 인수하여 순수 100% 한국 토종 기업으로 재탄생했습니다.'
+        ],
+        goodPoints: ['고물가 불황에 더 강한 균일가 비즈니스', '다이소 뷰티 품목의 메가히트'],
+        risks: ['1000~5000원 가격 상한 정책에 따른 원가 압박', 'C-커머스(알리) 직구 경쟁']
+      },
+      {
+        id: 'cgv',
+        name: 'CJ CGV',
+        category: 'mobility',
+        categoryName: '극장 & 멀티플렉스',
+        icon: '🍿',
+        statusBadge: '흑자전환 🎬',
+        keywords: 'cj cgv cgv 영화관 팝콘 아이맥스 4dx',
+        metaphor: '서울의 봄·파묘 천만 관객 돌파! IMAX/4DX 특별관 매출 급증!',
+        stat1: { label: '연간 매출', val: '1조 5,458억' },
+        stat2: { label: '영업이익', val: '491억 (흑자)' },
+        docName: '2023 사업보고서',
+        summary: [
+          '코로나19 터널을 지나 4년 만에 연간 영업이익 흑자 전환에 성공했습니다.',
+          'IMAX, 4DX, ScreenX 등 객단가가 높은 특별관 관람 비중이 역대 최대를 기록했습니다.',
+          '콘서트 실황 중계, e스포츠 상영, 클라이밍장(피커스) 등 공간 플랫폼으로 진화 중입니다.'
+        ],
+        goodPoints: ['특별관(4DX/ScreenX) 글로벌 라이선스 수출', '공간 다각화 시도'],
+        risks: ['OTT(넷플릭스 등) 대중화로 인한 영화 관람 습관 변화', '과거 차입금 이자 부담']
+      },
+      {
+        id: 'yanolja',
+        name: '야놀자',
+        category: 'mobility',
+        categoryName: '여행 & 여가 테크',
+        icon: '✈️',
+        statusBadge: '글로벌 테크 🏨',
+        keywords: '야놀자 호텔 모텔 숙박 비행기 인터파크트리플',
+        metaphor: '인터파크트리플 인수로 항공·여행 1위! 미국 나스닥 상장 추진!',
+        stat1: { label: '연간 매출', val: '7,667억 원' },
+        stat2: { label: '클라우드', val: '영업익 흑자 견인' },
+        docName: '2023 사업보고서',
+        summary: [
+          '국내 숙박 예약을 넘어 인터파크트리플 인수로 해외 항공/패키지 여행 1위로 도약했습니다.',
+          '전 세계 호텔에 공급하는 야놀자클라우드 솔루션 부문이 급성장하며 글로벌 테크 기업으로 진화했습니다.',
+          '해외 여행 수요 회복과 클라우드 부문 흑자로 미국 나스닥 상장을 준비하고 있습니다.'
+        ],
+        goodPoints: ['글로벌 200여 개국 호텔 솔루션(B2B Cloud) 확장', '해외 여행 독점적 패키지'],
+        risks: ['글로벌 OTA(아고다/부킹닷컴) 경쟁', '나스닥 상장 밸류에이션 변동성']
+      }
+    ];
+
+    // 소비 환산기 데이터
+    const brandData = {
+      olive: { title: 'CJ올리브영 체감 분석', icon: '🧴', marginRate: 0.122, itemPrice: 3000, itemName: '독도토너', unit: '병' },
+      daiso: { title: '아성다이소 체감 분석', icon: '🛒', marginRate: 0.088, itemPrice: 1000, itemName: '1,000원 생필품', unit: '개' },
+      starbucks: { title: '스타벅스(SCK) 체감 분석', icon: '☕', marginRate: 0.075, itemPrice: 1500, itemName: '아메리카노 Tall', unit: '잔' },
+      hyundai: { title: '현대자동차 체감 분석', icon: '🚗', marginRate: 0.093, itemPrice: 18000, itemName: '차량용 방향제', unit: '개' },
+      kakao: { title: '카카오 체감 분석', icon: '🎁', marginRate: 0.081, itemPrice: 800, itemName: '이모티콘 플러스', unit: '세트' },
+      baemin: { title: '배달의민족 체감 분석', icon: '🛵', marginRate: 0.205, itemPrice: 2500, itemName: '황금올리브 배달건', unit: '회' }
+    };
+
+    function renderCompanyCards(items) {
+      const grid = document.getElementById('companyGrid');
+      grid.innerHTML = items.map(c => `
+        <div class="company-card bg-white rounded-3xl p-6 border border-slate-200 shadow-subtle hover:shadow-hover card-transition cursor-pointer group" data-category="${c.category}" data-name="${c.name} ${c.keywords}" onclick="openCompanyModal('${c.id}')">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                ${c.icon}
+              </div>
+              <div>
+                <h3 class="font-extrabold text-base text-slate-900">${c.name}</h3>
+                <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">${c.categoryName}</span>
+              </div>
+            </div>
+            <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">${c.statusBadge}</span>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1 mb-4">
+            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">체감 환산 💡</p>
+            <p class="text-xs sm:text-sm font-extrabold text-slate-800 leading-snug">
+              "${c.metaphor}"
+            </p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div class="p-2.5 rounded-xl bg-slate-50">
+              <p class="text-[10px] text-slate-400">${c.stat1.label}</p>
+              <p class="font-black text-slate-800 text-sm">${c.stat1.val}</p>
+            </div>
+            <div class="p-2.5 rounded-xl bg-slate-50">
+              <p class="text-[10px] text-slate-400">${c.stat2.label}</p>
+              <p class="font-black text-emerald-700 text-sm">${c.stat2.val}</p>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+            <span>DART ${c.docName}</span>
+            <span class="font-bold text-emerald-600 group-hover:translate-x-1 transition-transform flex items-center gap-0.5">상세 파헤치기 ➡️</span>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function calculateMetaphor() {
+      const brandKey = document.getElementById('brandSelect').value;
+      const spendVal = Number(document.getElementById('spendInput').value) || 0;
+      const data = brandData[brandKey];
+
+      const marginEarned = Math.round(spendVal * data.marginRate);
+      const itemCount = (marginEarned / data.itemPrice).toFixed(1);
+
+      document.getElementById('resultIcon').innerText = data.icon;
+      document.getElementById('resultTitle').innerText = data.title;
+      document.getElementById('resultSub').innerText = `최근 공시 영업이익률 약 ${(data.marginRate * 100).toFixed(1)}% 적용`;
+      document.getElementById('dispSpend').innerText = `${spendVal.toLocaleString()}원`;
+      document.getElementById('dispMetaphor').innerText = `${data.itemName} ${itemCount}${data.unit}`;
+      document.getElementById('dispMargin').innerHTML = `순수 기업 이익금 환산액 : <span class="font-bold text-slate-800">약 ${marginEarned.toLocaleString()}원</span>`;
+
+      const card = document.getElementById('resultCard');
+      card.classList.add('scale-[1.02]');
+      setTimeout(() => card.classList.remove('scale-[1.02]'), 150);
+    }
+
+    function filterCompanies() {
+      const query = document.getElementById('companySearchInput').value.toLowerCase().trim();
+      const filtered = companiesData.filter(c => 
+        c.name.toLowerCase().includes(query) || c.keywords.toLowerCase().includes(query)
+      );
+      renderCompanyCards(filtered);
+      document.getElementById('noResults').classList.toggle('hidden', filtered.length > 0);
+    }
+
+    function setCategoryFilter(category) {
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.className = 'category-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 shrink-0';
+      });
+      event.target.className = 'category-btn active px-4 py-2 rounded-xl text-xs font-bold bg-slate-900 text-white shadow-sm shrink-0';
+
+      const filtered = category === 'all' 
+        ? companiesData 
+        : companiesData.filter(c => c.category === category);
+      
+      renderCompanyCards(filtered);
+      document.getElementById('noResults').classList.toggle('hidden', filtered.length > 0);
+    }
+
+    function openCompanyModal(id) {
+      window.location.href = `company_detail_preview.html?id=${id}`;
+    }
+
+    // Initialize Page
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCompanyCards(companiesData);
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

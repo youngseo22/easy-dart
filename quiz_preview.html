@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Easy-DART | 주식 & 회계 기초 용어 퀴즈</title>
+  <!-- Google Fonts: Pretendard & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Pretendard', 'Outfit', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              lime: '#10B981',
+              limeDark: '#059669',
+              yellow: '#FACC15',
+              orange: '#FF6B00',
+              purple: '#8B5CF6',
+              dark: '#0F172A',
+            }
+          },
+          boxShadow: {
+            'subtle': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+            'hover': '0 12px 30px -4px rgba(0, 0, 0, 0.12)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #F8FAFC;
+      color: #1E293B;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-indigo-100 selection:text-indigo-900">
+
+  <!-- 1. GNB Navigation Bar -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Logo & Brand -->
+      <div class="flex items-center space-x-8">
+        <a href="company_preview.html" class="flex items-center space-x-2.5 group">
+          <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-black text-xl shadow-md group-hover:scale-105 transition-transform">
+            🎯
+          </div>
+          <div>
+            <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-600 to-emerald-600 bg-clip-text text-transparent">Easy-DART</span>
+            <span class="hidden sm:inline-block ml-2 text-xs font-semibold px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded-full border border-indigo-200">주식 용어 퀴즈</span>
+          </div>
+        </a>
+
+        <!-- Navigation Tabs -->
+        <nav class="flex items-center space-x-2">
+          <a href="company_preview.html" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors flex items-center gap-1.5">
+            <i data-lucide="sparkles" class="w-4 h-4"></i> 기업 파헤치기
+          </a>
+          <a href="quiz_preview.html" class="px-4 py-2 rounded-xl text-sm font-bold bg-slate-900 text-white shadow-sm flex items-center gap-1.5 transition-all">
+            <i data-lucide="help-circle" class="w-4 h-4 text-yellow-400"></i> 주식 용어 퀴즈
+          </a>
+        </nav>
+      </div>
+
+      <!-- Right Simple Status -->
+      <div class="flex items-center space-x-3">
+        <div class="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 text-indigo-700 rounded-full text-xs font-bold border border-indigo-200">
+          <span>📚</span>
+          <span>주린이 기초 체력장</span>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 flex-1 w-full">
+    
+    <!-- 2. Header & Topic Selector -->
+    <div class="text-center space-y-3">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100 text-indigo-800 text-xs font-bold">
+        <span>📖</span> 기초 용어 정복 아레나
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-black text-slate-900">
+        "매출액과 영업이익, 헷갈리지 않으신가요?"
+      </h1>
+      <p class="text-xs sm:text-sm text-slate-500 max-w-lg mx-auto leading-relaxed">
+        주식 공시 문서를 읽기 전 꼭 알아야 할 기초 회계/주식 필수 용어들을 재미있는 퀴즈로 쉽게 마스터해 보세요!
+      </p>
+
+      <!-- Category Filter Buttons -->
+      <div class="flex flex-wrap items-center justify-center gap-2 pt-2">
+        <button onclick="changeTopic('all')" class="topic-btn active px-4 py-1.5 rounded-full text-xs font-bold bg-slate-900 text-white shadow-sm transition-all">
+          전체 용어 퀴즈
+        </button>
+        <button onclick="changeTopic('income')" class="topic-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all">
+          💰 손익 & 돈버는법
+        </button>
+        <button onclick="changeTopic('audit')" class="topic-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all">
+          📋 감사의견 & 성적표
+        </button>
+        <button onclick="changeTopic('indicator')" class="topic-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all">
+          📈 주식 기본 지표
+        </button>
+      </div>
+    </div>
+
+    <!-- 3. Active Term Quiz Card -->
+    <div class="bg-white rounded-3xl p-6 sm:p-9 border border-slate-200/90 shadow-subtle relative overflow-hidden space-y-6">
+      
+      <!-- Top Meta Info & Progress -->
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100 text-xs font-bold">
+        <div class="flex items-center gap-2">
+          <span id="quizIcon" class="text-xl">💰</span>
+          <span id="quizCategory" class="text-slate-800 text-sm">손익계산서 필수 용어</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span id="quizTypeBadge" class="px-2.5 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100">개념 퀴즈</span>
+          <span id="quizProgress" class="text-slate-400">Q 1 / 5</span>
+        </div>
+      </div>
+
+      <!-- Question Text -->
+      <div class="space-y-2 py-2">
+        <span class="text-xs font-extrabold text-indigo-600 tracking-wider">QUIZ</span>
+        <h2 id="quizQuestion" class="text-lg sm:text-xl font-black text-slate-900 leading-snug">
+          "가게에서 물건을 팔고 받은 총 금액에서 알바비, 재료비, 매장 월세 등을 빼고 순수하게 남은 돈을 무엇이라고 할까요?"
+        </h2>
+      </div>
+
+      <!-- Quiz Options -->
+      <div id="quizOptionsContainer" class="space-y-3">
+        <!-- Dynamically rendered -->
+      </div>
+
+      <!-- Feedback Explanation Box -->
+      <div id="feedbackBox" class="hidden p-5 rounded-2xl border transition-all space-y-2">
+        <div class="flex items-center gap-2">
+          <span id="feedbackIcon" class="text-xl">🎉</span>
+          <h4 id="feedbackTitle" class="font-extrabold text-sm">정답입니다!</h4>
+        </div>
+        <p id="feedbackContent" class="text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
+          <!-- Explanation text -->
+        </p>
+        <div class="pt-2 flex items-center justify-between text-xs text-slate-500 border-t border-slate-200/60 mt-2">
+          <span>💡 일상 찰떡 비유 해설</span>
+          <button onclick="nextQuiz()" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-sm flex items-center gap-1">
+            다음 퀴즈 풀기 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 4. Bottom Navigation Link to Company Explorer -->
+    <div class="p-6 rounded-3xl bg-slate-900 text-white flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="space-y-1 text-center sm:text-left">
+        <h4 class="font-extrabold text-sm text-white flex items-center justify-center sm:justify-start gap-1.5">
+          <span>🔍</span> 용어를 배웠다면 실제 기업 공시를 파헤쳐볼까요?
+        </h4>
+        <p class="text-xs text-slate-400">올리브영, 다이소, 현대차 등 20개 일상 기업의 실제 재무제표를 쉽게 구경해보세요.</p>
+      </div>
+      <a href="company_preview.html" class="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black text-xs transition-all shadow-md shrink-0">
+        기업 파헤치러 가기 ➡️
+      </a>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200/80 py-6 mt-12 text-center text-xs text-slate-400">
+    <div class="max-w-4xl mx-auto px-4 space-y-2">
+      <p class="font-semibold text-slate-600">📈 Easy-DART — 주린이를 위한 주식 & 회계 기초 용어 퀴즈 아레나</p>
+      <p>투자 권유 목적이 아닌 금융 지식 정보 제공용 서비스입니다.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // 주식 및 회계 기초 용어 퀴즈 데이터셋 (기업 무관)
+    const termQuizData = [
+      {
+        topic: 'income',
+        category: '손익계산서 필수 용어',
+        icon: '💰',
+        question: '가게에서 손님들에게 물건을 팔고 받은 총 금액에서 알바비, 재료비, 매장 월세를 빼고 본업으로 순수하게 남긴 돈을 무엇이라고 할까요?',
+        options: [
+          { text: '1. 매출액 (손님이 낸 모든 돈)', isCorrect: false },
+          { text: '2. 영업이익 (본업으로 남긴 순수 마진)', isCorrect: true },
+          { text: '3. 자본금 (처음 시작할 때 낸 밑천)', isCorrect: false },
+          { text: '4. 부채 (은행에서 빌린 빚)', isCorrect: false }
+        ],
+        explanation: '정답은 **영업이익**입니다! 매출액이 아무리 커도 원가나 알바비가 너무 많이 나가면 영업이익이 마이너스(적자)가 될 수 있어요. 기업이 본업으로 장사를 얼마나 잘했는지를 보여주는 핵심 지표입니다.'
+      },
+      {
+        topic: 'income',
+        category: '손익계산서 필수 용어',
+        icon: '💵',
+        question: '영업이익에서 세금(법인세)과 은행 대출 이자까지 다 털어낸 후, 진짜 회사 금고와 주주 주머니에 최종적으로 남는 돈은?',
+        options: [
+          { text: '1. 매출원가', isCorrect: false },
+          { text: '2. 감가상각비', isCorrect: false },
+          { text: '3. 당기순이익 (진짜 내 돈)', isCorrect: true },
+          { text: '4. 영업외수익', isCorrect: false }
+        ],
+        explanation: '정답은 **당기순이익**입니다! 영업이익이 좋아도 빚이 많아 이자를 많이 내거나 세금을 떼고 나면 당기순이익이 줄어들 수 있어요. 주주들에게 배당금을 줄 수 있는 진짜 최종 알짜 돈입니다.'
+      },
+      {
+        topic: 'audit',
+        category: '감사보고서 필수 상식',
+        icon: '📋',
+        question: '공인회계사가 기업의 감사보고서에 내리는 감사의견 중, "회계 장부에 특별한 거짓이나 이상이 없다"는 성적표는 무엇일까요?',
+        options: [
+          { text: '1. 적정 의견 (안심! 이상 없음)', isCorrect: true },
+          { text: '2. 한정 의견 (일부 문제 있음)', isCorrect: false },
+          { text: '3. 부적정 의견 (장부 엉망)', isCorrect: false },
+          { text: '4. 의견 거절 (성적표 거부/상장폐지 위험)', isCorrect: false }
+        ],
+        explanation: '정답은 **적정 의견**입니다! 적정은 회사가 초우량 기업이라는 뜻이 아니라 "장부를 회계 기준대로 솔직하게 잘 적었다"는 뜻입니다. 반대로 한정/부적정/의견거절이 뜨면 주식 거래 정지나 상장폐지 위험이 있는 빨간불입니다!'
+      },
+      {
+        topic: 'indicator',
+        category: '주식 밸류에이션 지표',
+        icon: '📈',
+        question: '현재 주가가 그 회사가 벌어들이는 이익에 비해 비싼지(고평가) 싼지(저평가)를 비교할 때 가장 흔히 쓰는 지표는?',
+        options: [
+          { text: '1. PER (주가수익비율)', isCorrect: true },
+          { text: '2. PBR (주가순자산비율)', isCorrect: false },
+          { text: '3. ROE (자기자본이익률)', isCorrect: false },
+          { text: '4. 배당수익률', isCorrect: false }
+        ],
+        explanation: '정답은 **PER(주가수익비율, Price-to-Earnings Ratio)**입니다! "이 회사가 1년에 버는 순이익 대비 주가가 몇 배로 거래되고 있는가?"를 나타내며, 보통 PER이 동종업계 대비 낮으면 저평가되어 있다고 봅니다.'
+      },
+      {
+        topic: 'indicator',
+        category: '주식 기초 개념',
+        icon: '🏢',
+        question: '"회사의 현재 주가 × 전체 발행 주식 수"로 계산되며, 그 회사를 통째로 사려면 필요한 전체 가격(몸값)을 뜻하는 용어는?',
+        options: [
+          { text: '1. 자본잉여금', isCorrect: false },
+          { text: '2. 시가총액 (기업의 시장 몸값)', isCorrect: true },
+          { text: '3. 유동부채', isCorrect: false },
+          { text: '4. 당기순손실', isCorrect: false }
+        ],
+        explanation: '정답은 **시가총액**입니다! 예를 들어 주가가 1,000원짜리 주식이 100만 주 있다면 시가총액은 10억 원입니다. 주식 시장에서 기업의 진짜 크기 순위는 주가 1주 가격이 아니라 시가총액 순위로 결정됩니다.'
+      }
+    ];
+
+    let currentList = [...termQuizData];
+    let curIdx = 0;
+
+    function renderTermQuiz() {
+      const q = currentList[curIdx];
+      document.getElementById('quizIcon').innerText = q.icon;
+      document.getElementById('quizCategory').innerText = q.category;
+      document.getElementById('quizProgress').innerText = `Q ${curIdx + 1} / ${currentList.length}`;
+      document.getElementById('quizQuestion').innerText = `"${q.question}"`;
+
+      const container = document.getElementById('quizOptionsContainer');
+      container.innerHTML = q.options.map((opt, idx) => `
+        <button onclick="handleTermOptionClick(${idx}, ${opt.isCorrect})" class="term-opt-btn w-full text-left p-4 rounded-2xl border border-slate-200 hover:border-indigo-500 hover:bg-indigo-50/40 font-bold text-xs sm:text-sm text-slate-800 flex items-center justify-between transition-all group">
+          <span>${opt.text}</span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 group-hover:text-indigo-600 transition-colors"></i>
+        </button>
+      `).join('');
+
+      const fb = document.getElementById('feedbackBox');
+      fb.classList.add('hidden');
+      lucide.createIcons();
+    }
+
+    function handleTermOptionClick(idx, isCorrect) {
+      const q = currentList[curIdx];
+      const btns = document.querySelectorAll('.term-opt-btn');
+
+      btns.forEach((b, i) => {
+        b.onclick = null;
+        if(i === idx) {
+          b.className = isCorrect
+            ? 'term-opt-btn w-full text-left p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-50 font-bold text-xs sm:text-sm text-emerald-900 flex items-center justify-between'
+            : 'term-opt-btn w-full text-left p-4 rounded-2xl border-2 border-rose-500 bg-rose-50 font-bold text-xs sm:text-sm text-rose-900 flex items-center justify-between';
+        }
+      });
+
+      const fb = document.getElementById('feedbackBox');
+      fb.classList.remove('hidden');
+      if(isCorrect) {
+        fb.className = 'p-5 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs sm:text-sm text-emerald-950 space-y-2';
+        document.getElementById('feedbackIcon').innerText = '🎉';
+        document.getElementById('feedbackTitle').innerText = '정답입니다!';
+        document.getElementById('feedbackTitle').className = 'font-extrabold text-sm text-emerald-800';
+      } else {
+        fb.className = 'p-5 rounded-2xl bg-rose-50 border border-rose-200 text-xs sm:text-sm text-rose-950 space-y-2';
+        document.getElementById('feedbackIcon').innerText = '💡';
+        document.getElementById('feedbackTitle').innerText = '아쉽지만 오답이에요!';
+        document.getElementById('feedbackTitle').className = 'font-extrabold text-sm text-rose-800';
+      }
+      document.getElementById('feedbackContent').innerHTML = q.explanation;
+      lucide.createIcons();
+    }
+
+    function nextQuiz() {
+      curIdx = (curIdx + 1) % currentList.length;
+      renderTermQuiz();
+    }
+
+    function changeTopic(topic) {
+      document.querySelectorAll('.topic-btn').forEach(b => {
+        b.className = 'topic-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 transition-all';
+      });
+      event.target.className = 'topic-btn active px-4 py-1.5 rounded-full text-xs font-bold bg-slate-900 text-white shadow-sm transition-all';
+
+      if(topic === 'all') {
+        currentList = [...termQuizData];
+      } else {
+        currentList = termQuizData.filter(q => q.topic === topic);
+      }
+      curIdx = 0;
+      renderTermQuiz();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderTermQuiz();
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
