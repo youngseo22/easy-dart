@@ -24,3 +24,9 @@ def get_company_review_quiz(company_id: str):
     if not quiz:
         raise HTTPException(status_code=404, detail="해당 기업의 복습 퀴즈를 찾을 수 없습니다.")
     return {"company_id": company_id, "quiz": quiz}
+
+@router.get("/game/disclosures")
+def get_game_disclosures():
+    """DART 공시 레이더 미사일 슈팅 게임용 악재/호재 공시 데이터 조회"""
+    disclosures = QuizService.get_game_disclosures()
+    return {"count": len(disclosures), "disclosures": disclosures}

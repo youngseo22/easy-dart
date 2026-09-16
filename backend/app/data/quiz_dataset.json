@@ -36,5 +36,47 @@
       ],
       "explanation": "올리브영은 오늘드림 퀵커머스 성장으로 온라인 비중이 사상 처음 30%를 넘었습니다."
     }
-  }
+  },
+  "radar_shooter_disclosures": [
+    {
+      "id": "risk_01",
+      "keyword": "감사의견 거절",
+      "is_danger": true,
+      "category": "상장폐지 위기",
+      "score": 100,
+      "summary": "회계사가 기업 장부를 전혀 믿을 수 없다고 선언한 상태입니다. 즉시 거래정지 및 상장폐지 실질심사 대상이 됩니다."
+    },
+    {
+      "id": "risk_02",
+      "keyword": "완전자본잠식",
+      "is_danger": true,
+      "category": "재무 파탄",
+      "score": 120,
+      "summary": "적자가 수년간 누적되어 주주들이 낸 밑천(자본금)마저 전부 까먹고 마이너스가 된 상태입니다."
+    },
+    {
+      "id": "risk_03",
+      "keyword": "횡령·배임 혐의",
+      "is_danger": true,
+      "category": "경영진 리스크",
+      "score": 130,
+      "summary": "대표나 임직원이 회사 공금을 몰래 빼돌리거나 회사에 중대한 손해를 입힌 혐의가 포착된 사건입니다."
+    },
+    {
+      "id": "good_01",
+      "keyword": "적정의견 수령",
+      "is_danger": false,
+      "category": "회계 건전성",
+      "score": -60,
+      "summary": "외부 회계법인이 기업의 재무제표가 회계 기준에 맞게 성실하고 정확하게 작성되었다고 인증한 정상 성적표입니다."
+    },
+    {
+      "id": "good_02",
+      "keyword": "영업이익 흑자전환",
+      "is_danger": false,
+      "category": "실적 서프라이즈",
+      "score": -80,
+      "summary": "적자에 허덕이던 기업이 드디어 본업에서 순수 이익을 내기 시작했다는 강력한 부활 신호입니다."
+    }
+  ]
 }

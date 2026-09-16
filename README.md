@@ -7,12 +7,13 @@
 
 ```
 easy-dart/
-├── 📄 PROJECT_PLAN.md             # 프로젝트 마스터 기획서
+├── 📄 GAMIFICATION_PLAN.md        # [팀원 C] 게이미피케이션 마스터 기획서
 ├── 📄 .env                        # 환경변수 설정 파일 (DART, GEMINI API 키)
 ├── 📄 run.sh                      # [Bash] 백엔드 서버 원클릭 실행 스크립트
 ├── 📄 company_preview.html        # [프리뷰] 기업 파헤치기 메인 화면
 ├── 📄 company_detail_preview.html # [프리뷰] 기업 공시 상세 해설 & 하단 퀴즈
 ├── 📄 quiz_preview.html           # [프리뷰] 주식 & 회계 기초 용어 퀴즈
+├── 📄 dart_shooter_preview.html   # [프리뷰/팀원 C] 🕹️ DART 공시 레이더 미사일 슈팅
 │
 ├── 📁 backend/                    # FastAPI 백엔드
 │   ├── requirements.txt
@@ -91,4 +92,4 @@ bash run.sh
 ---
 
 - 🌐 **API Swagger 문서**: `http://localhost:8000/docs`
-- 🖥️ **웹 화면 미리보기**: `company_preview.html`, `company_detail_preview.html`, `quiz_preview.html` 파일을 브라우저로 직접 열어 확인하실 수 있습니다.
+- 🖥️ **웹 화면 미리보기**: `company_preview.html`, `company_detail_preview.html`, `quiz_preview.html`, `dart_shooter_preview.html` 파일을 브라우저로 직접 열어 확인하실 수 있습니다.

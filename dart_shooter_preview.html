@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Easy-DART | DART 공시 레이더 미사일 슈팅 (단독 프리뷰)</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;900&family=Pretendard:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --arcade-bg: #0B0F19;
+      --neon-cyan: #38BDF8;
+      --neon-emerald: #10B981;
+      --neon-amber: #F59E0B;
+      --neon-rose: #F43F5E;
+    }
+
+    body {
+      font-family: 'Pretendard', -apple-system, sans-serif;
+      background-color: var(--arcade-bg);
+      color: #F1F5F9;
+      overflow-x: hidden;
+      user-select: none;
+    }
+
+    .arcade-panel {
+      background: rgba(19, 27, 46, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.5), 0 0 15px rgba(56, 189, 248, 0.08);
+    }
+
+    .glow-cyan {
+      text-shadow: 0 0 12px rgba(56, 189, 248, 0.7);
+    }
+
+    #gameCanvas {
+      display: block;
+      width: 100%;
+      height: 560px;
+      background: #090D16;
+      border-radius: 1.5rem;
+      border: 1.5px solid rgba(56, 189, 248, 0.3);
+      box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8), 0 0 25px rgba(56, 189, 248, 0.15);
+      cursor: crosshair;
+    }
+
+    .scanline-overlay {
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+      background-size: 100% 4px, 6px 100%;
+      pointer-events: none;
+    }
+
+    .hp-bar-fill {
+      transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.25s ease;
+    }
+
+    @keyframes comboBounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15) rotate(-3deg); }
+    }
+
+    .combo-active {
+      animation: comboBounce 0.35s ease infinite;
+    }
+
+    .virtual-btn {
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .virtual-btn:active {
+      transform: scale(0.92);
+      filter: brightness(1.25);
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(56, 189, 248, 0.4);
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-cyan-500 selection:text-white">
+
+  <!-- GNB Header -->
+  <header class="sticky top-0 z-50 bg-slate-950/85 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-6">
+        <a href="company_preview.html" class="flex items-center space-x-2.5 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-cyan-500/20">🎯</div>
+          <div>
+            <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Easy-DART</span>
+            <span class="hidden sm:inline-block ml-2 text-xs font-bold px-2.5 py-0.5 bg-cyan-950/80 text-cyan-300 rounded-full border border-cyan-800">DART 오락실</span>
+          </div>
+        </a>
+
+        <nav class="flex items-center space-x-2">
+          <a href="company_preview.html" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors flex items-center gap-1.5">
+            <i data-lucide="building-2" class="w-4 h-4"></i> 기업 파헤치기
+          </a>
+          <a href="quiz_preview.html" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors flex items-center gap-1.5">
+            <i data-lucide="help-circle" class="w-4 h-4"></i> 용어 퀴즈
+          </a>
+          <a href="dart_shooter_preview.html" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-500/20 flex items-center gap-1.5">
+            <i data-lucide="gamepad-2" class="w-4 h-4 text-cyan-200"></i> 공시 레이더 미사일
+          </a>
+        </nav>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button id="soundToggleBtn" class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 hover:text-white hover:border-cyan-500 text-xs font-semibold flex items-center gap-1.5 transition-all">
+          <i data-lucide="volume-2" id="soundIcon" class="w-4 h-4 text-cyan-400"></i>
+          <span id="soundLabel">사운드 ON</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 py-6 flex-1 w-full space-y-4">
+    
+    <!-- Top HUD Banner -->
+    <div class="arcade-panel rounded-2xl p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4">
+      <!-- Score & Combo -->
+      <div class="flex items-center space-x-6">
+        <div>
+          <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">공시 방어 점수</div>
+          <div id="scoreDisplay" class="text-2xl sm:text-3xl font-black text-cyan-400 glow-cyan">0</div>
+        </div>
+
+        <div class="h-8 w-px bg-slate-800"></div>
+
+        <div>
+          <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">콤보 연쇄</div>
+          <div id="comboDisplay" class="text-xl sm:text-2xl font-black text-amber-400 flex items-center gap-1">
+            <span>0</span><span class="text-xs text-amber-300 font-bold">COMBO</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Health Bar (Market Cap) -->
+      <div class="w-full sm:w-64 space-y-1.5">
+        <div class="flex items-center justify-between text-xs font-bold">
+          <span class="text-slate-300 flex items-center gap-1.5">
+            <i data-lucide="shield-alert" class="w-4 h-4 text-emerald-400"></i>
+            기업 시가총액 (방어막)
+          </span>
+          <span id="hpText" class="text-emerald-400 font-black">100%</span>
+        </div>
+        <div class="w-full h-3.5 bg-slate-900 rounded-full overflow-hidden border border-slate-700/80 p-0.5">
+          <div id="hpBarFill" class="hp-bar-fill h-full bg-emerald-500 rounded-full" style="width: 100%;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Canvas Game Container -->
+    <div class="relative w-full rounded-3xl overflow-hidden shadow-2xl">
+      <canvas id="gameCanvas"></canvas>
+      <div class="scanline-overlay absolute inset-0 rounded-3xl"></div>
+
+      <!-- Mission Briefing / Start Overlay -->
+      <div id="startOverlay" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-6 transition-all duration-300">
+        <div class="max-w-md w-full text-center space-y-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/90 text-cyan-400 text-xs font-bold border border-cyan-800">
+            <span>🚀</span> DART 특별 수사본부 아케이드
+          </div>
+          
+          <div class="space-y-2">
+            <h1 class="text-2xl sm:text-3xl font-black text-white">"상장폐지 지뢰 공시를<br><span class="text-cyan-400">조준 격추하라!</span>"</h1>
+            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+              위에서 쏟아지는 공시 중 <span class="text-rose-400 font-bold">악재 공시</span>만 요격하세요.<br>
+              <span class="text-emerald-400 font-bold">우량 공시</span>를 실수로 쏘면 시총이 급락합니다!
+            </p>
+          </div>
+
+          <!-- Rules Card -->
+          <div class="bg-slate-900/90 rounded-2xl p-4 border border-slate-800 text-left space-y-2.5 text-xs">
+            <div class="flex items-center gap-2 text-rose-400 font-bold">
+              <span class="w-5 h-5 rounded-md bg-rose-950/80 border border-rose-800 flex items-center justify-center">🎯</span>
+              <span>격추 대상: [감사의견 거절], [완전자본잠식], [횡령·배임] (+100점)</span>
+            </div>
+            <div class="flex items-center gap-2 text-emerald-400 font-bold">
+              <span class="w-5 h-5 rounded-md bg-emerald-950/80 border border-emerald-800 flex items-center justify-center">🛡️</span>
+              <span>사격 금지: [적정의견], [영업흑자], [자사주 소각] (오발 시 시총 차감)</span>
+            </div>
+            <div class="flex items-center gap-2 text-slate-400 pt-1 border-t border-slate-800/80">
+              <span>⌨️ 조작: 좌우 방향키(또는 A, D) / 발사: 스페이스바 (화면 마우스/터치 드래그 지원)</span>
+            </div>
+          </div>
+
+          <button id="startGameBtn" class="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-black text-base shadow-xl shadow-cyan-500/25 transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2">
+            <i data-lucide="play" class="w-5 h-5 fill-current"></i>
+            미션 시작하기 (Start Game)
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Virtual Controls -->
+    <div class="sm:hidden grid grid-cols-3 gap-3 pt-2">
+      <button id="vBtnLeft" class="virtual-btn py-4 rounded-2xl bg-slate-900 border border-slate-700 text-cyan-400 flex items-center justify-center font-black text-xl shadow-lg">
+        <i data-lucide="chevron-left" class="w-7 h-7"></i>
+      </button>
+      <button id="vBtnFire" class="virtual-btn py-4 rounded-2xl bg-gradient-to-r from-rose-600 to-amber-600 text-white flex items-center justify-center font-black text-base shadow-lg shadow-rose-600/30 gap-1.5">
+        <i data-lucide="crosshair" class="w-5 h-5"></i> 발사
+      </button>
+      <button id="vBtnRight" class="virtual-btn py-4 rounded-2xl bg-slate-900 border border-slate-700 text-cyan-400 flex items-center justify-center font-black text-xl shadow-lg">
+        <i data-lucide="chevron-right" class="w-7 h-7"></i>
+      </button>
+    </div>
+
+  </main>
+
+  <!-- Game Over & Review Modal -->
+  <div id="gameOverModal" class="hidden fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-lg flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div class="max-w-2xl w-full bg-slate-900 border border-slate-700/80 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl my-8">
+      
+      <!-- Result Title -->
+      <div class="text-center space-y-2">
+        <div id="userBadge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-950/80 border border-amber-700 text-amber-300 text-xs font-bold">
+          <span>👑</span> 스마트 머니 (공시 마스터)
+        </div>
+        <h2 id="gameOverHeading" class="text-2xl sm:text-3xl font-black text-white">미션 종료!</h2>
+        <p id="gameOverReason" class="text-xs sm:text-sm text-slate-400">기업 시가총액이 모두 소진되어 방어에 실패했습니다.</p>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="grid grid-cols-3 gap-3">
+        <div class="bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800 text-center">
+          <div class="text-[11px] text-slate-400 font-bold">최종 점수</div>
+          <div id="finalScore" class="text-xl sm:text-2xl font-black text-cyan-400 glow-cyan">1,250</div>
+        </div>
+        <div class="bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800 text-center">
+          <div class="text-[11px] text-slate-400 font-bold">최대 콤보</div>
+          <div id="finalCombo" class="text-xl sm:text-2xl font-black text-amber-400">7x</div>
+        </div>
+        <div class="bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800 text-center">
+          <div class="text-[11px] text-slate-400 font-bold">생존 시간</div>
+          <div id="finalSurvival" class="text-xl sm:text-2xl font-black text-emerald-400">48초</div>
+        </div>
+      </div>
+
+      <!-- Educational Review Sheet (오답노트 & 공시 용어 정복 리스트) -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm font-extrabold text-white flex items-center gap-1.5">
+            <span>📚</span> 오늘 만난 DART 공시 핵심 오답노트
+          </h3>
+          <span class="text-[11px] text-slate-400">실전 투자 필수 상식</span>
+        </div>
+
+        <div id="reviewListContainer" class="max-h-60 overflow-y-auto space-y-2.5 pr-1 custom-scrollbar">
+          <!-- Dynamically populated review cards -->
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-3 pt-2">
+        <button id="restartGameBtn" class="flex-1 py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-black text-sm shadow-lg shadow-cyan-500/25 transition-all flex items-center justify-center gap-2">
+          <i data-lucide="rotate-ccw" class="w-4 h-4"></i> 다시 도전하기
+        </button>
+        <a href="company_preview.html" class="px-5 py-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-sm border border-slate-700 transition-all flex items-center justify-center">
+          기업 목록 가기
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="bg-slate-950 border-t border-slate-900 py-6 mt-8 text-center text-xs text-slate-500">
+    <p class="font-semibold text-slate-400">📈 Easy-DART — 주린이를 위한 체감형 DART 공시 아케이드</p>
+  </footer>
+
+  <!-- Self-Contained Offline Script for Preview -->
+  <script>
+    lucide.createIcons();
+
+    const DISCLOSURE_DATASET = [
+      {
+        id: "risk_01",
+        keyword: "감사의견 거절",
+        isDanger: true,
+        category: "상장폐지 위기",
+        color: "#EF4444",
+        score: 100,
+        speed: 1.1,
+        summary: "회계사가 기업 장부를 전혀 믿을 수 없다고 선언한 상태입니다. 즉시 거래정지 및 상장폐지 실질심사 대상이 되는 가장 위험한 공시입니다.",
+        tip: "이 공시가 뜨면 주식은 휴지조각이 될 위험이 큽니다!"
+      },
+      {
+        id: "risk_02",
+        keyword: "완전자본잠식",
+        isDanger: true,
+        category: "재무 파탄",
+        color: "#F97316",
+        score: 120,
+        speed: 1.0,
+        summary: "적자가 수년간 누적되어 주주들이 낸 밑천(자본금)마저 전부 까먹고 마이너스가 된 상태입니다.",
+        tip: "기업의 뼈대까지 다 갉아먹은 상태로 퇴출 1순위 신호입니다."
+      },
+      {
+        id: "risk_03",
+        keyword: "횡령·배임 혐의",
+        isDanger: true,
+        category: "경영진 리스크",
+        color: "#DC2626",
+        score: 130,
+        speed: 1.2,
+        summary: "대표나 임직원이 회사 공금을 몰래 빼돌리거나 회사에 중대한 손해를 입힌 혐의가 포착된 사건입니다.",
+        tip: "경영진의 도덕적 해이는 기업 신뢰도를 바닥으로 떨어뜨립니다."
+      },
+      {
+        id: "risk_04",
+        keyword: "부채비율 900%",
+        isDanger: true,
+        category: "빚더미 경고",
+        color: "#EA580C",
+        score: 90,
+        speed: 0.9,
+        summary: "내 돈(자기자본)에 비해 빌린 빚이 9배나 많다는 뜻입니다. 금리가 오르면 이자를 못 버텨 부도날 위험이 높습니다.",
+        tip: "통상 부채비율은 100~200% 이하를 건전한 수준으로 봅니다."
+      },
+      {
+        id: "risk_05",
+        keyword: "전환사채(CB) 폭탄",
+        isDanger: true,
+        category: "주가 희석",
+        color: "#E11D48",
+        score: 110,
+        speed: 1.15,
+        summary: "나중에 주식으로 바꿀 수 있는 빚 문서를 대량 발행한 것입니다. 신주가 마구 쏟아져 기존 주주들의 주식 가치가 희석됩니다.",
+        tip: "시장에 공짜 물량이 풀리는 것과 같아 주가 급락의 원인이 됩니다."
+      },
+      {
+        id: "risk_06",
+        keyword: "매출액 미달 경고",
+        isDanger: true,
+        category: "관리종목 위험",
+        color: "#B91C1C",
+        score: 95,
+        speed: 0.85,
+        summary: "코스닥 상장 유지에 필요한 최소 연간 매출액 기준(30억 원 등)을 채우지 못해 상장폐지 경고를 받은 공시입니다.",
+        tip: "본업에서 아예 장사가 안 되고 있다는 결정적 증거입니다."
+      },
+      {
+        id: "good_01",
+        keyword: "적정의견 수령",
+        isDanger: false,
+        category: "회계 건전성",
+        color: "#10B981",
+        penalty: 60,
+        speed: 0.95,
+        summary: "외부 회계법인이 기업의 재무제표가 회계 기준에 맞게 성실하고 정확하게 작성되었다고 인증한 정상 성적표입니다.",
+        tip: "투자의 기본 전제 조건인 투명한 장부를 의미합니다."
+      },
+      {
+        id: "good_02",
+        keyword: "영업이익 흑자전환",
+        isDanger: false,
+        category: "실적 서프라이즈",
+        color: "#059669",
+        penalty: 80,
+        speed: 1.05,
+        summary: "적자에 허덕이던 기업이 드디어 본업에서 순수 이익을 내기 시작했다는 강력한 부활 신호입니다.",
+        tip: "주가 턴어라운드의 가장 대표적인 기폭제가 됩니다."
+      },
+      {
+        id: "good_03",
+        keyword: "대규모 신규 수주",
+        isDanger: false,
+        category: "매출 급성장",
+        color: "#0D9488",
+        penalty: 70,
+        speed: 1.0,
+        summary: "최근 연간 매출의 수십~수백 %에 달하는 대규모 일감을 따냈다는 공시로, 향후 확실한 매출 증대를 보증합니다.",
+        tip: "수주 잔고가 넉넉할수록 기업의 미래 실적이 든든해집니다."
+      },
+      {
+        id: "good_04",
+        keyword: "자사주 매입 및 소각",
+        isDanger: false,
+        category: "주주 환원",
+        color: "#2563EB",
+        penalty: 80,
+        speed: 0.9,
+        summary: "회사가 자기 돈으로 시장의 주식을 사들인 뒤 아예 불태워 없애는 것입니다. 1주당 가치가 높아져 주주에게 최고의 호재입니다.",
+        tip: "기업이 주가를 부양하고 주주 가치를 존중한다는 강력한 의지입니다."
+      },
+      {
+        id: "good_05",
+        keyword: "주당 배당금 상향",
+        isDanger: false,
+        category: "배당 호재",
+        color: "#0284C7",
+        penalty: 50,
+        speed: 0.85,
+        summary: "주주들에게 나누어주는 현금 배당금을 전년보다 늘리겠다는 공시입니다. 회사의 곳간(현금흐름)이 탄탄함을 증명합니다.",
+        tip: "배당을 꾸준히 늘리는 기업은 주가 하방 경직성이 높습니다."
+      }
+    ];
+
+    function getRandomDisclosure() {
+      const idx = Math.floor(Math.random() * DISCLOSURE_DATASET.length);
+      return { ...DISCLOSURE_DATASET[idx] };
+    }
+
+    class SoundSynthesizer {
+      constructor() {
+        this.ctx = null;
+        this.isMuted = false;
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) this.ctx = new AudioContext();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      playLaser() {
+        if (this.isMuted || !this.ctx) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sawtooth';
+          const now = this.ctx.currentTime;
+          osc.frequency.setValueAtTime(880, now);
+          osc.frequency.exponentialRampToValueAtTime(120, now + 0.12);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.12);
+        } catch (e) {}
+      }
+
+      playExplosion() {
+        if (this.isMuted || !this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          const bufferSize = this.ctx.sampleRate * 0.25;
+          const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = Math.random() * 2 - 1;
+          }
+          const noise = this.ctx.createBufferSource();
+          noise.buffer = buffer;
+
+          const filter = this.ctx.createBiquadFilter();
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(900, now);
+          filter.frequency.linearRampToValueAtTime(80, now + 0.25);
+
+          const gain = this.ctx.createGain();
+          gain.gain.setValueAtTime(0.35, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+
+          noise.connect(filter);
+          filter.connect(gain);
+          gain.connect(this.ctx.destination);
+          noise.start(now);
+        } catch (e) {}
+      }
+
+      playWarning() {
+        if (this.isMuted || !this.ctx) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'square';
+          const now = this.ctx.currentTime;
+          osc.frequency.setValueAtTime(220, now);
+          osc.frequency.setValueAtTime(180, now + 0.08);
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.2);
+        } catch (e) {}
+      }
+
+      playCombo() {
+        if (this.isMuted || !this.ctx) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          const now = this.ctx.currentTime;
+          osc.frequency.setValueAtTime(523.25, now);
+          osc.frequency.setValueAtTime(659.25, now + 0.06);
+          osc.frequency.setValueAtTime(783.99, now + 0.12);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        } catch (e) {}
+      }
+    }
+
+    class DartRadarShooter {
+      constructor(canvasElement, options = {}) {
+        this.canvas = canvasElement;
+        this.ctx = canvasElement.getContext('2d');
+        this.options = options;
+
+        this.sound = new SoundSynthesizer();
+        this.animationFrameId = null;
+
+        this.score = 0;
+        this.marketCap = 100;
+        this.combo = 0;
+        this.maxCombo = 0;
+        this.level = 1;
+        this.gameState = 'READY';
+        this.startTime = 0;
+        this.survivalSeconds = 0;
+
+        this.encounterHistory = new Map();
+        this.screenShakeTime = 0;
+
+        this.player = {
+          x: 0,
+          y: 0,
+          width: 48,
+          height: 48,
+          speed: 7,
+          cooldown: 0
+        };
+
+        this.missiles = [];
+        this.capsules = [];
+        this.particles = [];
+        this.floatingTexts = [];
+        this.stars = [];
+
+        this.keys = { left: false, right: false, shoot: false };
+
+        this.lastSpawnTime = 0;
+        this.spawnInterval = 1700;
+
+        this.setupDisplay();
+        this.setupStars();
+        this.bindEvents();
+      }
+
+      setupDisplay() {
+        const dpr = window.devicePixelRatio || 1;
+        const rect = this.canvas.getBoundingClientRect();
+        this.width = rect.width;
+        this.height = rect.height;
+
+        this.canvas.width = this.width * dpr;
+        this.canvas.height = this.height * dpr;
+        this.ctx.scale(dpr, dpr);
+
+        this.player.x = this.width / 2;
+        this.player.y = this.height - 60;
+      }
+
+      setupStars() {
+        this.stars = [];
+        for (let i = 0; i < 45; i++) {
+          this.stars.push({
+            x: Math.random() * this.width,
+            y: Math.random() * this.height,
+            size: Math.random() * 2 + 0.8,
+            speed: Math.random() * 0.8 + 0.3,
+            alpha: Math.random() * 0.8 + 0.2
+          });
+        }
+      }
+
+      bindEvents() {
+        window.addEventListener('resize', () => {
+          this.setupDisplay();
+        });
+
+        window.addEventListener('keydown', (e) => {
+          this.sound.init();
+          if (['ArrowLeft', 'KeyA', 'a', 'A'].includes(e.code)) this.keys.left = true;
+          if (['ArrowRight', 'KeyD', 'd', 'D'].includes(e.code)) this.keys.right = true;
+          if (['Space', 'KeyW', 'ArrowUp'].includes(e.code)) {
+            this.keys.shoot = true;
+            if (this.gameState === 'PLAYING') e.preventDefault();
+          }
+        });
+
+        window.addEventListener('keyup', (e) => {
+          if (['ArrowLeft', 'KeyA', 'a', 'A'].includes(e.code)) this.keys.left = false;
+          if (['ArrowRight', 'KeyD', 'd', 'D'].includes(e.code)) this.keys.right = false;
+          if (['Space', 'KeyW', 'ArrowUp'].includes(e.code)) this.keys.shoot = false;
+        });
+
+        let isTouching = false;
+        const handlePointerMove = (clientX) => {
+          const rect = this.canvas.getBoundingClientRect();
+          const x = clientX - rect.left;
+          this.player.x = Math.max(30, Math.min(this.width - 30, x));
+        };
+
+        this.canvas.addEventListener('mousedown', (e) => {
+          this.sound.init();
+          isTouching = true;
+          handlePointerMove(e.clientX);
+          this.keys.shoot = true;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+          if (isTouching) handlePointerMove(e.clientX);
+        });
+
+        window.addEventListener('mouseup', () => {
+          isTouching = false;
+          this.keys.shoot = false;
+        });
+
+        this.canvas.addEventListener('touchstart', (e) => {
+          this.sound.init();
+          if (e.touches.length > 0) {
+            isTouching = true;
+            handlePointerMove(e.touches[0].clientX);
+            this.keys.shoot = true;
+          }
+        }, { passive: true });
+
+        this.canvas.addEventListener('touchmove', (e) => {
+          if (e.touches.length > 0) handlePointerMove(e.touches[0].clientX);
+        }, { passive: true });
+
+        this.canvas.addEventListener('touchend', () => {
+          isTouching = false;
+          this.keys.shoot = false;
+        });
+      }
+
+      start() {
+        this.sound.init();
+        this.score = 0;
+        this.marketCap = 100;
+        this.combo = 0;
+        this.maxCombo = 0;
+        this.level = 1;
+        this.gameState = 'PLAYING';
+        this.startTime = Date.now();
+        this.missiles = [];
+        this.capsules = [];
+        this.particles = [];
+        this.floatingTexts = [];
+        this.encounterHistory.clear();
+        this.lastSpawnTime = Date.now();
+
+        if (this.options.onStateChange) {
+          this.options.onStateChange({
+            state: this.gameState,
+            score: this.score,
+            marketCap: this.marketCap,
+            combo: this.combo
+          });
+        }
+
+        if (!this.animationFrameId) this.loop();
+      }
+
+      triggerGameOver(reason) {
+        this.gameState = 'GAMEOVER';
+        this.survivalSeconds = Math.floor((Date.now() - this.startTime) / 1000);
+        this.sound.playWarning();
+
+        const reviewList = Array.from(this.encounterHistory.values());
+
+        if (this.options.onGameOver) {
+          this.options.onGameOver({
+            score: this.score,
+            marketCap: Math.max(0, Math.floor(this.marketCap)),
+            survivalSeconds: this.survivalSeconds,
+            maxCombo: this.maxCombo,
+            reason: reason,
+            reviewList: reviewList
+          });
+        }
+      }
+
+      shoot() {
+        if (this.player.cooldown > 0) return;
+        this.player.cooldown = 11;
+
+        this.missiles.push({ x: this.player.x - 14, y: this.player.y - 10, radius: 4, speed: 13, color: '#38BDF8' });
+        this.missiles.push({ x: this.player.x + 14, y: this.player.y - 10, radius: 4, speed: 13, color: '#38BDF8' });
+        this.sound.playLaser();
+      }
+
+      spawnCapsule() {
+        const item = getRandomDisclosure();
+        const padding = 70;
+        const spawnX = Math.random() * (this.width - padding * 2) + padding;
+
+        if (!this.encounterHistory.has(item.id)) {
+          this.encounterHistory.set(item.id, { item: item, countShot: 0, countMissed: 0 });
+        }
+
+        const speedMultiplier = 1 + Math.min(1.2, this.score / 2000);
+
+        this.capsules.push({
+          item: item,
+          x: spawnX,
+          y: -30,
+          vy: (1.2 * item.speed) * speedMultiplier,
+          width: 140,
+          height: 38,
+          pulse: 0
+        });
+      }
+
+      addExplosion(x, y, color, count = 18) {
+        for (let i = 0; i < count; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = Math.random() * 5 + 2;
+          this.particles.push({
+            x: x, y: y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            radius: Math.random() * 3 + 1.5,
+            color: color,
+            alpha: 1,
+            life: Math.random() * 20 + 20
+          });
+        }
+      }
+
+      addFloatingText(text, x, y, color, size = 15) {
+        this.floatingTexts.push({
+          text: text, x: x, y: y,
+          color: color, size: size,
+          alpha: 1, vy: -1.4
+        });
+      }
+
+      update() {
+        if (this.gameState !== 'PLAYING') return;
+
+        if (this.keys.left) this.player.x -= this.player.speed;
+        if (this.keys.right) this.player.x += this.player.speed;
+        this.player.x = Math.max(30, Math.min(this.width - 30, this.player.x));
+
+        if (this.keys.shoot) this.shoot();
+        if (this.player.cooldown > 0) this.player.cooldown--;
+
+        const now = Date.now();
+        const currentInterval = Math.max(850, this.spawnInterval - Math.floor(this.score / 500) * 120);
+        if (now - this.lastSpawnTime > currentInterval) {
+          this.spawnCapsule();
+          this.lastSpawnTime = now;
+        }
+
+        for (let i = this.missiles.length - 1; i >= 0; i--) {
+          const m = this.missiles[i];
+          m.y -= m.speed;
+          if (m.y < -20) this.missiles.splice(i, 1);
+        }
+
+        for (let i = this.capsules.length - 1; i >= 0; i--) {
+          const c = this.capsules[i];
+          c.y += c.vy;
+          c.pulse += 0.08;
+
+          const halfW = c.width / 2;
+          const halfH = c.height / 2;
+
+          let hit = false;
+          for (let j = this.missiles.length - 1; j >= 0; j--) {
+            const m = this.missiles[j];
+            if (m.x >= c.x - halfW && m.x <= c.x + halfW && m.y >= c.y - halfH && m.y <= c.y + halfH) {
+              hit = true;
+              this.missiles.splice(j, 1);
+              break;
+            }
+          }
+
+          if (hit) {
+            const encounter = this.encounterHistory.get(c.item.id);
+            if (encounter) encounter.countShot++;
+
+            if (c.item.isDanger) {
+              this.combo++;
+              if (this.combo > this.maxCombo) this.maxCombo = this.combo;
+              const comboBonus = Math.min(50, (this.combo - 1) * 15);
+              const earned = c.item.score + comboBonus;
+              this.score += earned;
+
+              this.sound.playExplosion();
+              if (this.combo % 3 === 0) this.sound.playCombo();
+
+              this.addExplosion(c.x, c.y, c.item.color, 24);
+              this.screenShakeTime = 6;
+
+              const comboTxt = this.combo > 1 ? ` (${this.combo}콤보!)` : '';
+              this.addFloatingText(`💥 +${earned}${comboTxt}`, c.x, c.y - 15, '#FBBF24', 16);
+              this.addFloatingText(`[상폐 방어: ${c.item.category}]`, c.x, c.y + 12, '#38BDF8', 12);
+            } else {
+              this.combo = 0;
+              const penalty = c.item.penalty || 60;
+              this.score = Math.max(0, this.score - penalty);
+              this.marketCap -= 16;
+
+              this.sound.playWarning();
+              this.addExplosion(c.x, c.y, '#EF4444', 14);
+              this.screenShakeTime = 12;
+
+              this.addFloatingText(`🚨 우량 공시 오발! -${penalty}`, c.x, c.y - 15, '#EF4444', 15);
+              this.addFloatingText(`시총 16% 증발!`, c.x, c.y + 12, '#F87171', 13);
+
+              if (this.marketCap <= 0) {
+                this.triggerGameOver('우량 공시 파괴로 인한 투자자 신뢰 상실');
+                return;
+              }
+            }
+
+            this.capsules.splice(i, 1);
+            continue;
+          }
+
+          if (c.y > this.height - 30) {
+            const encounter = this.encounterHistory.get(c.item.id);
+            if (encounter) encounter.countMissed++;
+
+            if (c.item.isDanger) {
+              this.combo = 0;
+              this.marketCap -= 20;
+              this.sound.playWarning();
+              this.screenShakeTime = 16;
+              this.addExplosion(c.x, this.height - 40, '#DC2626', 20);
+              this.addFloatingText(`⚠️ ${c.item.keyword} 직격타! -20%`, c.x, this.height - 70, '#EF4444', 15);
+
+              if (this.marketCap <= 0) {
+                this.triggerGameOver(`${c.item.keyword} 누적으로 인한 상장폐지`);
+                return;
+              }
+            } else {
+              this.score += 30;
+              this.addFloatingText(`✨ 우량 공시 보존! +30`, c.x, this.height - 50, '#34D399', 13);
+            }
+
+            this.capsules.splice(i, 1);
+          }
+        }
+
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+          const p = this.particles[i];
+          p.x += p.vx; p.y += p.vy;
+          p.alpha -= 1 / p.life;
+          if (p.alpha <= 0) this.particles.splice(i, 1);
+        }
+
+        for (let i = this.floatingTexts.length - 1; i >= 0; i--) {
+          const ft = this.floatingTexts[i];
+          ft.y += ft.vy;
+          ft.alpha -= 0.025;
+          if (ft.alpha <= 0) this.floatingTexts.splice(i, 1);
+        }
+
+        for (const star of this.stars) {
+          star.y += star.speed;
+          if (star.y > this.height) {
+            star.y = 0;
+            star.x = Math.random() * this.width;
+          }
+        }
+
+        if (this.options.onStateChange) {
+          this.options.onStateChange({
+            state: this.gameState,
+            score: this.score,
+            marketCap: Math.max(0, Math.floor(this.marketCap)),
+            combo: this.combo
+          });
+        }
+      }
+
+      draw() {
+        this.ctx.save();
+
+        if (this.screenShakeTime > 0) {
+          const dx = (Math.random() - 0.5) * this.screenShakeTime * 2.2;
+          const dy = (Math.random() - 0.5) * this.screenShakeTime * 2.2;
+          this.ctx.translate(dx, dy);
+          this.screenShakeTime--;
+        }
+
+        const bgGrad = this.ctx.createLinearGradient(0, 0, 0, this.height);
+        bgGrad.addColorStop(0, '#090D16');
+        bgGrad.addColorStop(1, '#0F172A');
+        this.ctx.fillStyle = bgGrad;
+        this.ctx.fillRect(0, 0, this.width, this.height);
+
+        this.ctx.strokeStyle = 'rgba(30, 41, 59, 0.45)';
+        this.ctx.lineWidth = 1;
+        const gridSize = 45;
+        for (let x = 0; x < this.width; x += gridSize) {
+          this.ctx.beginPath();
+          this.ctx.moveTo(x, 0);
+          this.ctx.lineTo(x, this.height);
+          this.ctx.stroke();
+        }
+        for (let y = 0; y < this.height; y += gridSize) {
+          this.ctx.beginPath();
+          this.ctx.moveTo(0, y);
+          this.ctx.lineTo(this.width, y);
+          this.ctx.stroke();
+        }
+
+        for (const star of this.stars) {
+          this.ctx.fillStyle = `rgba(148, 163, 184, ${star.alpha})`;
+          this.ctx.beginPath();
+          this.ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+          this.ctx.fill();
+        }
+
+        this.ctx.strokeStyle = this.marketCap > 30 ? 'rgba(56, 189, 248, 0.4)' : 'rgba(239, 68, 68, 0.7)';
+        this.ctx.lineWidth = 2;
+        this.ctx.setLineDash([6, 6]);
+        this.ctx.beginPath();
+        this.ctx.moveTo(0, this.height - 35);
+        this.ctx.lineTo(this.width, this.height - 35);
+        this.ctx.stroke();
+        this.ctx.setLineDash([]);
+
+        for (const m of this.missiles) {
+          this.ctx.fillStyle = m.color;
+          this.ctx.shadowColor = m.color;
+          this.ctx.shadowBlur = 10;
+          this.ctx.beginPath();
+          this.ctx.arc(m.x, m.y, m.radius, 0, Math.PI * 2);
+          this.ctx.fill();
+
+          this.ctx.strokeStyle = 'rgba(56, 189, 248, 0.5)';
+          this.ctx.lineWidth = 2;
+          this.ctx.beginPath();
+          this.ctx.moveTo(m.x, m.y);
+          this.ctx.lineTo(m.x, m.y + 12);
+          this.ctx.stroke();
+        }
+        this.ctx.shadowBlur = 0;
+
+        for (const c of this.capsules) {
+          const halfW = c.width / 2;
+          const halfH = c.height / 2;
+          const cx = c.x;
+          const cy = c.y;
+
+          const glowColor = c.item.color;
+          const pulseSize = Math.sin(c.pulse) * 3;
+
+          this.ctx.shadowColor = glowColor;
+          this.ctx.shadowBlur = 12 + pulseSize;
+
+          this.ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+          this.ctx.strokeStyle = glowColor;
+          this.ctx.lineWidth = 2;
+
+          this.roundRect(cx - halfW, cy - halfH, c.width, c.height, 12, true, true);
+          this.ctx.shadowBlur = 0;
+
+          this.ctx.fillStyle = glowColor;
+          this.ctx.font = 'bold 9px sans-serif';
+          this.ctx.textAlign = 'center';
+          this.ctx.textBaseline = 'middle';
+          const badgeIcon = c.item.isDanger ? '🚨' : '🍀';
+          this.ctx.fillText(`${badgeIcon} ${c.item.category}`, cx, cy - 8);
+
+          this.ctx.fillStyle = '#FFFFFF';
+          this.ctx.font = 'bold 12px Pretendard, sans-serif';
+          this.ctx.fillText(c.item.keyword, cx, cy + 8);
+        }
+
+        this.drawPlayer();
+
+        for (const p of this.particles) {
+          this.ctx.fillStyle = p.color;
+          this.ctx.globalAlpha = Math.max(0, p.alpha);
+          this.ctx.beginPath();
+          this.ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          this.ctx.fill();
+        }
+        this.ctx.globalAlpha = 1;
+
+        for (const ft of this.floatingTexts) {
+          this.ctx.fillStyle = ft.color;
+          this.ctx.globalAlpha = Math.max(0, ft.alpha);
+          this.ctx.font = `bold ${ft.size}px Pretendard, sans-serif`;
+          this.ctx.textAlign = 'center';
+          this.ctx.fillText(ft.text, ft.x, ft.y);
+        }
+        this.ctx.globalAlpha = 1;
+
+        this.ctx.restore();
+      }
+
+      drawPlayer() {
+        const px = this.player.x;
+        const py = this.player.y;
+
+        this.ctx.save();
+        this.ctx.translate(px, py);
+
+        const thrust = Math.random() * 6 + 10;
+        const thrusterGrad = this.ctx.createRadialGradient(0, 20, 2, 0, 20 + thrust, thrust);
+        thrusterGrad.addColorStop(0, '#38BDF8');
+        thrusterGrad.addColorStop(1, 'transparent');
+        this.ctx.fillStyle = thrusterGrad;
+        this.ctx.beginPath();
+        this.ctx.arc(0, 20, thrust, 0, Math.PI * 2);
+        this.ctx.fill();
+
+        this.ctx.shadowColor = '#06B6D4';
+        this.ctx.shadowBlur = 14;
+
+        this.ctx.fillStyle = '#0F172A';
+        this.ctx.strokeStyle = '#38BDF8';
+        this.ctx.lineWidth = 2.5;
+
+        this.ctx.beginPath();
+        this.ctx.moveTo(0, -22);
+        this.ctx.lineTo(20, 18);
+        this.ctx.lineTo(7, 12);
+        this.ctx.lineTo(0, 15);
+        this.ctx.lineTo(-7, 12);
+        this.ctx.lineTo(-20, 18);
+        this.ctx.closePath();
+        this.ctx.fill();
+        this.ctx.stroke();
+
+        this.ctx.fillStyle = '#10B981';
+        this.ctx.beginPath();
+        this.ctx.arc(0, -2, 5, 0, Math.PI * 2);
+        this.ctx.fill();
+
+        this.ctx.strokeStyle = '#FBBF24';
+        this.ctx.lineWidth = 2;
+        this.ctx.strokeRect(-16, -6, 3, 12);
+        this.ctx.strokeRect(13, -6, 3, 12);
+
+        this.ctx.restore();
+      }
+
+      roundRect(x, y, w, h, radius, fill, stroke) {
+        this.ctx.beginPath();
+        this.ctx.moveTo(x + radius, y);
+        this.ctx.arcTo(x + w, y, x + w, y + h, radius);
+        this.ctx.arcTo(x + w, y + h, x, y + h, radius);
+        this.ctx.arcTo(x, y + h, x, y, radius);
+        this.ctx.arcTo(x, y, x + w, y, radius);
+        this.ctx.closePath();
+        if (fill) this.ctx.fill();
+        if (stroke) this.ctx.stroke();
+      }
+
+      loop() {
+        this.update();
+        this.draw();
+        this.animationFrameId = requestAnimationFrame(() => this.loop());
+      }
+    }
+
+    // Wiring up UI
+    const canvas = document.getElementById('gameCanvas');
+    const startOverlay = document.getElementById('startOverlay');
+    const startGameBtn = document.getElementById('startGameBtn');
+    const restartGameBtn = document.getElementById('restartGameBtn');
+    const gameOverModal = document.getElementById('gameOverModal');
+
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const comboDisplay = document.getElementById('comboDisplay');
+    const hpText = document.getElementById('hpText');
+    const hpBarFill = document.getElementById('hpBarFill');
+
+    const soundToggleBtn = document.getElementById('soundToggleBtn');
+    const soundIcon = document.getElementById('soundIcon');
+    const soundLabel = document.getElementById('soundLabel');
+
+    const vBtnLeft = document.getElementById('vBtnLeft');
+    const vBtnRight = document.getElementById('vBtnRight');
+    const vBtnFire = document.getElementById('vBtnFire');
+
+    const gameOverHeading = document.getElementById('gameOverHeading');
+    const gameOverReason = document.getElementById('gameOverReason');
+    const userBadge = document.getElementById('userBadge');
+    const finalScore = document.getElementById('finalScore');
+    const finalCombo = document.getElementById('finalCombo');
+    const finalSurvival = document.getElementById('finalSurvival');
+    const reviewListContainer = document.getElementById('reviewListContainer');
+
+    let game = new DartRadarShooter(canvas, {
+      onStateChange: (state) => {
+        scoreDisplay.textContent = state.score.toLocaleString();
+        
+        if (state.combo > 1) {
+          comboDisplay.innerHTML = `<span>${state.combo}</span><span class="text-xs text-amber-300 font-bold">COMBO! 🔥</span>`;
+          comboDisplay.classList.add('combo-active');
+        } else {
+          comboDisplay.innerHTML = `<span>0</span><span class="text-xs text-amber-300 font-bold">COMBO</span>`;
+          comboDisplay.classList.remove('combo-active');
+        }
+
+        hpText.textContent = `${state.marketCap}%`;
+        hpBarFill.style.width = `${state.marketCap}%`;
+
+        if (state.marketCap > 50) {
+          hpBarFill.className = 'hp-bar-fill h-full bg-emerald-500 rounded-full';
+          hpText.className = 'text-emerald-400 font-black';
+        } else if (state.marketCap > 25) {
+          hpBarFill.className = 'hp-bar-fill h-full bg-amber-500 rounded-full';
+          hpText.className = 'text-amber-400 font-black';
+        } else {
+          hpBarFill.className = 'hp-bar-fill h-full bg-rose-500 rounded-full';
+          hpText.className = 'text-rose-400 font-black animate-pulse';
+        }
+      },
+      onGameOver: (result) => {
+        gameOverModal.classList.remove('hidden');
+
+        finalScore.textContent = result.score.toLocaleString();
+        finalCombo.textContent = `${result.maxCombo}x`;
+        finalSurvival.textContent = `${result.survivalSeconds}초`;
+        gameOverReason.textContent = result.reason;
+
+        let badgeIcon = '🐣';
+        let badgeName = '새싹 주린이';
+        if (result.score >= 1000) {
+          badgeIcon = '👑';
+          badgeName = '스마트 머니 (공시 마스터)';
+        } else if (result.score >= 400) {
+          badgeIcon = '🔍';
+          badgeName = '노련한 지뢰 감별사';
+        }
+
+        userBadge.innerHTML = `<span>${badgeIcon}</span> ${badgeName}`;
+
+        reviewListContainer.innerHTML = '';
+        if (result.reviewList && result.reviewList.length > 0) {
+          result.reviewList.forEach(({ item, countShot, countMissed }) => {
+            const card = document.createElement('div');
+            const isDanger = item.isDanger;
+            const statusBorder = isDanger ? 'border-rose-900/60 bg-rose-950/20' : 'border-emerald-900/60 bg-emerald-950/20';
+            const tagBg = isDanger ? 'bg-rose-950 text-rose-300 border-rose-800' : 'bg-emerald-950 text-emerald-300 border-emerald-800';
+            const icon = isDanger ? '🚨 악재 공시' : '🍀 호재 공시';
+
+            let resultText = '';
+            if (isDanger) {
+              resultText = countShot > 0 ? `✅ ${countShot}회 요격 성공` : '⚠️ 방어 실패 (직격타)';
+            } else {
+              resultText = countShot > 0 ? `❌ ${countShot}회 오인 사격!` : '✨ 보존 성공';
+            }
+
+            card.className = `p-3.5 rounded-2xl border ${statusBorder} space-y-1.5 text-xs`;
+            card.innerHTML = `
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="px-2 py-0.5 rounded-md text-[10px] font-bold border ${tagBg}">${icon}</span>
+                  <span class="font-extrabold text-white text-sm">${item.keyword}</span>
+                </div>
+                <span class="font-bold ${isDanger && countShot > 0 ? 'text-emerald-400' : (!isDanger && countShot === 0 ? 'text-cyan-400' : 'text-rose-400')}">${resultText}</span>
+              </div>
+              <p class="text-slate-300 leading-relaxed text-[11px]">${item.summary}</p>
+              <div class="text-[11px] text-amber-300/90 font-medium pt-1 border-t border-slate-800/60 flex items-center gap-1">
+                <span>💡 주린이 팁:</span> <span>${item.tip}</span>
+              </div>
+            `;
+            reviewListContainer.appendChild(card);
+          });
+        } else {
+          reviewListContainer.innerHTML = '<div class="text-xs text-slate-500 py-4 text-center">공시 데이터 로딩 대기 중</div>';
+        }
+
+        lucide.createIcons();
+      }
+    });
+
+    startGameBtn.addEventListener('click', () => {
+      startOverlay.classList.add('hidden');
+      game.start();
+    });
+
+    restartGameBtn.addEventListener('click', () => {
+      gameOverModal.classList.add('hidden');
+      game.start();
+    });
+
+    let isSoundOn = true;
+    soundToggleBtn.addEventListener('click', () => {
+      isSoundOn = !isSoundOn;
+      game.sound.isMuted = !isSoundOn;
+      soundLabel.textContent = isSoundOn ? '사운드 ON' : '사운드 OFF';
+      soundIcon.setAttribute('data-lucide', isSoundOn ? 'volume-2' : 'volume-x');
+      lucide.createIcons();
+    });
+
+    if (vBtnLeft) {
+      vBtnLeft.addEventListener('touchstart', (e) => { e.preventDefault(); game.keys.left = true; });
+      vBtnLeft.addEventListener('touchend', (e) => { e.preventDefault(); game.keys.left = false; });
+      vBtnLeft.addEventListener('mousedown', () => { game.keys.left = true; });
+      vBtnLeft.addEventListener('mouseup', () => { game.keys.left = false; });
+    }
+
+    if (vBtnRight) {
+      vBtnRight.addEventListener('touchstart', (e) => { e.preventDefault(); game.keys.right = true; });
+      vBtnRight.addEventListener('touchend', (e) => { e.preventDefault(); game.keys.right = false; });
+      vBtnRight.addEventListener('mousedown', () => { game.keys.right = true; });
+      vBtnRight.addEventListener('mouseup', () => { game.keys.right = false; });
+    }
+
+    if (vBtnFire) {
+      vBtnFire.addEventListener('touchstart', (e) => { e.preventDefault(); game.shoot(); });
+      vBtnFire.addEventListener('mousedown', () => { game.shoot(); });
+    }
+  </script>
+</body>
+</html>

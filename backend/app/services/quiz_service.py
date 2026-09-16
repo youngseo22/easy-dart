@@ -26,3 +26,9 @@ class QuizService:
     def get_company_quiz(cls, company_id: str):
         data = cls.load_data()
         return data.get("company_quizzes", {}).get(company_id)
+
+    @classmethod
+    def get_game_disclosures(cls):
+        """DART 레이더 미사일 슈팅 게임용 악재/호재 공시 데이터셋 반환"""
+        data = cls.load_data()
+        return data.get("radar_shooter_disclosures", [])
