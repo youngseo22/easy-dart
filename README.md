@@ -15,6 +15,7 @@ easy-dart/
 ├── 📄 quiz_preview.html           # [프리뷰] 주식 & 회계 기초 용어 퀴즈
 ├── 📄 game_arcade_preview.html     # [프리뷰/팀원 C] 🕹️ 핑거다트 레트로 오락실 메인 로비
 ├── 📄 dart_shooter_preview.html   # [프리뷰/팀원 C] 🚀 DART 공시 레이더 미사일 슈팅
+├── 📄 tetris_preview.html         # [프리뷰/팀원 C] 🧱 밸런스 시트 테트리스
 │
 ├── 📁 backend/                    # FastAPI 백엔드
 │   ├── requirements.txt
@@ -93,4 +94,4 @@ bash run.sh
 ---
 
 - 🌐 **API Swagger 문서**: `http://localhost:8000/docs`
-- 🖥️ **웹 화면 미리보기**: `company_preview.html`, `company_detail_preview.html`, `game_arcade_preview.html`, `dart_shooter_preview.html`, `quiz_preview.html` 파일을 브라우저로 직접 열어 확인하실 수 있습니다.
+- 🖥️ **웹 화면 미리보기**: `company_preview.html`, `company_detail_preview.html`, `game_arcade_preview.html`, `dart_shooter_preview.html`, `tetris_preview.html`, `quiz_preview.html` 파일을 브라우저로 직접 열어 확인하실 수 있습니다.
