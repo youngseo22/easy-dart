@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Easy-DART | 기업 파헤치기</title>
+  <!-- Tailwind CDN & Lucide -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- CSS 분리 링크 -->
+  <link rel="stylesheet" href="../../styles/common.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-emerald-100 selection:text-emerald-900">
+
+  <!-- GNB Header -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-8">
+        <a href="index.html" class="flex items-center space-x-2.5 group">
+          <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-black text-xl shadow-md">
+            📈
+          </div>
+          <div>
+            <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Easy-DART</span>
+            <span class="hidden sm:inline-block ml-2 text-xs font-semibold px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200">20대 일상 기업</span>
+          </div>
+        </a>
+
+        <nav class="flex items-center space-x-2">
+          <a href="index.html" class="px-4 py-2 rounded-xl text-sm font-bold bg-slate-900 text-white shadow-sm flex items-center gap-1.5">
+            <i data-lucide="sparkles" class="w-4 h-4 text-emerald-400"></i> 기업 파헤치기
+          </a>
+          <a href="../quiz_terms/index.html" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors flex items-center gap-1.5">
+            <i data-lucide="help-circle" class="w-4 h-4"></i> 주식 용어 퀴즈
+          </a>
+        </nav>
+      </div>
+
+      <div class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-600 rounded-full text-xs font-semibold border border-slate-200">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span>DART 전자공시 실시간 연동</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10 flex-1">
+    
+    <!-- Hero 소비 환산기 -->
+    <section class="gradient-hero rounded-3xl p-6 sm:p-8 border border-emerald-100 shadow-subtle relative overflow-hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-6 space-y-4">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-bold shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-emerald-300 pulse-dot"></span>
+            내 소비 ➡️ 기업 실적 환산기
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 leading-tight">
+            "내가 쓴 돈, 그 기업은 <br class="hidden sm:inline"/>
+            <span class="text-emerald-700 underline decoration-emerald-400 decoration-wavy">얼마나 남겨먹었을까?</span>"
+          </h1>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            평소 자주 결제하는 브랜드와 금액을 입력해보세요. DART 공시 데이터 기준으로 실제 제품 몇 개치 순이익인지 즉시 환산해 드려요!
+          </p>
+
+          <div class="bg-white p-2.5 rounded-2xl shadow-sm border border-slate-200 flex flex-col sm:flex-row items-center gap-2">
+            <select id="brandSelect" class="w-full sm:w-44 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-700 outline-none cursor-pointer">
+              <option value="olive">🧴 CJ올리브영</option>
+              <option value="daiso">🛒 아성다이소</option>
+              <option value="starbucks">☕ 스타벅스</option>
+              <option value="hyundai">🚗 현대자동차</option>
+              <option value="baemin">🛵 배달의민족</option>
+            </select>
+            <div class="relative flex-1 w-full">
+              <input id="spendInput" type="number" value="35000" class="w-full bg-transparent font-bold text-sm text-slate-800 px-3 py-2 outline-none" placeholder="결제 금액 입력" />
+              <span class="absolute right-3 top-2 text-xs font-bold text-slate-400">원 결제</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6">
+          <div id="resultCard" class="bg-white/90 backdrop-blur-md rounded-2xl p-6 border border-emerald-200 shadow-hover">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+              <div class="flex items-center gap-3">
+                <div id="resultIcon" class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl shadow-inner">🧴</div>
+                <div>
+                  <h3 id="resultTitle" class="font-extrabold text-base text-slate-900">CJ올리브영 체감 분석</h3>
+                  <p id="resultSub" class="text-xs text-slate-500">최근 공시 영업이익률 약 12.2% 적용</p>
+                </div>
+              </div>
+              <span class="text-xs font-bold px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-lg border border-emerald-100">공시 기반</span>
+            </div>
+
+            <div class="py-5 text-center space-y-1">
+              <p class="text-xs text-slate-500 font-medium">당신이 결제한 <span id="dispSpend" class="font-bold text-slate-800">35,000원</span>으로</p>
+              <p class="text-xl sm:text-2xl font-black text-emerald-800 leading-snug">
+                "올리브영은 <span id="dispMetaphor" class="text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-lg border border-emerald-100">독도토너 1.4병</span>의 순이익을 남겼어요!"
+              </p>
+              <p id="dispMargin" class="text-xs text-slate-500 pt-1">
+                순수 기업 이익금 환산액 : <span class="font-bold text-slate-800">약 4,270원</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 20대 기업 탐색 -->
+    <section class="space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2">
+            <span>🔍</span> 20대 일상 기업 공시 파헤치기
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">내가 돈 쓰는 친숙한 기업들의 공시문서를 쉽게 분석해 보세요.</p>
+        </div>
+
+        <div class="relative w-full md:w-80">
+          <input type="text" id="companySearchInput" placeholder="기업명 검색 (예: 다이소, 하이브, 올리브영)" class="w-full bg-white border border-slate-300 focus:border-emerald-500 text-xs sm:text-sm rounded-2xl py-3 pl-10 pr-4 outline-none shadow-sm" />
+          <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400"></i>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+        <button data-category="all" class="category-btn active px-4 py-2 rounded-xl text-xs font-bold bg-slate-900 text-white shadow-sm shrink-0">전체 기업</button>
+        <button data-category="beauty" class="category-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 shrink-0">🧴 뷰티 / 패션</button>
+        <button data-category="tech" class="category-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 shrink-0">💬 IT / 플랫폼 / 콘텐츠</button>
+        <button data-category="fnb" class="category-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 shrink-0">☕ 카페 / 푸드 / 배달</button>
+        <button data-category="mobility" class="category-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 shrink-0">🚗 모빌리티 / 라이프</button>
+      </div>
+
+      <div id="companyGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </section>
+
+  </main>
+
+  <footer class="bg-white border-t border-slate-200/80 py-6 mt-12 text-center text-xs text-slate-400">
+    <p class="font-semibold text-slate-600">📈 Easy-DART — 20대 일상 기업 전자공시 해설 플랫폼</p>
+  </footer>
+
+  <!-- JS 분리 모듈 로드 -->
+  <script type="module" src="script.js"></script>
+</body>
+</html>

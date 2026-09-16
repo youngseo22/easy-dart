@@ -1,0 +1,40 @@
+{
+  "basic_terms": [
+    {
+      "id": "q1",
+      "topic": "income",
+      "category": "손익계산서 필수 용어",
+      "question": "가게에서 손님들에게 물건을 팔고 받은 총 금액에서 알바비, 재료비, 매장 월세를 빼고 본업으로 순수하게 남긴 돈은?",
+      "options": [
+        { "text": "1. 매출액", "is_correct": false },
+        { "text": "2. 영업이익", "is_correct": true },
+        { "text": "3. 자본금", "is_correct": false },
+        { "text": "4. 부채", "is_correct": false }
+      ],
+      "explanation": "영업이익은 기업이 본업을 통해 순수하게 벌어들인 마진입니다."
+    },
+    {
+      "id": "q2",
+      "topic": "audit",
+      "category": "감사보고서 상식",
+      "question": "회계사가 기업 장부에 이상이 없음을 인증하는 성적표는?",
+      "options": [
+        { "text": "1. 적정 의견", "is_correct": true },
+        { "text": "2. 한정 의견", "is_correct": false },
+        { "text": "3. 부적정 의견", "is_correct": false },
+        { "text": "4. 의견 거절", "is_correct": false }
+      ],
+      "explanation": "적정 의견은 회계 장부가 기준에 맞게 성실히 작성되었다는 뜻입니다."
+    }
+  ],
+  "company_quizzes": {
+    "olive": {
+      "question": "올리브영의 2023년 매출 중 온라인(오늘드림 등) 비중은 30%를 돌파했을까요?",
+      "options": [
+        { "text": "⭕ 그렇다 (30.6%로 돌파)", "is_correct": true },
+        { "text": "❌ 아니다", "is_correct": false }
+      ],
+      "explanation": "올리브영은 오늘드림 퀵커머스 성장으로 온라인 비중이 사상 처음 30%를 넘었습니다."
+    }
+  }
+}

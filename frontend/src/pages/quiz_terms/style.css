@@ -1,0 +1,5 @@
+/* quiz_terms 페이지 전용 스타일 */
+.quiz-opt-btn:hover {
+  border-color: #6366F1;
+  background-color: #EEF2FF;
+}

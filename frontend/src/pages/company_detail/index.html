@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Easy-DART | 기업 공시 심층 파헤치기</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="../../styles/common.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-emerald-100 selection:text-emerald-900">
+
+  <!-- GNB Header -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-8">
+        <a href="../company_list/index.html" class="flex items-center space-x-2.5 group">
+          <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-black text-xl shadow-md">📈</div>
+          <div>
+            <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Easy-DART</span>
+            <span class="hidden sm:inline-block ml-2 text-xs font-semibold px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200">공시 파헤치기</span>
+          </div>
+        </a>
+
+        <nav class="flex items-center space-x-2">
+          <a href="../company_list/index.html" class="px-4 py-2 rounded-xl text-sm font-bold bg-slate-900 text-white shadow-sm flex items-center gap-1.5">
+            <i data-lucide="sparkles" class="w-4 h-4 text-emerald-400"></i> 기업 파헤치기
+          </a>
+          <a href="../quiz_terms/index.html" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors flex items-center gap-1.5">
+            <i data-lucide="help-circle" class="w-4 h-4"></i> 주식 용어 퀴즈
+          </a>
+        </nav>
+      </div>
+
+      <a href="../company_list/index.html" class="flex items-center gap-1 text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-full transition-all">
+        <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> 목록으로
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10 flex-1 w-full">
+    
+    <!-- Company Hero -->
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-subtle flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div class="flex items-center gap-4">
+        <div id="compIcon" class="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-3xl shadow-inner shrink-0">🧴</div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 id="compName" class="text-2xl sm:text-3xl font-black text-slate-900">기업명</h1>
+            <span id="compBadge" class="text-xs font-bold px-2.5 py-0.5 bg-emerald-50 text-emerald-700 rounded-md border border-emerald-100">카테고리</span>
+          </div>
+          <p class="text-xs text-slate-400 mt-1">금융감독원 전자공시(DART) 정기 보고서 기반</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 손익계산서 해체쇼 -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-subtle space-y-6">
+      <div class="border-b border-slate-100 pb-4">
+        <h2 class="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
+          <span>📊</span> 초간단 손익계산서 해체쇼
+        </h2>
+        <p class="text-xs text-slate-500 mt-0.5">손님이 낸 돈(매출)에서 얼마가 나가고 진짜 내 주머니에 얼마가 남았을까요?</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="stat-card p-5 rounded-2xl bg-slate-50 border border-slate-200">
+          <span class="text-xs font-bold text-slate-500">1. 매출액 (총 결제액)</span>
+          <p id="statRevenue" class="text-xl font-black text-slate-900 mt-1">-</p>
+        </div>
+        <div class="stat-card p-5 rounded-2xl bg-rose-50/60 border border-rose-100">
+          <span class="text-xs font-bold text-rose-600">2. 빠져나간 비용</span>
+          <p id="statCost" class="text-xl font-black text-rose-800 mt-1">-</p>
+        </div>
+        <div class="stat-card p-5 rounded-2xl bg-yellow-50/60 border border-yellow-200">
+          <span class="text-xs font-bold text-yellow-700">3. 영업이익 (본업 몫)</span>
+          <p id="statOpProfit" class="text-xl font-black text-yellow-900 mt-1">-</p>
+        </div>
+        <div class="stat-card p-5 rounded-2xl bg-emerald-50 border-2 border-emerald-500/80">
+          <span class="text-xs font-bold text-emerald-800">4. 당기순이익 (진짜 내 돈)</span>
+          <p id="statNetProfit" class="text-xl font-black text-emerald-700 mt-1">-</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI 3줄 요약 & 리스크 -->
+    <section class="grid grid-cols-1 md:grid-cols-12 gap-6">
+      <div class="md:col-span-12 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-subtle space-y-4">
+        <h2 class="text-lg font-black text-slate-900 flex items-center gap-2"><span>🤖</span> AI 공시 3줄 핵심 요약</h2>
+        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-100">
+          <ul id="summaryList" class="space-y-2.5 text-xs sm:text-sm text-slate-700 font-medium"></ul>
+        </div>
+      </div>
+
+      <div class="md:col-span-6 bg-emerald-50/60 rounded-3xl p-6 sm:p-7 border border-emerald-100 space-y-3">
+        <h3 class="text-sm font-extrabold text-emerald-900">🟢 이 회사의 올해 자랑거리</h3>
+        <ul id="goodList" class="space-y-2 text-xs sm:text-sm text-slate-700 font-medium"></ul>
+      </div>
+
+      <div class="md:col-span-6 bg-rose-50/60 rounded-3xl p-6 sm:p-7 border border-rose-100 space-y-3">
+        <h3 class="text-sm font-extrabold text-rose-900">🔴 주린이가 조심해야 할 리스크</h3>
+        <ul id="riskList" class="space-y-2 text-xs sm:text-sm text-slate-700 font-medium"></ul>
+      </div>
+    </section>
+
+    <!-- 🎯 하단 기업 퀴즈 컨테이너 (팀원 C 컴포넌트 렌더링 영역) -->
+    <section id="companyQuizContainer"></section>
+
+  </main>
+
+  <footer class="bg-white border-t border-slate-200/80 py-6 mt-12 text-center text-xs text-slate-400">
+    <p class="font-semibold text-slate-600">📈 Easy-DART — 20대 일상 기업 전자공시 해설 플랫폼</p>
+  </footer>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>

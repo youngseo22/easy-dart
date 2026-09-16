@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Easy-DART | 주식 & 회계 기초 용어 퀴즈</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="../../styles/common.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-indigo-100 selection:text-indigo-900">
+
+  <!-- GNB Header -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-8">
+        <a href="../company_list/index.html" class="flex items-center space-x-2.5 group">
+          <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-black text-xl shadow-md">🎯</div>
+          <div>
+            <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-600 to-emerald-600 bg-clip-text text-transparent">Easy-DART</span>
+            <span class="hidden sm:inline-block ml-2 text-xs font-semibold px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded-full border border-indigo-200">주식 용어 퀴즈</span>
+          </div>
+        </a>
+
+        <nav class="flex items-center space-x-2">
+          <a href="../company_list/index.html" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors flex items-center gap-1.5">
+            <i data-lucide="sparkles" class="w-4 h-4"></i> 기업 파헤치기
+          </a>
+          <a href="index.html" class="px-4 py-2 rounded-xl text-sm font-bold bg-slate-900 text-white shadow-sm flex items-center gap-1.5">
+            <i data-lucide="help-circle" class="w-4 h-4 text-yellow-400"></i> 주식 용어 퀴즈
+          </a>
+        </nav>
+      </div>
+
+      <div class="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 text-indigo-700 rounded-full text-xs font-bold border border-indigo-200">
+        <span>📚</span>
+        <span>주린이 기초 체력장</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 flex-1 w-full">
+    
+    <div class="text-center space-y-3">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100 text-indigo-800 text-xs font-bold">
+        <span>📖</span> 기초 용어 정복 아레나
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-black text-slate-900">"매출액과 영업이익, 헷갈리지 않으신가요?"</h1>
+      <p class="text-xs sm:text-sm text-slate-500 max-w-lg mx-auto leading-relaxed">
+        주식 공시 문서를 읽기 전 꼭 알아야 할 기초 회계/주식 필수 용어들을 재미있는 퀴즈로 쉽게 마스터해 보세요!
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-2 pt-2">
+        <button data-topic="all" class="topic-btn active px-4 py-1.5 rounded-full text-xs font-bold bg-slate-900 text-white shadow-sm">전체 용어 퀴즈</button>
+        <button data-topic="income" class="topic-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">💰 손익 & 돈버는법</button>
+        <button data-topic="audit" class="topic-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-white border border-slate-200 text-slate-700 hover:bg-slate-50">📋 감사의견 & 성적표</button>
+      </div>
+    </div>
+
+    <!-- 퀴즈 카드 -->
+    <div class="bg-white rounded-3xl p-6 sm:p-9 border border-slate-200/90 shadow-subtle space-y-6">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100 text-xs font-bold">
+        <span id="quizCategory" class="text-slate-800 text-sm">손익계산서 필수 용어</span>
+        <span id="quizProgress" class="text-slate-400">Q 1 / 5</span>
+      </div>
+
+      <div class="space-y-2 py-2">
+        <span class="text-xs font-extrabold text-indigo-600 tracking-wider">QUIZ</span>
+        <h2 id="quizQuestion" class="text-lg sm:text-xl font-black text-slate-900 leading-snug">질문 로딩 중...</h2>
+      </div>
+
+      <div id="quizOptionsContainer" class="space-y-3"></div>
+
+      <div id="feedbackBox" class="hidden p-5 rounded-2xl border transition-all space-y-2">
+        <h4 id="feedbackTitle" class="font-extrabold text-sm">정답입니다!</h4>
+        <p id="feedbackContent" class="text-xs sm:text-sm text-slate-700 leading-relaxed"></p>
+        <div class="pt-2 flex items-center justify-end border-t border-slate-200/60 mt-2">
+          <button id="nextQuizBtn" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-sm">
+            다음 퀴즈 풀기 ➡️
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="bg-white border-t border-slate-200/80 py-6 mt-12 text-center text-xs text-slate-400">
+    <p class="font-semibold text-slate-600">📈 Easy-DART — 주린이를 위한 주식 & 회계 기초 용어 퀴즈</p>
+  </footer>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>

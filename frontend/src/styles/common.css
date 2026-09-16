@@ -1,0 +1,38 @@
+/* 공통 디자인 시스템 및 토큰 */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Pretendard:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --font-main: 'Pretendard', 'Outfit', -apple-system, sans-serif;
+  --bg-primary: #F8FAFC;
+  --text-main: #0F172A;
+  --text-muted: #64748B;
+  --brand-emerald: #10B981;
+  --brand-emerald-dark: #059669;
+  --brand-emerald-light: #ECFDF5;
+  --border-color: #E2E8F0;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  margin: 0;
+  padding: 0;
+}
+
+.gradient-hero {
+  background: linear-gradient(135deg, #ECFDF5 0%, #F0FDF4 50%, #FEF3C7 100%);
+}
+
+.card-transition {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pulse-dot {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.1); }
+}

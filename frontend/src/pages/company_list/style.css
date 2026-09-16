@@ -1,0 +1,4 @@
+/* company_list 페이지 전용 스타일 */
+.company-card:hover {
+  transform: translateY(-4px);
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "olive",
+    "name": "CJ올리브영",
+    "corp_code": "01407335",
+    "category": "beauty",
+    "category_name": "뷰티 & 헬스케어",
+    "icon": "🧴",
+    "item_name": "독도토너",
+    "item_price": 3000
+  },
+  {
+    "id": "daiso",
+    "name": "아성다이소",
+    "corp_code": "00257009",
+    "category": "mobility",
+    "category_name": "균일가 생활용품",
+    "icon": "🛒",
+    "item_name": "1,000원 생필품",
+    "item_price": 1000
+  },
+  {
+    "id": "hyundai",
+    "name": "현대자동차",
+    "corp_code": "00164779",
+    "category": "mobility",
+    "category_name": "모빌리티 & 완성차",
+    "icon": "🚗",
+    "item_name": "차량용 방향제",
+    "item_price": 18000
+  },
+  {
+    "id": "starbucks",
+    "name": "스타벅스(SCK컴퍼니)",
+    "corp_code": "00318045",
+    "category": "fnb",
+    "category_name": "식음료 & 카페",
+    "icon": "☕",
+    "item_name": "아메리카노 Tall",
+    "item_price": 1500
+  }
+]
