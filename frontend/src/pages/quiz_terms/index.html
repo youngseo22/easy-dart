@@ -82,15 +82,15 @@
           </div>
         </a>
 
-        <nav class="flex items-center space-x-2">
-          <a href="/company-list" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors flex items-center gap-1.5">
-            <i data-lucide="building-2" class="w-4 h-4"></i> 기업 파헤치기
+        <nav class="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
+          <a href="/company-list" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
+            <i data-lucide="building-2" class="w-4 h-4 flex-shrink-0"></i> <span>기업 파헤치기</span>
           </a>
-          <a href="/mock-invest" id="navTabMockInvest" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors flex items-center gap-1.5">
-            <i data-lucide="trending-up" class="w-4 h-4 text-cyan-400"></i> 실전 모의투자
+          <a href="/mock-invest" id="navTabMockInvest" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
+            <i data-lucide="trending-up" class="w-4 h-4 text-cyan-400 flex-shrink-0"></i> <span>실전 모의투자</span>
           </a>
-          <button id="navTabArcade" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-rose-600 via-purple-600 to-cyan-600 text-white shadow-md shadow-rose-500/20 flex items-center gap-1.5 transition-all">
-            <i data-lucide="gamepad-2" class="w-4 h-4 text-amber-300"></i> DART 오락실
+          <button id="navTabArcade" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-rose-600 via-purple-600 to-cyan-600 text-white shadow-md shadow-rose-500/20 flex items-center gap-1.5 transition-all whitespace-nowrap flex-shrink-0">
+            <i data-lucide="gamepad-2" class="w-4 h-4 text-amber-300 flex-shrink-0"></i> <span>DART 오락실</span>
           </button>
         </nav>
       </div>
@@ -405,14 +405,26 @@
     <p class="font-semibold text-slate-400">📈 Easy-DART — 20대 주린이를 위한 체감형 DART 게이미피케이션 플랫폼</p>
   </footer>
 
+  <!-- Immediate Lucide Icon Render for Header & Static Elements -->
+  <script>
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
+
   <!-- Quiz Script (팀원 C 모듈) -->
-  <script type="module" src="script.js"></script>
+  <script type="module" src="/frontend/src/pages/quiz_terms/script.js"></script>
 
   <!-- Arcade UI & Tab Interaction Script -->
   <script type="module">
-    import { getUserStats, getHallOfFame, calculateGrade, saveUserNickname } from './games/ranking_helper.js';
+    import { getUserStats, getHallOfFame, calculateGrade, saveUserNickname } from '/frontend/src/pages/quiz_terms/games/ranking_helper.js';
 
-    lucide.createIcons();
+    if (window.lucide) {
+      lucide.createIcons();
+    }
 
     // Tab Switching Logic
     const navTabArcade = document.getElementById('navTabArcade');
