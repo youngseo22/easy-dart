@@ -54,11 +54,6 @@
         linear-gradient(to right, rgba(56, 189, 248, 0.08) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(56, 189, 248, 0.08) 1px, transparent 1px);
     }
-    .scanline-bg {
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-      background-size: 100% 4px, 6px 100%;
-      pointer-events: none;
-    }
     .text-glow-pink {
       text-shadow: 0 0 16px rgba(244, 63, 94, 0.8), 0 0 30px rgba(244, 63, 94, 0.4);
     }
@@ -71,8 +66,6 @@
   </style>
 </head>
 <body class="min-h-screen flex flex-col font-sans selection:bg-rose-500 selection:text-white retro-grid relative">
-
-  <div class="scanline-bg fixed inset-0 z-40"></div>
 
   <!-- GNB Header -->
   <header class="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80">
