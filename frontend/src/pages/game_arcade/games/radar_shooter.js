@@ -106,6 +106,25 @@ class SoundSynthesizer {
       osc.stop(now + 0.25);
     } catch (e) {}
   }
+
+  playCollect() {
+    if (this.isMuted || !this.ctx) return;
+    try {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'sine';
+      const now = this.ctx.currentTime;
+      osc.frequency.setValueAtTime(523.25, now); // C5
+      osc.frequency.setValueAtTime(659.25, now + 0.06); // E5
+      osc.frequency.setValueAtTime(880.00, now + 0.12); // A5
+      gain.gain.setValueAtTime(0.25, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.28);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.28);
+    } catch (e) {}
+  }
 }
 
 export class DartRadarShooter {
@@ -356,7 +375,7 @@ export class DartRadarShooter {
 
   spawnCapsule() {
     const item = getRandomDisclosure();
-    const padding = 70;
+    const padding = 75;
     const spawnX = Math.random() * (this.width - padding * 2) + padding;
 
     // Track encounter
@@ -364,6 +383,8 @@ export class DartRadarShooter {
       this.encounterHistory.set(item.id, {
         item: item,
         countShot: 0,
+        countAbsorbed: 0,
+        countCollided: 0,
         countMissed: 0
       });
     }
@@ -376,8 +397,8 @@ export class DartRadarShooter {
       x: spawnX,
       y: -30,
       vy: (1.2 * item.speed) * speedMultiplier,
-      width: 140,
-      height: 38,
+      width: 154,
+      height: 42,
       pulse: 0
     });
   }
@@ -457,7 +478,56 @@ export class DartRadarShooter {
       const halfW = c.width / 2;
       const halfH = c.height / 2;
 
-      // Check collision with missiles
+      // 1. Check Collision with Player Spaceship Body
+      const hitPlayer = Math.abs(c.x - this.player.x) < (halfW + 16) && Math.abs(c.y - this.player.y) < (halfH + 18);
+
+      if (hitPlayer) {
+        const encounter = this.encounterHistory.get(c.item.id);
+        if (!c.item.isDanger) {
+          // 🍀 호재 공시 비행선 직접 흡수 성공! (+120P, +연쇄콤보, +시총 10% 회복)
+          if (encounter) encounter.countAbsorbed = (encounter.countAbsorbed || 0) + 1;
+          this.combo++;
+          if (this.combo > this.maxCombo) this.maxCombo = this.combo;
+          const comboBonus = Math.min(60, (this.combo - 1) * 15);
+          const earned = 120 + comboBonus;
+          this.score += earned;
+
+          const prevCap = this.marketCap;
+          this.marketCap = Math.min(100, this.marketCap + 10);
+          const healed = Math.round(this.marketCap - prevCap);
+
+          this.sound.playCollect();
+          if (this.combo % 3 === 0) this.sound.playCombo();
+
+          this.addExplosion(c.x, c.y, '#10B981', 22);
+
+          const comboTxt = this.combo > 1 ? ` (${this.combo}연쇄!)` : '';
+          this.addFloatingText(`💚 흡수 성공! +${earned}P${comboTxt}`, c.x, c.y - 18, '#34D399', 16);
+          this.addFloatingText(`[시총 +${healed}% 회복] ${c.item.keyword}`, c.x, c.y + 12, '#A7F3D0', 12);
+        } else {
+          // 💥 악재 지뢰와 비행선 직접 충돌! (-25% 시총 급락)
+          if (encounter) encounter.countCollided = (encounter.countCollided || 0) + 1;
+          this.combo = 0;
+          this.marketCap -= 25;
+
+          this.sound.playWarning();
+          this.screenShakeTime = 18;
+          this.addExplosion(c.x, c.y, '#EF4444', 24);
+
+          this.addFloatingText(`💥 지뢰 직접 충돌! 시총 -25%`, c.x, c.y - 18, '#EF4444', 16);
+          this.addFloatingText(`[${c.item.keyword}] 미사일로 격추해야 합니다!`, c.x, c.y + 12, '#FCA5A5', 12);
+
+          if (this.marketCap <= 0) {
+            this.triggerGameOver(`${c.item.keyword} 지뢰 충돌로 인한 시총 붕괴`);
+            return;
+          }
+        }
+
+        this.capsules.splice(i, 1);
+        continue;
+      }
+
+      // 2. Check collision with missiles
       let hit = false;
       for (let j = this.missiles.length - 1; j >= 0; j--) {
         const m = this.missiles[j];
@@ -475,10 +545,10 @@ export class DartRadarShooter {
 
       if (hit) {
         const encounter = this.encounterHistory.get(c.item.id);
-        if (encounter) encounter.countShot++;
+        if (encounter) encounter.countShot = (encounter.countShot || 0) + 1;
 
         if (c.item.isDanger) {
-          // ✅ 악재 공시 격추 성공!
+          // 🎯 악재 공시 요격 성공!
           this.combo++;
           if (this.combo > this.maxCombo) this.maxCombo = this.combo;
           const comboBonus = Math.min(50, (this.combo - 1) * 15);
@@ -492,10 +562,10 @@ export class DartRadarShooter {
           this.screenShakeTime = 6;
 
           const comboTxt = this.combo > 1 ? ` (${this.combo}콤보!)` : '';
-          this.addFloatingText(`💥 +${earned}${comboTxt}`, c.x, c.y - 15, '#FBBF24', 16);
+          this.addFloatingText(`🎯 요격 성공! +${earned}P${comboTxt}`, c.x, c.y - 15, '#FBBF24', 16);
           this.addFloatingText(`[상폐 방어: ${c.item.category}]`, c.x, c.y + 12, '#38BDF8', 12);
         } else {
-          // ❌ 호재 공시 오인 사격! (페널티)
+          // 🚨 호재 공시 미사일 오발! (페널티)
           this.combo = 0;
           const penalty = c.item.penalty || 60;
           this.score = Math.max(0, this.score - penalty);
@@ -505,8 +575,8 @@ export class DartRadarShooter {
           this.addExplosion(c.x, c.y, '#EF4444', 14);
           this.screenShakeTime = 12;
 
-          this.addFloatingText(`🚨 우량 공시 오발! -${penalty}`, c.x, c.y - 15, '#EF4444', 15);
-          this.addFloatingText(`시총 16% 증발!`, c.x, c.y + 12, '#F87171', 13);
+          this.addFloatingText(`🚨 오발! 우량 공시 파괴 (-${penalty}P)`, c.x, c.y - 15, '#EF4444', 15);
+          this.addFloatingText(`호재는 몸체로 흡수해야 합니다! (시총 -16%)`, c.x, c.y + 12, '#F87171', 12);
 
           if (this.marketCap <= 0) {
             this.triggerGameOver('우량 공시 파괴로 인한 투자자 신뢰 상실');
@@ -518,10 +588,10 @@ export class DartRadarShooter {
         continue;
       }
 
-      // Reached bottom (Player base)
+      // 3. Reached bottom (Player base)
       if (c.y > this.height - 30) {
         const encounter = this.encounterHistory.get(c.item.id);
-        if (encounter) encounter.countMissed++;
+        if (encounter) encounter.countMissed = (encounter.countMissed || 0) + 1;
 
         if (c.item.isDanger) {
           // 악재가 회사에 직격타!
@@ -530,16 +600,16 @@ export class DartRadarShooter {
           this.sound.playWarning();
           this.screenShakeTime = 16;
           this.addExplosion(c.x, this.height - 40, '#DC2626', 20);
-          this.addFloatingText(`⚠️ ${c.item.keyword} 직격타! -20%`, c.x, this.height - 70, '#EF4444', 15);
+          this.addFloatingText(`⚠️ 악재 방치 직격타! 시총 -20%`, c.x, this.height - 70, '#EF4444', 15);
+          this.addFloatingText(`[${c.item.keyword}] 미사일 요격 실패!`, c.x, this.height - 45, '#FCA5A5', 12);
 
           if (this.marketCap <= 0) {
-            this.triggerGameOver(`${c.item.keyword} 누적으로 인한 상장폐지`);
+            this.triggerGameOver(`${c.item.keyword} 방치로 인한 상장폐지`);
             return;
           }
         } else {
-          // 호재는 자연스럽게 통과시킴 (보존 성공!)
-          this.score += 30;
-          this.addFloatingText(`✨ 우량 공시 보존! +30`, c.x, this.height - 50, '#34D399', 13);
+          // 호재는 자연스럽게 통과시킴
+          this.addFloatingText(`💨 호재 놓침! (비행선으로 흡수하세요)`, c.x, this.height - 50, '#94A3B8', 12);
         }
 
         this.capsules.splice(i, 1);
@@ -681,18 +751,18 @@ export class DartRadarShooter {
       this.roundRect(cx - halfW, cy - halfH, c.width, c.height, 12, true, true);
       this.ctx.shadowBlur = 0;
 
-      // Category Pill Tag
+      // Category Pill Tag & Action Instruction
       this.ctx.fillStyle = glowColor;
-      this.ctx.font = 'bold 9px sans-serif';
+      this.ctx.font = 'bold 9.5px Pretendard, sans-serif';
       this.ctx.textAlign = 'center';
       this.ctx.textBaseline = 'middle';
-      const badgeIcon = c.item.isDanger ? '🚨' : '🍀';
-      this.ctx.fillText(`${badgeIcon} ${c.item.category}`, cx, cy - 8);
+      const actionBadge = c.item.isDanger ? '🎯 [미사일 격추]' : '🍀 [몸으로 획득]';
+      this.ctx.fillText(`${actionBadge} ${c.item.category}`, cx, cy - 9);
 
       // Disclosure Keyword Text
       this.ctx.fillStyle = '#FFFFFF';
-      this.ctx.font = 'bold 12px Pretendard, sans-serif';
-      this.ctx.fillText(c.item.keyword, cx, cy + 8);
+      this.ctx.font = 'bold 12.5px Pretendard, sans-serif';
+      this.ctx.fillText(c.item.keyword, cx, cy + 9);
     }
 
     // Draw Player Turret (Spaceship)

@@ -82,6 +82,63 @@
       </div>
     </div>
 
+    <!-- Top How to Play Guide Banner -->
+    <div class="arcade-panel rounded-2xl p-4 sm:p-5 border-cyan-500/30 bg-gradient-to-b from-slate-900/95 to-slate-950/95 shadow-xl">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-3.5">
+        <div class="flex items-center gap-2">
+          <span class="text-base">🕹️</span>
+          <h2 class="text-sm font-black text-white tracking-wide">30초 마스터! 공시 레이더 미사일 핵심 교전 수칙</h2>
+        </div>
+        <span class="text-[11px] font-bold text-cyan-400 bg-cyan-950/80 px-2.5 py-0.5 rounded-full border border-cyan-800">
+          피아식별 조작 가이드
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+        <!-- Bad News Rule -->
+        <div class="p-3.5 rounded-xl bg-rose-950/20 border-2 border-rose-500/40 flex items-start gap-3">
+          <div class="w-10 h-10 rounded-xl bg-rose-500/20 border border-rose-500/50 flex items-center justify-center text-rose-400 text-xl shrink-0">
+            🎯
+          </div>
+          <div class="space-y-1">
+            <div class="flex items-center gap-1.5">
+              <span class="text-xs font-black text-rose-400">악재 공시 [상폐 지뢰]</span>
+              <span class="text-[10px] px-1.5 py-0.2 rounded bg-rose-500 text-slate-950 font-black">미사일로 격추!</span>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              <span class="font-bold text-white">[감사의견 거절, 완전자본잠식, 횡령배임]</span> 등은 회사를 망하게 하는 지뢰입니다. <span class="text-rose-400 font-bold">스페이스바(Space)</span>로 쏴서 파괴하세요! (+100P, 방치 또는 충돌 시 시총 폭락)
+            </p>
+          </div>
+        </div>
+
+        <!-- Good News Rule -->
+        <div class="p-3.5 rounded-xl bg-emerald-950/20 border-2 border-emerald-500/40 flex items-start gap-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/50 flex items-center justify-center text-emerald-400 text-xl shrink-0">
+            🍀
+          </div>
+          <div class="space-y-1">
+            <div class="flex items-center gap-1.5">
+              <span class="text-xs font-black text-emerald-400">호재 공시 [우량 실적]</span>
+              <span class="text-[10px] px-1.5 py-0.2 rounded bg-emerald-500 text-slate-950 font-black">비행선으로 먹기!</span>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              <span class="font-bold text-white">[영업이익 흑자, 자사주 소각, 적정의견]</span>은 좋은 공시입니다. 쏘지 말고 <span class="text-emerald-400 font-bold">비행선 몸체로 직접 닿아서 흡수</span>하세요! (+120P & 💚시총 +10% 회복, 쏘면 오발 페널티)
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400 flex-wrap gap-2">
+        <span class="flex items-center gap-1.5">
+          <i data-lucide="keyboard" class="w-3.5 h-3.5 text-cyan-400"></i>
+          조작법: <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">◀</kbd> <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">▶</kbd> 이동 / <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">Space</kbd> 미사일 발사 (마우스 드래그 & 터치 지원)
+        </span>
+        <span class="text-cyan-400 font-semibold flex items-center gap-1">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> 목표: 기업 시가총액(100%)을 방어하며 클리어
+        </span>
+      </div>
+    </div>
+
     <!-- Canvas Game Container -->
     <div class="relative w-full rounded-3xl overflow-hidden shadow-2xl">
       <canvas id="gameCanvas"></canvas>
@@ -94,10 +151,10 @@
           </div>
           
           <div class="space-y-2">
-            <h1 class="text-2xl sm:text-3xl font-black text-white">"상장폐지 지뢰 공시를<br><span class="text-cyan-400">조준 격추하라!</span>"</h1>
+            <h1 class="text-2xl sm:text-3xl font-black text-white">"상장폐지 지뢰는 <span class="text-rose-400">격추</span>하고,<br>우량 호재는 <span class="text-emerald-400">몸으로 흡수</span>하라!"</h1>
             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-              위에서 쏟아지는 공시 중 <span class="text-rose-400 font-bold">악재 공시</span>만 요격하세요.<br>
-              <span class="text-emerald-400 font-bold">우량 공시</span>를 실수로 쏘면 시총이 급락합니다!
+              <span class="text-rose-400 font-bold">악재 공시</span>는 미사일로 요격하고, <span class="text-emerald-400 font-bold">호재 공시</span>는 비행선으로 직접 받아먹으세요!<br>
+              실수로 호재를 쏘거나 지뢰와 충돌하면 시총이 급락합니다.
             </p>
           </div>
 
@@ -105,14 +162,14 @@
           <div class="bg-slate-900/90 rounded-2xl p-4 border border-slate-800 text-left space-y-2.5 text-xs">
             <div class="flex items-center gap-2 text-rose-400 font-bold">
               <span class="w-5 h-5 rounded-md bg-rose-950/80 border border-rose-800 flex items-center justify-center">🎯</span>
-              <span>격추 대상: [감사의견 거절], [완전자본잠식], [횡령·배임] (+100점)</span>
+              <span>미사일 요격: [감사의견 거절], [완전자본잠식], [횡령·배임] (+100점)</span>
             </div>
             <div class="flex items-center gap-2 text-emerald-400 font-bold">
-              <span class="w-5 h-5 rounded-md bg-emerald-950/80 border border-emerald-800 flex items-center justify-center">🛡️</span>
-              <span>사격 금지: [적정의견], [영업흑자], [자사주 소각] (오발 시 시총 차감)</span>
+              <span class="w-5 h-5 rounded-md bg-emerald-950/80 border border-emerald-800 flex items-center justify-center">🍀</span>
+              <span>비행선 흡수: [적정의견], [영업흑자], [자사주 소각] (+120점 & 💚시총 +10% 회복)</span>
             </div>
             <div class="flex items-center gap-2 text-slate-400 pt-1 border-t border-slate-800/80">
-              <span>⌨️ 조작: 좌우 방향키(또는 A, D) / 발사: 스페이스바 (또는 화면 터치)</span>
+              <span>⌨️ 조작: 좌우 방향키(또는 A, D) / 발사: 스페이스바 (화면 마우스/터치 드래그 지원)</span>
             </div>
           </div>
 
@@ -297,18 +354,37 @@
       // Populate Educational Review List
       reviewListContainer.innerHTML = '';
       if (result.reviewList && result.reviewList.length > 0) {
-        result.reviewList.forEach(({ item, countShot, countMissed }) => {
+        result.reviewList.forEach(({ item, countShot = 0, countAbsorbed = 0, countCollided = 0, countMissed = 0 }) => {
           const card = document.createElement('div');
           const isDanger = item.isDanger;
           const statusBorder = isDanger ? 'border-rose-900/60 bg-rose-950/20' : 'border-emerald-900/60 bg-emerald-950/20';
           const tagBg = isDanger ? 'bg-rose-950 text-rose-300 border-rose-800' : 'bg-emerald-950 text-emerald-300 border-emerald-800';
-          const icon = isDanger ? '🚨 악재 공시' : '🍀 호재 공시';
+          const icon = isDanger ? '🎯 악재 [격추대상]' : '🍀 호재 [몸체흡수]';
 
           let resultText = '';
+          let resultColor = '';
           if (isDanger) {
-            resultText = countShot > 0 ? `✅ ${countShot}회 요격 성공` : '⚠️ 방어 실패 (직격타)';
+            if (countShot > 0) {
+              resultText = `✅ ${countShot}회 미사일 요격 성공`;
+              resultColor = 'text-emerald-400';
+            } else if (countCollided > 0) {
+              resultText = `💥 ${countCollided}회 비행선 직접 충돌`;
+              resultColor = 'text-rose-400';
+            } else {
+              resultText = `⚠️ ${countMissed}회 방치 (기지 타격)`;
+              resultColor = 'text-rose-400';
+            }
           } else {
-            resultText = countShot > 0 ? `❌ ${countShot}회 오인 사격!` : '✨ 보존 성공';
+            if (countAbsorbed > 0) {
+              resultText = `💚 ${countAbsorbed}회 비행선 흡수(+회복) 성공!`;
+              resultColor = 'text-emerald-400';
+            } else if (countShot > 0) {
+              resultText = `❌ ${countShot}회 오발 파괴!`;
+              resultColor = 'text-rose-400';
+            } else {
+              resultText = `💨 ${countMissed}회 미흡수 통과`;
+              resultColor = 'text-slate-400';
+            }
           }
 
           card.className = `p-3.5 rounded-2xl border ${statusBorder} space-y-1.5 text-xs`;
@@ -318,7 +394,7 @@
                 <span class="px-2 py-0.5 rounded-md text-[10px] font-bold border ${tagBg}">${icon}</span>
                 <span class="font-extrabold text-white text-sm">${item.keyword}</span>
               </div>
-              <span class="font-bold ${isDanger && countShot > 0 ? 'text-emerald-400' : (!isDanger && countShot === 0 ? 'text-cyan-400' : 'text-rose-400')}">${resultText}</span>
+              <span class="font-bold ${resultColor}">${resultText}</span>
             </div>
             <p class="text-slate-300 leading-relaxed text-[11px]">${item.summary}</p>
             <div class="text-[11px] text-amber-300/90 font-medium pt-1 border-t border-slate-800/60 flex items-center gap-1">
