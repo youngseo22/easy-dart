@@ -1,13 +1,12 @@
-/**
- * [팀원 B 담당] 기업 목록 및 소비 환산기 인터랙션 스크립트
- */
-import { calculateMetaphor, BRAND_METAPHOR_MAP } from '../../utils/metaphor_calculator.js';
+import { calculateMetaphor, getCompanyScaleMetaphor, BRAND_METAPHOR_MAP } from '../../utils/metaphor_calculator.js';
 import { apiClient } from '../../api/client.js';
 
 let allCompanies = [];
 
 document.addEventListener('DOMContentLoaded', async () => {
-  lucide.createIcons();
+  if (window.lucide) {
+    lucide.createIcons();
+  }
   setupEvents();
   await loadCompanies();
 });
@@ -67,7 +66,10 @@ function renderCompanyList(list) {
   const grid = document.getElementById('companyGrid');
   if (!grid) return;
 
-  grid.innerHTML = list.map(c => `
+  grid.innerHTML = list.map(c => {
+    const scaleMeta = getCompanyScaleMetaphor(c.id);
+    const headline = scaleMeta.headline || `영업이익으로 ${c.item_name}을 대량 판매한 마진 규모!`;
+    return `
     <div class="company-card bg-white rounded-3xl p-6 border border-slate-200 shadow-subtle hover:shadow-hover card-transition cursor-pointer group" onclick="location.href='../company_detail/index.html?id=${c.id}'">
       <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-3">
@@ -79,23 +81,26 @@ function renderCompanyList(list) {
             <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">${c.category_name}</span>
           </div>
         </div>
-        <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">공시 분석 📈</span>
+        <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">${c.highlight || '공시 분석 📈'}</span>
       </div>
 
       <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1 mb-4">
         <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">체감 환산 💡</p>
         <p class="text-xs sm:text-sm font-extrabold text-slate-800 leading-snug">
-          "영업이익으로 ${c.item_name}을 대량 판매한 마진 규모!"
+          "${headline}"
         </p>
       </div>
 
       <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-        <span>DART 2023 사업보고서</span>
+        <span>DART 정기보고서 기반</span>
         <span class="font-bold text-emerald-600 group-hover:translate-x-1 transition-transform flex items-center gap-0.5">상세 파헤치기 ➡️</span>
       </div>
     </div>
-  `).join('');
-  lucide.createIcons();
+  `;
+  }).join('');
+  if (window.lucide) {
+    lucide.createIcons();
+  }
 }
 
 function filterCompanies(query) {

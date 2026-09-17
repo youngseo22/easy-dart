@@ -10,24 +10,94 @@
     "item_price": 3000
   },
   {
-    "id": "daiso",
-    "name": "아성다이소",
-    "corp_code": "00257009",
-    "category": "mobility",
-    "category_name": "균일가 생활용품",
-    "icon": "🛒",
-    "item_name": "1,000원 생필품",
-    "item_price": 1000
+    "id": "musinsa",
+    "name": "무신사",
+    "corp_code": "01309831",
+    "category": "beauty",
+    "category_name": "패션 & 커머스",
+    "icon": "👕",
+    "item_name": "무탠다드 맨투맨",
+    "item_price": 50000
   },
   {
-    "id": "hyundai",
-    "name": "현대자동차",
-    "corp_code": "00164779",
-    "category": "mobility",
-    "category_name": "모빌리티 & 완성차",
-    "icon": "🚗",
-    "item_name": "차량용 방향제",
-    "item_price": 18000
+    "id": "amore",
+    "name": "아모레퍼시픽",
+    "corp_code": "00164830",
+    "category": "beauty",
+    "category_name": "K-뷰티 코스메틱",
+    "icon": "💄",
+    "item_name": "설화수 윤조에센스",
+    "item_price": 45000
+  },
+  {
+    "id": "ably",
+    "name": "에이블리",
+    "corp_code": "01358327",
+    "category": "beauty",
+    "category_name": "AI 스타일 커머스",
+    "icon": "👗",
+    "item_name": "트렌드 원피스",
+    "item_price": 20000
+  },
+  {
+    "id": "fnf",
+    "name": "F&F",
+    "corp_code": "00223789",
+    "category": "beauty",
+    "category_name": "K-패션 & 아웃도어",
+    "icon": "🧢",
+    "item_name": "MLB 볼캡 모자",
+    "item_price": 42000
+  },
+  {
+    "id": "naver",
+    "name": "네이버",
+    "corp_code": "00266961",
+    "category": "tech",
+    "category_name": "포털 & 커머스 & AI",
+    "icon": "🟢",
+    "item_name": "네이버플러스 멤버십",
+    "item_price": 4900
+  },
+  {
+    "id": "kakao",
+    "name": "카카오",
+    "corp_code": "00258801",
+    "category": "tech",
+    "category_name": "메신저 & 콘텐츠",
+    "icon": "💬",
+    "item_name": "이모티콘 플러스",
+    "item_price": 2500
+  },
+  {
+    "id": "daangn",
+    "name": "당근",
+    "corp_code": "01368944",
+    "category": "tech",
+    "category_name": "지역 생활 커뮤니티",
+    "icon": "🥕",
+    "item_name": "소상공인 광고 1회",
+    "item_price": 3000
+  },
+  {
+    "id": "hybe",
+    "name": "하이브",
+    "corp_code": "01428514",
+    "category": "tech",
+    "category_name": "엔터 & 글로벌 팬덤",
+    "icon": "🎤",
+    "item_name": "K-POP 정규 앨범",
+    "item_price": 22000
+  },
+  {
+    "id": "krafton",
+    "name": "크래프톤",
+    "corp_code": "00883391",
+    "category": "tech",
+    "category_name": "게임 & 글로벌 IP",
+    "icon": "🎮",
+    "item_name": "배그 치킨 패스권",
+    "item_price": 15000
   },
   {
     "id": "starbucks",
@@ -37,6 +107,96 @@
     "category_name": "식음료 & 카페",
     "icon": "☕",
     "item_name": "아메리카노 Tall",
-    "item_price": 1500
+    "item_price": 4500
+  },
+  {
+    "id": "baemin",
+    "name": "우아한형제들(배달의민족)",
+    "corp_code": "00908867",
+    "category": "fnb",
+    "category_name": "배달 & 커머스",
+    "icon": "🛵",
+    "item_name": "황금올리브 치킨",
+    "item_price": 20000
+  },
+  {
+    "id": "cj_food",
+    "name": "CJ제일제당",
+    "corp_code": "00114408",
+    "category": "fnb",
+    "category_name": "K-푸드 & 바이오",
+    "icon": "🥟",
+    "item_name": "비비고 왕교자 만두",
+    "item_price": 9900
+  },
+  {
+    "id": "bgf",
+    "name": "BGF리테일(CU)",
+    "corp_code": "01235473",
+    "category": "fnb",
+    "category_name": "편의점 유통",
+    "icon": "🏪",
+    "item_name": "연세우유 생크림빵",
+    "item_price": 2800
+  },
+  {
+    "id": "ottogi",
+    "name": "오뚜기",
+    "corp_code": "00126388",
+    "category": "fnb",
+    "category_name": "종합 식품",
+    "icon": "🍜",
+    "item_name": "진라면 매운맛",
+    "item_price": 1000
+  },
+  {
+    "id": "hyundai",
+    "name": "현대자동차",
+    "corp_code": "00164779",
+    "category": "mobility",
+    "category_name": "모빌리티 & 완성차",
+    "icon": "🚗",
+    "item_name": "아반떼 순마진",
+    "item_price": 20000000
+  },
+  {
+    "id": "kia",
+    "name": "기아",
+    "corp_code": "00106649",
+    "category": "mobility",
+    "category_name": "모빌리티 & 레저차량",
+    "icon": "🚘",
+    "item_name": "쏘렌토 하이브리드",
+    "item_price": 35000000
+  },
+  {
+    "id": "daiso",
+    "name": "아성다이소",
+    "corp_code": "00257009",
+    "category": "mobility",
+    "category_name": "균일가 생활용품",
+    "icon": "🛒",
+    "item_name": "1,000원 국민 생필품",
+    "item_price": 1000
+  },
+  {
+    "id": "cgv",
+    "name": "CJ CGV",
+    "corp_code": "00366662",
+    "category": "mobility",
+    "category_name": "극장 & 멀티플렉스",
+    "icon": "🍿",
+    "item_name": "IMAX 영화 티켓",
+    "item_price": 15000
+  },
+  {
+    "id": "yanolja",
+    "name": "야놀자",
+    "corp_code": "00889146",
+    "category": "mobility",
+    "category_name": "여행 & 여가 테크",
+    "icon": "✈️",
+    "item_name": "도심 호캉스 1박",
+    "item_price": 70000
   }
 ]

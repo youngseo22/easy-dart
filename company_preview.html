@@ -123,13 +123,35 @@
 
           <!-- Input Group -->
           <div class="bg-white p-2.5 rounded-2xl shadow-sm border border-slate-200 flex flex-col sm:flex-row items-center gap-2">
-            <select id="brandSelect" onchange="calculateMetaphor()" class="w-full sm:w-44 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-700 outline-none focus:border-emerald-500 cursor-pointer">
-              <option value="olive">🧴 CJ올리브영 (화장품)</option>
-              <option value="daiso">🛒 아성다이소 (생필품)</option>
-              <option value="starbucks">☕ 스타벅스 (카페)</option>
-              <option value="hyundai">🚗 현대자동차 (차량/주유)</option>
-              <option value="kakao">🎁 카카오 (선물/이모티콘)</option>
-              <option value="baemin">🛵 배달의민족 (치킨/배달)</option>
+            <select id="brandSelect" onchange="calculateMetaphor()" class="w-full sm:w-52 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-700 outline-none focus:border-emerald-500 cursor-pointer">
+              <optgroup label="💄 뷰티 & 패션">
+                <option value="olive">🧴 CJ올리브영 (화장품)</option>
+                <option value="musinsa">👕 무신사 (패션)</option>
+                <option value="amore">💄 아모레퍼시픽 (뷰티)</option>
+                <option value="ably">👗 에이블리 (패션)</option>
+                <option value="fnf">🧢 F&F (MLB 모자)</option>
+              </optgroup>
+              <optgroup label="💻 IT & 콘텐츠">
+                <option value="naver">🟢 네이버 (쇼핑/웹툰)</option>
+                <option value="kakao">🎁 카카오 (선물하기)</option>
+                <option value="daangn">🥕 당근 (동네 광고)</option>
+                <option value="hybe">🎤 하이브 (K-POP)</option>
+                <option value="krafton">🎮 크래프톤 (배그)</option>
+              </optgroup>
+              <optgroup label="☕ 카페 & 푸드">
+                <option value="starbucks">☕ 스타벅스 (카페)</option>
+                <option value="baemin">🛵 배달의민족 (배달)</option>
+                <option value="cj_food">🥟 CJ제일제당 (비비고)</option>
+                <option value="bgf">🏪 BGF리테일 (CU편의점)</option>
+                <option value="ottogi">🍜 오뚜기 (진라면)</option>
+              </optgroup>
+              <optgroup label="🚗 라이프 & 모빌리티">
+                <option value="hyundai">🚗 현대자동차 (차량)</option>
+                <option value="kia">🚘 기아 (SUV/RV)</option>
+                <option value="daiso">🛒 아성다이소 (생필품)</option>
+                <option value="cgv">🍿 CJ CGV (영화)</option>
+                <option value="yanolja">✈️ 야놀자 (여행/숙박)</option>
+              </optgroup>
             </select>
             <div class="relative flex-1 w-full">
               <input id="spendInput" type="number" value="35000" oninput="calculateMetaphor()" class="w-full bg-transparent font-bold text-sm text-slate-800 px-3 py-2 outline-none" placeholder="결제 금액 입력" />
@@ -161,7 +183,7 @@
             <div class="py-5 text-center space-y-1">
               <p class="text-xs text-slate-500 font-medium">당신이 결제한 <span id="dispSpend" class="font-bold text-slate-800">35,000원</span>으로</p>
               <p class="text-xl sm:text-2xl font-black text-emerald-800 leading-snug">
-                "올리브영은 <span id="dispMetaphor" class="text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-lg border border-emerald-100">독도토너 1.4병</span>의 순이익을 남겼어요!"
+                "<span id="dispMetaphorTarget">올리브영은</span> <span id="dispMetaphor" class="text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-lg border border-emerald-100">독도토너 1.4병</span>의 순이익을 남겼어요!"
               </p>
               <p id="dispMargin" class="text-xs text-slate-500 pt-1">
                 순수 기업 이익금 환산액 : <span class="font-bold text-slate-800">약 4,270원</span>
@@ -171,7 +193,7 @@
             <!-- Bottom Action -->
             <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
               <span class="text-slate-500 font-medium">해당 기업의 사업보고서가 궁금하다면?</span>
-              <button onclick="openCompanyModal('olive')" class="font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 underline underline-offset-4">
+              <button id="btnGoDetail" onclick="goToSelectedCompanyDetail()" class="font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 underline underline-offset-4">
                 공시 3줄 요약 보러가기 <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
               </button>
             </div>
@@ -677,14 +699,35 @@
       }
     ];
 
-    // 소비 환산기 데이터
+    // 20개 일상 기업 전체 소비 환산기 메타포 데이터
     const brandData = {
-      olive: { title: 'CJ올리브영 체감 분석', icon: '🧴', marginRate: 0.122, itemPrice: 3000, itemName: '독도토너', unit: '병' },
-      daiso: { title: '아성다이소 체감 분석', icon: '🛒', marginRate: 0.088, itemPrice: 1000, itemName: '1,000원 생필품', unit: '개' },
-      starbucks: { title: '스타벅스(SCK) 체감 분석', icon: '☕', marginRate: 0.075, itemPrice: 1500, itemName: '아메리카노 Tall', unit: '잔' },
-      hyundai: { title: '현대자동차 체감 분석', icon: '🚗', marginRate: 0.093, itemPrice: 18000, itemName: '차량용 방향제', unit: '개' },
-      kakao: { title: '카카오 체감 분석', icon: '🎁', marginRate: 0.081, itemPrice: 800, itemName: '이모티콘 플러스', unit: '세트' },
-      baemin: { title: '배달의민족 체감 분석', icon: '🛵', marginRate: 0.205, itemPrice: 2500, itemName: '황금올리브 배달건', unit: '회' }
+      // 뷰티 & 패션
+      olive: { brandName: 'CJ올리브영', title: 'CJ올리브영 체감 분석', icon: '🧴', marginRate: 0.122, itemPrice: 3000, itemName: '독도토너', unit: '병' },
+      musinsa: { brandName: '무신사', title: '무신사 체감 분석', icon: '👕', marginRate: 0.086, itemPrice: 50000, itemName: '무탠다드 맨투맨', unit: '장' },
+      amore: { brandName: '아모레퍼시픽', title: '아모레퍼시픽 체감 분석', icon: '💄', marginRate: 0.068, itemPrice: 45000, itemName: '설화수 에센스', unit: '병' },
+      ably: { brandName: '에이블리', title: '에이블리 체감 분석', icon: '👗', marginRate: 0.045, itemPrice: 20000, itemName: '트렌드 원피스', unit: '벌' },
+      fnf: { brandName: 'F&F', title: 'F&F(에프앤에프) 체감 분석', icon: '🧢', marginRate: 0.228, itemPrice: 42000, itemName: 'MLB 볼캡 모자', unit: '개' },
+
+      // IT & 콘텐츠
+      naver: { brandName: '네이버', title: '네이버 체감 분석', icon: '🟢', marginRate: 0.154, itemPrice: 4900, itemName: '네이버플러스 멤버십', unit: '개월권' },
+      kakao: { brandName: '카카오', title: '카카오 체감 분석', icon: '🎁', marginRate: 0.081, itemPrice: 2500, itemName: '이모티콘 플러스', unit: '세트' },
+      daangn: { brandName: '당근', title: '당근마켓 체감 분석', icon: '🥕', marginRate: 0.135, itemPrice: 3000, itemName: '동네 소상공인 광고', unit: '건' },
+      hybe: { brandName: '하이브', title: '하이브(HYBE) 체감 분석', icon: '🎤', marginRate: 0.136, itemPrice: 22000, itemName: 'K-POP 정규 앨범', unit: '장' },
+      krafton: { brandName: '크래프톤', title: '크래프톤 체감 분석', icon: '🎮', marginRate: 0.402, itemPrice: 15000, itemName: '배그 치킨 패스', unit: '개' },
+
+      // 카페 & 푸드
+      starbucks: { brandName: '스타벅스', title: '스타벅스(SCK) 체감 분석', icon: '☕', marginRate: 0.075, itemPrice: 4500, itemName: '아메리카노 Tall', unit: '잔' },
+      baemin: { brandName: '배달의민족', title: '배달의민족 체감 분석', icon: '🛵', marginRate: 0.205, itemPrice: 20000, itemName: '황금올리브 치킨', unit: '마리' },
+      cj_food: { brandName: 'CJ제일제당', title: 'CJ제일제당 체감 분석', icon: '🥟', marginRate: 0.065, itemPrice: 9900, itemName: '비비고 왕교자', unit: '봉지' },
+      bgf: { brandName: 'BGF리테일', title: 'BGF리테일(CU) 체감 분석', icon: '🏪', marginRate: 0.035, itemPrice: 2800, itemName: '연세우유 생크림빵', unit: '개' },
+      ottogi: { brandName: '오뚜기', title: '오뚜기 체감 분석', icon: '🍜', marginRate: 0.074, itemPrice: 1000, itemName: '진라면 매운맛', unit: '봉지' },
+
+      // 라이프 & 모빌리티
+      hyundai: { brandName: '현대자동차', title: '현대자동차 체감 분석', icon: '🚗', marginRate: 0.093, itemPrice: 20000000, itemName: '차량 순마진 지분', unit: '지분' },
+      kia: { brandName: '기아', title: '기아(KIA) 체감 분석', icon: '🚘', marginRate: 0.116, itemPrice: 35000000, itemName: '쏘렌토 순마진 지분', unit: '지분' },
+      daiso: { brandName: '아성다이소', title: '아성다이소 체감 분석', icon: '🛒', marginRate: 0.076, itemPrice: 1000, itemName: '1,000원 생필품', unit: '개' },
+      cgv: { brandName: 'CJ CGV', title: 'CJ CGV 체감 분석', icon: '🍿', marginRate: 0.032, itemPrice: 15000, itemName: 'IMAX 영화 티켓', unit: '장' },
+      yanolja: { brandName: '야놀자', title: '야놀자 체감 분석', icon: '✈️', marginRate: 0.082, itemPrice: 70000, itemName: '도심 호캉스 1박', unit: '박' }
     };
 
     function renderCompanyCards(items) {
@@ -734,21 +777,35 @@
     function calculateMetaphor() {
       const brandKey = document.getElementById('brandSelect').value;
       const spendVal = Number(document.getElementById('spendInput').value) || 0;
-      const data = brandData[brandKey];
+      const data = brandData[brandKey] || brandData.olive;
 
       const marginEarned = Math.round(spendVal * data.marginRate);
-      const itemCount = (marginEarned / data.itemPrice).toFixed(1);
+      
+      let itemCountText = '';
+      if (data.itemPrice >= 10000000) {
+        // 고가 제품 (자동차 등)
+        itemCountText = `${data.itemName} 기여`;
+      } else {
+        const count = (marginEarned / data.itemPrice).toFixed(1);
+        itemCountText = `${data.itemName} ${count}${data.unit}`;
+      }
 
       document.getElementById('resultIcon').innerText = data.icon;
       document.getElementById('resultTitle').innerText = data.title;
       document.getElementById('resultSub').innerText = `최근 공시 영업이익률 약 ${(data.marginRate * 100).toFixed(1)}% 적용`;
       document.getElementById('dispSpend').innerText = `${spendVal.toLocaleString()}원`;
-      document.getElementById('dispMetaphor').innerText = `${data.itemName} ${itemCount}${data.unit}`;
+      document.getElementById('dispMetaphorTarget').innerText = `${data.brandName}은`;
+      document.getElementById('dispMetaphor').innerText = itemCountText;
       document.getElementById('dispMargin').innerHTML = `순수 기업 이익금 환산액 : <span class="font-bold text-slate-800">약 ${marginEarned.toLocaleString()}원</span>`;
 
       const card = document.getElementById('resultCard');
       card.classList.add('scale-[1.02]');
       setTimeout(() => card.classList.remove('scale-[1.02]'), 150);
+    }
+
+    function goToSelectedCompanyDetail() {
+      const brandKey = document.getElementById('brandSelect').value || 'olive';
+      openCompanyModal(brandKey);
     }
 
     function filterCompanies() {
@@ -764,7 +821,9 @@
       document.querySelectorAll('.category-btn').forEach(btn => {
         btn.className = 'category-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 shrink-0';
       });
-      event.target.className = 'category-btn active px-4 py-2 rounded-xl text-xs font-bold bg-slate-900 text-white shadow-sm shrink-0';
+      if (event && event.target) {
+        event.target.className = 'category-btn active px-4 py-2 rounded-xl text-xs font-bold bg-slate-900 text-white shadow-sm shrink-0';
+      }
 
       const filtered = category === 'all' 
         ? companiesData 
