@@ -1068,12 +1068,41 @@
         holdingProfitLoss.textContent = `${curSign}${Math.round(curProfit).toLocaleString()}원 (${curSign}${curRate}%)`;
         holdingProfitLoss.className = curProfit >= 0 ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold';
 
+        // Update Water Down Button State (물타기 vs 불타기 동적 라벨)
+        if (holding.type === 'buy') {
+          if (comp.currentPrice < holding.avgPrice) {
+            waterDownBtn.innerHTML = `
+              <div class="flex items-center justify-between w-full">
+                <span class="text-xs font-black text-blue-300 flex items-center gap-1">💧 긴급 물타기 기도</span>
+                <span class="text-[9px] font-black bg-blue-900 text-blue-300 px-1.5 py-0.2 rounded">평단가 인하</span>
+              </div>
+              <p class="text-[10px] text-slate-400 leading-snug">현재 주가가 낮아 추가 매수 시 평단가를 성공적으로 낮춥니다!</p>
+            `;
+          } else {
+            waterDownBtn.innerHTML = `
+              <div class="flex items-center justify-between w-full">
+                <span class="text-xs font-black text-amber-300 flex items-center gap-1">🔥 불타기 (수량 확대)</span>
+                <span class="text-[9px] font-black bg-amber-900 text-amber-300 px-1.5 py-0.2 rounded">평단가 상승</span>
+              </div>
+              <p class="text-[10px] text-slate-400 leading-snug">현재 수익 구간! 추가 매수 시 평단가가 오르며 포지션을 키웁니다.</p>
+            `;
+          }
+        }
+
         sellControlBox.classList.remove('hidden');
       } else {
         holdingStatusBadge.textContent = '보유 주식 없음';
         holdingStatusBadge.className = 'text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400';
         holdingDetailBox.classList.add('hidden');
         sellControlBox.classList.add('hidden');
+
+        waterDownBtn.innerHTML = `
+          <div class="flex items-center justify-between w-full">
+            <span class="text-xs font-black text-blue-300 flex items-center gap-1">💧 긴급 물타기 기도</span>
+            <span class="text-[9px] font-black bg-blue-900 text-blue-300 px-1.5 py-0.2 rounded">평단가 인하</span>
+          </div>
+          <p class="text-[10px] text-slate-400 leading-snug">물린 주식에 추가 자금을 태워 평단가를 낮추고 탈출 시도!</p>
+        `;
       }
 
       // Lock-up Freeze Alert Check
@@ -1348,18 +1377,27 @@
       updateAccount();
     });
 
-    // 9. Strategy 4: Water Down Prayer (긴급 물타기 기도)
+    // 9. Strategy 4: Water Down vs Pyramiding (물타기 vs 불타기)
     waterDownBtn.addEventListener('click', () => {
       if (!holding || holding.type !== 'buy') {
-        alert('물타기는 현재 일반 매수로 물려있는 종목이 있을 때만 가능합니다!');
+        alert('물타기는 현재 일반 매수로 보유 중인 종목이 있을 때만 가능합니다!');
         return;
       }
       if (cash <= 200000) {
-        alert('물타기에 투입할 예수금이 부족합니다! (최소 20만원)');
+        alert('추가 매수에 투입할 예수금이 부족합니다! (최소 20만원)');
         return;
       }
       const comp = COMPANIES.find(c => c.id === holding.companyId);
-      const waterAmount = Math.min(cash, 2000000); // 200만원 한도 물타기
+
+      // 물타기 vs 불타기 구분 판정
+      const isWaterDown = comp.currentPrice < holding.avgPrice;
+
+      if (!isWaterDown) {
+        const proceed = confirm(`⚠️ [불타기 확인 안내]\n현재 주가(${comp.currentPrice.toLocaleString()}원)가 내 매수 평단가(${Math.round(holding.avgPrice).toLocaleString()}원)보다 높습니다!\n\n지금 추가 매수하면 평단가가 낮아지는 '물타기'가 아니라, 평단가가 올라가는 '불타기(수량 확대)'가 됩니다.\n계속 진행하시겠습니까?`);
+        if (!proceed) return;
+      }
+
+      const waterAmount = Math.min(cash, 2000000); // 200만원 한도 추가 매수
       const addQty = Math.floor(waterAmount / comp.currentPrice);
 
       if (addQty <= 0) {
@@ -1373,8 +1411,13 @@
       holding.qty += addQty;
       holding.avgPrice = totalCost / holding.qty;
 
-      logEvent('💧 [물타기 단행]', `${comp.name} ${addQty}주를 추가 매수하여 평단가를 ${Math.round(prevAvg).toLocaleString()}원 ➔ ${Math.round(holding.avgPrice).toLocaleString()}원으로 낮췄습니다!`, 'text-blue-300 font-bold');
-      alert(`💧 [물타기 완료]\n평단가가 ${Math.round(prevAvg).toLocaleString()}원에서 ${Math.round(holding.avgPrice).toLocaleString()}원으로 낮아졌습니다!\n주가 반등 시 더 빠르게 본전에 도달할 수 있습니다.`);
+      if (holding.avgPrice < prevAvg) {
+        logEvent('💧 [물타기 단행]', `${comp.name} ${addQty}주를 추가 매수하여 평단가를 ${Math.round(prevAvg).toLocaleString()}원 ➔ ${Math.round(holding.avgPrice).toLocaleString()}원으로 성공적으로 낮췄습니다!`, 'text-blue-300 font-bold');
+        alert(`💧 [물타기 완료]\n현재 주가가 평단가보다 낮아, 평단가가 ${Math.round(prevAvg).toLocaleString()}원에서 ${Math.round(holding.avgPrice).toLocaleString()}원으로 낮아졌습니다!\n주가 반등 시 더 빠르게 본전에 도달할 수 있습니다.`);
+      } else {
+        logEvent('🔥 [불타기 단행]', `${comp.name} ${addQty}주를 불타기 매수하여 평단가가 ${Math.round(prevAvg).toLocaleString()}원 ➔ ${Math.round(holding.avgPrice).toLocaleString()}원으로 높아졌습니다. (수량 증대)`, 'text-amber-400 font-bold');
+        alert(`🔥 [불타기 완료]\n현재 주가가 기존 평단가보다 높아, 평단가가 ${Math.round(prevAvg).toLocaleString()}원에서 ${Math.round(holding.avgPrice).toLocaleString()}원으로 높아졌습니다!\n주가가 계속 상승하면 더 큰 수익을 얻을 수 있습니다.`);
+      }
 
       updateAccount();
     });
