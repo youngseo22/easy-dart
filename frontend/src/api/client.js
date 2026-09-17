@@ -20,11 +20,22 @@ export const apiClient = {
   },
 
   // 퀴즈 API (팀원 C)
-  async getBasicTermQuizzes(topic = 'all') {
+  async getBasicTermQuizzes(topic = 'all', limit = null) {
     const params = new URLSearchParams();
     if (topic && topic !== 'all') params.append('topic', topic);
+    if (limit) params.append('limit', limit);
     
     const res = await fetch(`${API_BASE_URL}/quiz/basic?${params.toString()}`);
+    return res.json();
+  },
+
+  async getInfiniteQuizzes(topic = 'all', batchSize = 10, excludeIds = []) {
+    const params = new URLSearchParams();
+    if (topic && topic !== 'all') params.append('topic', topic);
+    if (batchSize) params.append('batch_size', batchSize);
+    if (excludeIds && excludeIds.length > 0) params.append('exclude_ids', excludeIds.join(','));
+
+    const res = await fetch(`${API_BASE_URL}/quiz/infinite?${params.toString()}`);
     return res.json();
   },
 

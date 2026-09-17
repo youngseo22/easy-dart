@@ -184,36 +184,36 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-          <!-- Machine 1: Radar Shooter -->
-          <div class="arcade-cabinet group rounded-3xl bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-cyan-500/50 hover:border-cyan-400 p-5 flex flex-col justify-between space-y-4 shadow-xl hover:shadow-neon-cyan relative overflow-hidden">
+          <!-- Machine 1: Financial Terms Quiz Arena -->
+          <div class="arcade-cabinet group rounded-3xl bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-indigo-500/50 hover:border-indigo-400 p-5 flex flex-col justify-between space-y-4 shadow-xl hover:shadow-neon-cyan relative overflow-hidden">
             <div class="flex items-center justify-between">
-              <span class="px-2.5 py-1 rounded-full text-[10px] font-black bg-cyan-600 text-white uppercase tracking-wider flex items-center gap-1 shadow-sm">
-                🎯 조준 요격
+              <span class="px-2.5 py-1 rounded-full text-[10px] font-black bg-gradient-to-r from-indigo-500 to-purple-600 text-white uppercase tracking-wider flex items-center gap-1 shadow-sm">
+                🧠 문해력 배틀
               </span>
-              <span class="text-xs font-black text-cyan-400">MACHINE 01</span>
+              <span class="text-xs font-black text-indigo-400">MACHINE 01</span>
             </div>
 
             <div class="h-36 rounded-2xl bg-slate-950/90 border border-slate-800/80 flex flex-col items-center justify-center relative overflow-hidden p-4 group-hover:scale-[1.02] transition-transform">
-              <div class="text-4xl mb-2 animate-pulse">🚀</div>
-              <div class="text-xs font-bold text-rose-400 bg-rose-950/80 px-2 py-0.5 rounded border border-rose-800">
-                [감사의견 거절 요격!]
+              <div class="text-4xl mb-2 animate-bounce">📚</div>
+              <div class="text-xs font-bold text-cyan-300 bg-cyan-950/80 px-2.5 py-0.5 rounded border border-cyan-800">
+                [60+ 실전 금융 퀴즈 뱅크]
               </div>
-              <div class="text-[10px] text-slate-500 mt-1">종스크롤 미사일 슈팅</div>
+              <div class="text-[10px] text-slate-400 mt-1">20대 주린이 무한 퀴즈 아레나</div>
             </div>
 
             <div class="space-y-1.5">
               <h3 class="text-base font-black text-white group-hover:text-cyan-300 transition-colors">
-                DART 공시 레이더 미사일
+                주식 & 회계 기초 퀴즈 아레나
               </h3>
               <p class="text-xs text-slate-400 leading-relaxed line-clamp-2">
-                쏟아지는 공시 중 <span class="text-rose-400 font-bold">감사의견 거절, 완전자본잠식</span> 등 상폐 지뢰만 미사일로 요격하고 호재는 몸체로 획득하세요!
+                월급 지키는 <span class="text-cyan-400 font-bold">손익·재무상태표</span>부터 CB·감사의견 상폐 지뢰까지! 60+ 문항 무한 스트리밍 퀴즈!
               </p>
             </div>
 
-            <a href="radar_shooter.html" class="w-full py-3 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-black text-xs shadow-lg shadow-cyan-500/25 transition-all flex items-center justify-center gap-2 transform active:scale-95">
+            <button id="startQuizCabinetBtn" class="w-full py-3 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white font-black text-xs shadow-lg shadow-indigo-500/25 transition-all flex items-center justify-center gap-2 transform active:scale-95">
               <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
-              게임 시작 (PLAY NOW)
-            </a>
+              퀴즈 아레나 입장 (PLAY NOW)
+            </button>
           </div>
 
           <!-- Machine 2: 3-Sec Judge -->
@@ -392,16 +392,28 @@
           30초 숏폼 보듯 풀며 <b>'작전주·상폐 지뢰 피하는 실전 회계 센스'</b>를 충전하세요!
         </p>
 
-        <!-- Topic Buttons -->
+        <!-- Topic Buttons (6대 금융 카테고리) -->
         <div class="flex flex-wrap items-center justify-center gap-2 pt-2">
-          <button data-topic="all" class="topic-btn active px-4 py-2 rounded-full text-xs font-black bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-500/25 border border-cyan-400 transition-all flex items-center gap-1.5">
-            <span>⚡</span> 전체 퀴즈 정복
+          <button data-topic="all" class="topic-btn active px-3.5 py-1.5 rounded-full text-xs font-black bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-500/25 border border-cyan-400 transition-all flex items-center gap-1.5">
+            <span>⚡</span> 전체 퀴즈 (62문항)
           </button>
-          <button data-topic="income" class="topic-btn px-4 py-2 rounded-full text-xs font-bold bg-slate-900 border border-slate-700 text-slate-300 hover:text-white hover:border-cyan-500 hover:bg-slate-800 transition-all flex items-center gap-1.5">
-            <span>💰</span> 월급 & 회사의 진짜 돈벌이 (손익)
+          <button data-topic="income" class="topic-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-slate-900 border border-slate-700 text-slate-300 hover:text-white hover:border-cyan-500 hover:bg-slate-800 transition-all flex items-center gap-1.5">
+            <span>💰</span> 손익 & 본업 마진
           </button>
-          <button data-topic="audit" class="topic-btn px-4 py-2 rounded-full text-xs font-bold bg-slate-900 border border-slate-700 text-slate-300 hover:text-white hover:border-cyan-500 hover:bg-slate-800 transition-all flex items-center gap-1.5">
-            <span>📋</span> 대표님도 긴장하는 성적표 (감사의견)
+          <button data-topic="balance" class="topic-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-slate-900 border border-slate-700 text-slate-300 hover:text-white hover:border-cyan-500 hover:bg-slate-800 transition-all flex items-center gap-1.5">
+            <span>🏦</span> 재무상태 & 건전성
+          </button>
+          <button data-topic="audit" class="topic-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-slate-900 border border-slate-700 text-slate-300 hover:text-white hover:border-cyan-500 hover:bg-slate-800 transition-all flex items-center gap-1.5">
+            <span>🚨</span> 감사의견 & 상폐지뢰
+          </button>
+          <button data-topic="financing" class="topic-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-slate-900 border border-slate-700 text-slate-300 hover:text-white hover:border-cyan-500 hover:bg-slate-800 transition-all flex items-center gap-1.5">
+            <span>💣</span> CB & 유상증자
+          </button>
+          <button data-topic="valuation" class="topic-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-slate-900 border border-slate-700 text-slate-300 hover:text-white hover:border-cyan-500 hover:bg-slate-800 transition-all flex items-center gap-1.5">
+            <span>📈</span> 배당 & 밸류에이션
+          </button>
+          <button data-topic="disclosure" class="topic-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-slate-900 border border-slate-700 text-slate-300 hover:text-white hover:border-cyan-500 hover:bg-slate-800 transition-all flex items-center gap-1.5">
+            <span>📑</span> DART 실전 공시
           </button>
         </div>
       </div>

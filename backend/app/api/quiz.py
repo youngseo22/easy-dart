@@ -12,9 +12,16 @@ class CheckAnswerRequest(BaseModel):
     selected_index: int
 
 @router.get("/basic")
-def get_basic_term_quizzes(topic: str = None):
-    """주식 & 회계 기초 용어 퀴즈 목록 조회"""
-    quizzes = QuizService.get_basic_quizzes(topic)
+def get_basic_term_quizzes(topic: str = None, limit: int = None):
+    """주식 & 회계 기초 용어 퀴즈 목록 조회 (60+ 대용량 DB 연동 및 랜덤 셔플)"""
+    quizzes = QuizService.get_basic_quizzes(topic, limit)
+    return {"count": len(quizzes), "quizzes": quizzes}
+
+@router.get("/infinite")
+def get_infinite_quizzes(topic: str = None, batch_size: int = 10, exclude_ids: str = None):
+    """무한 퀴즈 스트림용 배치 반환 API (최대한 많은 퀴즈가 끊김 없이 순환)"""
+    excluded = [i.strip() for i in exclude_ids.split(",")] if exclude_ids else []
+    quizzes = QuizService.get_infinite_quiz_stream(topic, batch_size, excluded)
     return {"count": len(quizzes), "quizzes": quizzes}
 
 @router.get("/company/{company_id}")

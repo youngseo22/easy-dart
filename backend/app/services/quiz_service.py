@@ -16,7 +16,7 @@ class QuizService:
         return {"basic_terms": [], "company_quizzes": {}}
 
     @classmethod
-    def get_basic_quizzes(cls, topic: str = None):
+    def get_basic_quizzes(cls, topic: str = None, limit: int = None):
         data = cls.load_data()
         quizzes = data.get("basic_terms", [])
         if topic and topic != "all":
@@ -24,7 +24,24 @@ class QuizService:
         # 매번 순서가 달라지도록 랜덤 셔플
         shuffled = list(quizzes)
         random.shuffle(shuffled)
+        if limit and limit > 0:
+            return shuffled[:limit]
         return shuffled
+
+    @classmethod
+    def get_infinite_quiz_stream(cls, topic: str = None, batch_size: int = 10, exclude_ids: list = None):
+        """무한 퀴즈 모드용: 이미 푼 문제를 피해 새 배치 반환 (부족할 경우 전체 풀에서 순환)"""
+        data = cls.load_data()
+        quizzes = data.get("basic_terms", [])
+        if topic and topic != "all":
+            quizzes = [q for q in quizzes if q.get("topic") == topic]
+        exclude_set = set(exclude_ids or [])
+        available = [q for q in quizzes if q.get("id") not in exclude_set]
+        if len(available) < batch_size:
+            available = list(quizzes)
+        shuffled = list(available)
+        random.shuffle(shuffled)
+        return shuffled[:batch_size]
 
     @classmethod
     def get_company_quiz(cls, company_id: str):
