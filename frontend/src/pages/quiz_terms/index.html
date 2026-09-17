@@ -2,7 +2,6 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <base href="/frontend/src/pages/quiz_terms/">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Easy-DART | 🕹️ 핑거다트 게임 & 용어 퀴즈 센터</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -10,8 +9,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,600;0,700;1,700;1,800&family=Outfit:wght@500;700;900&family=Pretendard:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="../../styles/common.css" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="/frontend/src/styles/common.css" />
+  <link rel="stylesheet" href="/frontend/src/pages/quiz_terms/style.css" />
   <script>
     tailwind.config = {
       theme: {
@@ -73,7 +72,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       
       <div class="flex items-center space-x-6 sm:space-x-8">
-        <a href="../company_list/index.html" class="flex items-center space-x-2.5 group">
+        <a href="/company-list" class="flex items-center space-x-2.5 group">
           <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 via-purple-600 to-cyan-500 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-rose-500/25 group-hover:scale-105 transition-transform">
             🕹️
           </div>
@@ -84,7 +83,7 @@
         </a>
 
         <nav class="flex items-center space-x-2">
-          <a href="../company_list/index.html" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors flex items-center gap-1.5">
+          <a href="/company-list" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors flex items-center gap-1.5">
             <i data-lucide="building-2" class="w-4 h-4"></i> 기업 파헤치기
           </a>
           <button id="navTabArcade" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-rose-600 via-purple-600 to-cyan-600 text-white shadow-md shadow-rose-500/20 flex items-center gap-1.5 transition-all">

@@ -1,5 +1,5 @@
 from pathlib import Path
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, RedirectResponse
@@ -39,6 +39,24 @@ def health_check():
         "docs_url": "/docs"
     }
 
+# 물리 파일 경로 직접 접근 시 깔끔한 URL로 리다이렉트
+@app.get("/frontend/src/pages/company_list/index.html")
+@app.get("/frontend/src/pages/company_list")
+def redirect_company_list():
+    return RedirectResponse(url="/company-list")
+
+@app.get("/frontend/src/pages/company_detail/index.html")
+@app.get("/frontend/src/pages/company_detail")
+def redirect_company_detail(request: Request):
+    query = str(request.query_params)
+    target = f"/company-details?{query}" if query else "/company-details"
+    return RedirectResponse(url=target)
+
+@app.get("/frontend/src/pages/quiz_terms/index.html")
+@app.get("/frontend/src/pages/quiz_terms")
+def redirect_quiz():
+    return RedirectResponse(url="/quiz")
+
 # 프론트엔드 정적 웹 서빙 (모듈 및 에셋)
 if (ROOT_DIR / "frontend").exists():
     app.mount("/frontend", StaticFiles(directory=str(ROOT_DIR / "frontend")), name="frontend")
@@ -48,7 +66,7 @@ COMPANY_LIST_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "company_list" / "
 COMPANY_DETAIL_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "company_detail" / "index.html"
 QUIZ_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "quiz_terms" / "index.html"
 
-# 실제 웹 페이지 라우팅
+# 깔끔한 URL 라우팅
 @app.get("/")
 def root_redirect():
     """메인 접속 시 /company-list로 이동"""
@@ -70,6 +88,7 @@ def page_company_details():
 def page_quiz():
     """3. 주식 용어 퀴즈 페이지"""
     return FileResponse(QUIZ_PAGE)
+
 
 
 
