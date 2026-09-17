@@ -190,24 +190,41 @@
         <canvas id="runnerCanvas" width="480" height="580"></canvas>
       </div>
 
-      <!-- On-Screen Virtual Controls for Mobile & Quick Mouse Play -->
-      <div class="flex items-center justify-between w-full max-w-[480px] mt-4 gap-3">
-        <button id="laneLeftBtn" class="virtual-btn flex-1 py-3.5 rounded-2xl bg-slate-900/90 border-2 border-slate-700 text-cyan-400 hover:border-cyan-500 font-black text-base flex items-center justify-center gap-1.5 shadow-lg active:scale-95">
-          <i data-lucide="chevron-left" class="w-5 h-5"></i>
-          <span>좌측 (◀)</span>
-        </button>
-        <button id="bottomPauseBtn" class="virtual-btn px-4 py-3.5 rounded-2xl bg-amber-500/15 border-2 border-amber-500/40 text-amber-300 hover:bg-amber-500/25 font-black text-sm flex items-center justify-center gap-1 shadow-lg active:scale-95">
+      <!-- On-Screen Virtual Cockpit Controls (4-Way Steering + Throttle/Brake) -->
+      <div class="w-full max-w-[480px] mt-4 flex items-center justify-between gap-2.5">
+        <!-- Steering (Left / Right) -->
+        <div class="flex items-center gap-2 flex-1">
+          <button id="laneLeftBtn" class="virtual-btn flex-1 py-3.5 rounded-2xl bg-slate-900/90 border-2 border-slate-700 text-cyan-400 hover:border-cyan-500 font-black text-sm sm:text-base flex items-center justify-center gap-1 shadow-lg active:scale-95" title="좌측 차선 이동 (◀ / A)">
+            <i data-lucide="arrow-left" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+            <span>좌측</span>
+          </button>
+          <button id="laneRightBtn" class="virtual-btn flex-1 py-3.5 rounded-2xl bg-slate-900/90 border-2 border-slate-700 text-cyan-400 hover:border-cyan-500 font-black text-sm sm:text-base flex items-center justify-center gap-1 shadow-lg active:scale-95" title="우측 차선 이동 (▶ / D)">
+            <span>우측</span>
+            <i data-lucide="arrow-right" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+          </button>
+        </div>
+
+        <!-- Center Pause Button -->
+        <button id="bottomPauseBtn" class="virtual-btn px-3 py-3.5 rounded-2xl bg-amber-500/15 border-2 border-amber-500/40 text-amber-300 hover:bg-amber-500/25 font-black text-xs flex flex-col items-center justify-center gap-0.5 shadow-lg active:scale-95" title="일시정지 (P)">
           <i data-lucide="pause" class="w-4 h-4"></i>
-          <span>일시정지</span>
+          <span>정지</span>
         </button>
-        <button id="laneRightBtn" class="virtual-btn flex-1 py-3.5 rounded-2xl bg-slate-900/90 border-2 border-slate-700 text-cyan-400 hover:border-cyan-500 font-black text-base flex items-center justify-center gap-1.5 shadow-lg active:scale-95">
-          <span>우측 (▶)</span>
-          <i data-lucide="chevron-right" class="w-5 h-5"></i>
-        </button>
+
+        <!-- Speed Throttle (Boost Forward / Brake Backward) -->
+        <div class="flex items-center gap-2 flex-1">
+          <button id="thrustUpBtn" class="virtual-btn flex-1 py-3.5 rounded-2xl bg-cyan-950/70 border-2 border-cyan-500/40 text-cyan-300 hover:border-cyan-400 font-black text-sm sm:text-base flex items-center justify-center gap-1 shadow-lg active:scale-95" title="가속 전진 부스터 (▲ / W)">
+            <i data-lucide="chevrons-up" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+            <span>전진▲</span>
+          </button>
+          <button id="brakeDownBtn" class="virtual-btn flex-1 py-3.5 rounded-2xl bg-rose-950/70 border-2 border-rose-500/40 text-rose-300 hover:border-rose-400 font-black text-sm sm:text-base flex items-center justify-center gap-1 shadow-lg active:scale-95" title="감속 후진 브레이크 (▼ / S)">
+            <i data-lucide="chevrons-down" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+            <span>후진▼</span>
+          </button>
+        </div>
       </div>
 
       <p class="text-xs text-slate-500 mt-2.5 text-center">
-        키보드 <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">◀</kbd> / <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">▶</kbd> 또는 <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">A</kbd> / <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">D</kbd> 차선 이동 | <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">ESC</kbd> or <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">P</kbd> 일시정지
+        조작: <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">◀</kbd> <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">▶</kbd> 차선 | <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">▲</kbd> 부스터 전진 | <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">▼</kbd> 브레이크 후진 | <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">P</kbd> 정지
       </p>
     </div>
   </main>
@@ -348,6 +365,40 @@
           gain.connect(this.ctx.destination);
           osc.start(now);
           osc.stop(now + 0.25);
+        } catch(e) {}
+      }
+      playBoost() {
+        if (this.isMuted || !this.ctx) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          const now = this.ctx.currentTime;
+          osc.frequency.setValueAtTime(280, now);
+          osc.frequency.exponentialRampToValueAtTime(620, now + 0.09);
+          gain.gain.setValueAtTime(0.18, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.09);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.09);
+        } catch(e) {}
+      }
+      playBrake() {
+        if (this.isMuted || !this.ctx) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sawtooth';
+          const now = this.ctx.currentTime;
+          osc.frequency.setValueAtTime(220, now);
+          osc.frequency.linearRampToValueAtTime(110, now + 0.1);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.1);
         } catch(e) {}
       }
     }
