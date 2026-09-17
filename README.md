@@ -18,7 +18,6 @@ easy-dart/
 ├── 📄 judge_preview.html          # [프리뷰/팀원 C] ⚖️ Machine 02: 3초 투자 심사관 (BUY or SELL)
 ├── 📄 runner_preview.html         # [프리뷰/팀원 C] 🏎️ Machine 03: DART 급행 레인 러너
 ├── 📄 slicer_preview.html         # [프리뷰/팀원 C] ⚔️ Machine 04: DART 블레이드 슬라이서
-├── 📄 tetris_preview.html         # [프리뷰/팀원 C] 🧱 [아카이브] 밸런스 시트 테트리스
 │
 ├── 📁 backend/                    # FastAPI 백엔드
 │   ├── requirements.txt
