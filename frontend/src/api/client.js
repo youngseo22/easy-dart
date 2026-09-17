@@ -1,7 +1,8 @@
 /**
  * [공통] 백엔드 FastAPI 서버와 통신하는 API 클라이언트 모듈
  */
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = '/api';
+
 
 export const apiClient = {
   // 기업 목록 및 상세 (팀원 A & B)
