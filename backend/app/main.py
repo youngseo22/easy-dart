@@ -1,5 +1,5 @@
 from pathlib import Path
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, RedirectResponse
@@ -39,6 +39,29 @@ def health_check():
         "docs_url": "/docs"
     }
 
+# 물리 파일 경로 직접 접근 시 깔끔한 URL로 리다이렉트
+@app.get("/frontend/src/pages/company_list/index.html")
+@app.get("/frontend/src/pages/company_list")
+def redirect_company_list():
+    return RedirectResponse(url="/company-list")
+
+@app.get("/frontend/src/pages/company_detail/index.html")
+@app.get("/frontend/src/pages/company_detail")
+def redirect_company_detail(request: Request):
+    query = str(request.query_params)
+    target = f"/company-details?{query}" if query else "/company-details"
+    return RedirectResponse(url=target)
+
+@app.get("/frontend/src/pages/quiz_terms/index.html")
+@app.get("/frontend/src/pages/quiz_terms")
+def redirect_quiz():
+    return RedirectResponse(url="/quiz")
+
+@app.get("/frontend/src/pages/quiz_terms/mock_invest.html")
+@app.get("/frontend/src/pages/quiz_terms/mock_invest")
+def redirect_mock_invest():
+    return RedirectResponse(url="/mock-invest")
+
 # 프론트엔드 정적 웹 서빙 (모듈 및 에셋)
 if (ROOT_DIR / "frontend").exists():
     app.mount("/frontend", StaticFiles(directory=str(ROOT_DIR / "frontend")), name="frontend")
@@ -47,8 +70,9 @@ if (ROOT_DIR / "frontend").exists():
 COMPANY_LIST_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "company_list" / "index.html"
 COMPANY_DETAIL_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "company_detail" / "index.html"
 QUIZ_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "quiz_terms" / "index.html"
+MOCK_INVEST_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "quiz_terms" / "mock_invest.html"
 
-# 실제 웹 페이지 라우팅
+# 깔끔한 URL 라우팅
 @app.get("/")
 def root_redirect():
     """메인 접속 시 /company-list로 이동"""
@@ -66,10 +90,17 @@ def page_company_details():
     """2. 기업 공시 상세 해설 페이지"""
     return FileResponse(COMPANY_DETAIL_PAGE)
 
+@app.get("/mock-invest")
+@app.get("/mock-investment")
+def page_mock_invest():
+    """3. 실전 모의투자 시뮬레이션 페이지"""
+    return FileResponse(MOCK_INVEST_PAGE)
+
 @app.get("/quiz")
 def page_quiz():
-    """3. 주식 용어 퀴즈 페이지"""
+    """4. DART 오락실 & 금융 퀴즈 센터 페이지"""
     return FileResponse(QUIZ_PAGE)
+
 
 
 

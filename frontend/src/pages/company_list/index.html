@@ -2,7 +2,6 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <base href="/frontend/src/pages/company_list/">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Easy-DART | 기업 파헤치기</title>
   <!-- Google Fonts: Pretendard & Outfit -->
@@ -40,8 +39,8 @@
     }
   </script>
   <!-- CSS Stylesheets -->
-  <link rel="stylesheet" href="../../styles/common.css" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="/frontend/src/styles/common.css" />
+  <link rel="stylesheet" href="/frontend/src/pages/company_list/style.css" />
 </head>
 <body class="min-h-screen flex flex-col font-sans selection:bg-emerald-100 selection:text-emerald-900 bg-slate-50 text-slate-900">
 
@@ -66,8 +65,11 @@
           <a href="/company-list" class="px-4 py-2 rounded-xl text-sm font-bold bg-slate-900 text-white shadow-sm flex items-center gap-1.5 transition-all">
             <i data-lucide="sparkles" class="w-4 h-4 text-emerald-400"></i> 기업 파헤치기
           </a>
+          <a href="/mock-invest" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors flex items-center gap-1.5">
+            <i data-lucide="trending-up" class="w-4 h-4 text-cyan-600"></i> 실전 모의투자
+          </a>
           <a href="/quiz" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors flex items-center gap-1.5">
-            <i data-lucide="gamepad-2" class="w-4 h-4"></i> 퀴즈
+            <i data-lucide="gamepad-2" class="w-4 h-4 text-rose-500"></i> DART 오락실
           </a>
         </nav>
       </div>
@@ -250,6 +252,6 @@
   </footer>
 
   <!-- JS Module Entry Point -->
-  <script type="module" src="script.js"></script>
+  <script type="module" src="/frontend/src/pages/company_list/script.js"></script>
 </body>
 </html>
