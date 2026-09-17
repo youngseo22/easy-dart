@@ -3,6 +3,7 @@
 """
 import json
 import os
+import random
 
 DATA_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "quiz_dataset.json")
 
@@ -20,7 +21,10 @@ class QuizService:
         quizzes = data.get("basic_terms", [])
         if topic and topic != "all":
             quizzes = [q for q in quizzes if q.get("topic") == topic]
-        return quizzes
+        # 매번 순서가 달라지도록 랜덤 셔플
+        shuffled = list(quizzes)
+        random.shuffle(shuffled)
+        return shuffled
 
     @classmethod
     def get_company_quiz(cls, company_id: str):
