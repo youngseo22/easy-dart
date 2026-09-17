@@ -1,8 +1,14 @@
+from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api import companies, quiz
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse, RedirectResponse
 
+from app.api import companies, quiz
 from app.config import HOST, PORT
+
+# 프로젝트 루트 경로 (easy-dart/)
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 
 app = FastAPI(
     title="Easy-DART API",
@@ -23,15 +29,51 @@ app.add_middleware(
 app.include_router(companies.router, prefix="/api/companies", tags=["기업 파헤치기 (팀원 A & B)"])
 app.include_router(quiz.router, prefix="/api/quiz", tags=["퀴즈 아레나 (팀원 C)"])
 
-@app.get("/")
-def root():
-    """백엔드 서버 헬스 체크 엔드포인트"""
+# 백엔드 API 헬스체크
+@app.get("/api/health")
+def health_check():
     return {
         "status": "ok",
         "service": "Easy-DART Backend API Server",
         "version": "1.0.0",
         "docs_url": "/docs"
     }
+
+# 프론트엔드 정적 웹 서빙 (모듈 및 에셋)
+if (ROOT_DIR / "frontend").exists():
+    app.mount("/frontend", StaticFiles(directory=str(ROOT_DIR / "frontend")), name="frontend")
+
+# 프론트엔드 실제 페이지 경로
+COMPANY_LIST_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "company_list" / "index.html"
+COMPANY_DETAIL_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "company_detail" / "index.html"
+QUIZ_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "quiz_terms" / "index.html"
+
+# 실제 웹 페이지 라우팅
+@app.get("/")
+def root_redirect():
+    """메인 접속 시 /company-list로 이동"""
+    return RedirectResponse(url="/company-list")
+
+@app.get("/company-list")
+@app.get("/compay-list")
+def page_company_list():
+    """1. 기업 파헤치기 메인 목록 페이지"""
+    return FileResponse(COMPANY_LIST_PAGE)
+
+@app.get("/company-details")
+@app.get("/company-detail")
+def page_company_details():
+    """2. 기업 공시 상세 해설 페이지"""
+    return FileResponse(COMPANY_DETAIL_PAGE)
+
+@app.get("/quiz")
+def page_quiz():
+    """3. 주식 용어 퀴즈 페이지"""
+    return FileResponse(QUIZ_PAGE)
+
+
+
+
 
 
 if __name__ == "__main__":

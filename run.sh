@@ -46,8 +46,10 @@ pip install -r requirements.txt --quiet
 
 # 4. FastAPI 서버 실행 (uvicorn)
 echo "✨ [Easy-DART] 서버가 가상환경에서 성공적으로 시작되었습니다!"
-echo "👉 서버 주소: http://localhost:8000"
-echo "👉 API 문서(Swagger): http://localhost:8000/docs"
+echo "👉 기업 목록: http://localhost:8080/company-list"
+echo "👉 기업 상세: http://localhost:8080/company-details"
+echo "👉 퀴즈: http://localhost:8080/quiz"
+echo "👉 API 문서: http://localhost:8080/docs"
 echo "----------------------------------------------------"
 
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8080
