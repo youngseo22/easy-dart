@@ -159,24 +159,55 @@
       </div>
     </div>
 
+    <!-- Speed Selector & Pause Quick Toolbar -->
+    <div class="w-full max-w-[480px] flex items-center justify-between gap-2 mb-2.5">
+      <!-- Speed Presets -->
+      <div class="flex items-center gap-1 bg-slate-900/90 p-1 rounded-xl border border-slate-800 text-xs">
+        <span class="text-[11px] text-slate-400 font-bold px-1.5 flex items-center gap-1">
+          <i data-lucide="gauge" class="w-3.5 h-3.5 text-cyan-400"></i> 속도:
+        </span>
+        <button id="speedSlowBtn" class="px-2.5 py-1 rounded-lg text-xs font-bold transition bg-emerald-500/25 text-emerald-300 border border-emerald-500/40" title="여유롭게 텍스트를 정독할 수 있는 추천 속도">
+          🐢 정독 (0.75x)
+        </button>
+        <button id="speedNormalBtn" class="px-2.5 py-1 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white hover:bg-slate-800" title="표준 주행 속도">
+          🚶 보통 (1.0x)
+        </button>
+        <button id="speedFastBtn" class="px-2.5 py-1 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white hover:bg-slate-800" title="빠른 반사신경 모드">
+          ⚡ 쾌속 (1.3x)
+        </button>
+      </div>
+
+      <!-- Quick Pause Button right beside canvas -->
+      <button id="inGamePauseBtn" class="px-3.5 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-amber-500/40 hover:border-amber-400 text-amber-300 font-black text-xs flex items-center gap-1.5 shadow-md active:scale-95 transition">
+        <i data-lucide="pause" class="w-4 h-4"></i>
+        <span>일시정지 (P)</span>
+      </button>
+    </div>
+
     <!-- Game Canvas Area -->
     <div class="w-full flex flex-col items-center">
-      <canvas id="runnerCanvas" width="480" height="580"></canvas>
+      <div class="relative w-full max-w-[480px]">
+        <canvas id="runnerCanvas" width="480" height="580"></canvas>
+      </div>
 
       <!-- On-Screen Virtual Controls for Mobile & Quick Mouse Play -->
-      <div class="flex items-center justify-between w-full max-w-[480px] mt-4 gap-4">
-        <button id="laneLeftBtn" class="virtual-btn flex-1 py-4 rounded-2xl bg-slate-900/90 border-2 border-slate-700 text-cyan-400 hover:border-cyan-500 font-black text-lg flex items-center justify-center gap-2 shadow-lg">
-          <i data-lucide="chevron-left" class="w-6 h-6"></i>
-          <span>좌측 차선 (◀)</span>
+      <div class="flex items-center justify-between w-full max-w-[480px] mt-4 gap-3">
+        <button id="laneLeftBtn" class="virtual-btn flex-1 py-3.5 rounded-2xl bg-slate-900/90 border-2 border-slate-700 text-cyan-400 hover:border-cyan-500 font-black text-base flex items-center justify-center gap-1.5 shadow-lg active:scale-95">
+          <i data-lucide="chevron-left" class="w-5 h-5"></i>
+          <span>좌측 (◀)</span>
         </button>
-        <button id="laneRightBtn" class="virtual-btn flex-1 py-4 rounded-2xl bg-slate-900/90 border-2 border-slate-700 text-cyan-400 hover:border-cyan-500 font-black text-lg flex items-center justify-center gap-2 shadow-lg">
-          <span>우측 차선 (▶)</span>
-          <i data-lucide="chevron-right" class="w-6 h-6"></i>
+        <button id="bottomPauseBtn" class="virtual-btn px-4 py-3.5 rounded-2xl bg-amber-500/15 border-2 border-amber-500/40 text-amber-300 hover:bg-amber-500/25 font-black text-sm flex items-center justify-center gap-1 shadow-lg active:scale-95">
+          <i data-lucide="pause" class="w-4 h-4"></i>
+          <span>일시정지</span>
+        </button>
+        <button id="laneRightBtn" class="virtual-btn flex-1 py-3.5 rounded-2xl bg-slate-900/90 border-2 border-slate-700 text-cyan-400 hover:border-cyan-500 font-black text-base flex items-center justify-center gap-1.5 shadow-lg active:scale-95">
+          <span>우측 (▶)</span>
+          <i data-lucide="chevron-right" class="w-5 h-5"></i>
         </button>
       </div>
 
       <p class="text-xs text-slate-500 mt-2.5 text-center">
-        키보드 <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">◀</kbd> / <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">▶</kbd> 또는 <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">A</kbd> / <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">D</kbd> 차선 이동 | <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">ESC</kbd> 일시정지
+        키보드 <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">◀</kbd> / <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">▶</kbd> 또는 <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">A</kbd> / <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">D</kbd> 차선 이동 | <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">ESC</kbd> or <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">P</kbd> 일시정지
       </p>
     </div>
   </main>
