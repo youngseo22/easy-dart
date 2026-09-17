@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Easy-DART | 3초 투자 심사관: BUY or SELL (단독 프리뷰)</title>
+  <title>Easy-DART | DART 실전 투자 심사관: BUY or SELL</title>
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -181,10 +181,10 @@
         </div>
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="text-xl font-black text-white tracking-tight">3초 투자 심사관</h1>
+            <h1 class="text-xl font-black text-white tracking-tight">DART 실전 투자 심사관</h1>
             <span class="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">BUY or SELL</span>
           </div>
-          <p class="text-xs text-slate-400 mt-0.5">공시 내용을 읽고 3.5초 안에 판단하세요! 좌측(손절) ◀ ▶ 우측(매수)</p>
+          <p class="text-xs text-slate-400 mt-0.5">공시 원문을 정독하고 정확하게 판정하세요! ⚡ 3초 이내 판단 시 번개 보너스(+100P)</p>
         </div>
       </div>
 
@@ -207,22 +207,45 @@
       </div>
     </div>
 
-    <!-- Timer Countdown Bar -->
-    <div class="w-full max-w-md mb-4">
-      <div class="flex items-center justify-between text-xs font-bold mb-1.5">
+    <!-- Speed Mode & Timer Countdown Bar -->
+    <div class="w-full max-w-md mb-4 space-y-2">
+      <!-- Speed Presets -->
+      <div class="flex items-center justify-between gap-1 p-1 rounded-2xl bg-slate-900/90 border border-slate-800 text-xs">
+        <button id="modeReadBtn" class="flex-1 py-1.5 px-2 rounded-xl font-bold transition border border-transparent text-slate-400 hover:text-white hover:bg-slate-800 text-center">
+          🐢 정독 (10s)
+        </button>
+        <button id="modeStandardBtn" class="flex-1 py-1.5 px-2 rounded-xl font-bold transition border border-amber-500/50 bg-amber-500/20 text-amber-300 shadow-sm text-center">
+          ⚖️ 표준 (8s)
+        </button>
+        <button id="modeSpeedBtn" class="flex-1 py-1.5 px-2 rounded-xl font-bold transition border border-transparent text-slate-400 hover:text-white hover:bg-slate-800 text-center">
+          ⚡ 쾌속 (5s)
+        </button>
+      </div>
+
+      <!-- Timer Bar Header -->
+      <div class="flex items-center justify-between text-xs font-bold px-1">
         <span class="text-slate-400 flex items-center gap-1">
           <i data-lucide="clock" class="w-3.5 h-3.5 text-amber-400"></i> 심사 제한시간
         </span>
-        <span id="timerText" class="text-amber-400 font-mono font-bold">3.5s</span>
+        <div id="lightningBadge" class="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/40 transition-all">
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>
+          <span>⚡ 3초 이내 번개 보너스 존</span>
+        </div>
+        <span id="timerText" class="text-amber-400 font-mono font-bold text-sm">8.0s</span>
       </div>
+
+      <!-- Timer Progress Bar -->
       <div class="w-full h-2.5 bg-slate-900 rounded-full overflow-hidden border border-slate-800 p-0.5">
-        <div id="timerBar" class="timer-progress h-full rounded-full bg-gradient-to-r from-emerald-400 via-amber-400 to-rose-500 w-full"></div>
+        <div id="timerBar" class="timer-progress h-full rounded-full bg-emerald-400 w-full"></div>
       </div>
     </div>
 
     <!-- Card Arena & Swipe Area -->
     <div class="w-full flex flex-col items-center justify-center my-2">
       <div class="card-stack-container" id="cardStack">
+        <!-- Floating Decision Feedback Banner -->
+        <div id="decisionBanner" class="absolute -top-10 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full text-xs font-black shadow-2xl opacity-0 pointer-events-none transition-all duration-300 z-50 flex items-center gap-1.5 scale-90 whitespace-nowrap"></div>
+
         <!-- Interactive card inserted via JavaScript -->
         <div class="swipe-card" id="activeCard">
           <div class="stamp-badge stamp-buy" id="stampBuy">APPROVED<br><span class="text-lg">매수 (BUY)</span></div>
@@ -316,7 +339,7 @@
         <p class="text-xs sm:text-sm text-slate-400 mt-1" id="resultGradeDesc">DART 공시 분석력 상위 5%의 놀라운 직관을 보여주셨습니다.</p>
         
         <!-- Stats Summary -->
-        <div class="grid grid-cols-3 gap-3 mt-4">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-4">
           <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800">
             <div class="text-[10px] text-slate-400 font-bold uppercase">최종 시총 점수</div>
             <div id="finalScore" class="text-xl font-black text-amber-400 font-mono mt-0.5">0</div>
@@ -328,6 +351,10 @@
           <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800">
             <div class="text-[10px] text-slate-400 font-bold uppercase">최대 콤보</div>
             <div id="finalMaxCombo" class="text-xl font-black text-cyan-400 font-mono mt-0.5">0 combo</div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800">
+            <div class="text-[10px] text-slate-400 font-bold uppercase">⚡ 번개 보너스</div>
+            <div id="finalLightningBonus" class="text-xl font-black text-amber-300 font-mono mt-0.5">0회</div>
           </div>
         </div>
       </div>
@@ -436,6 +463,24 @@
           gain.connect(this.ctx.destination);
           osc.start(now);
           osc.stop(now + 0.25);
+        } catch (e) {}
+      }
+      playLightning() {
+        if (this.isMuted || !this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + i * 0.05);
+            gain.gain.setValueAtTime(0.22, now + i * 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.005, now + i * 0.05 + 0.14);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now + i * 0.05);
+            osc.stop(now + i * 0.05 + 0.14);
+          });
         } catch (e) {}
       }
     }
