@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Easy-DART | DART 실전 투자 심사관: BUY or SELL</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;900&family=Pretendard:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --arcade-bg: #0B0F19;
+      --neon-cyan: #38BDF8;
+      --neon-emerald: #10B981;
+      --neon-amber: #F59E0B;
+      --neon-rose: #F43F5E;
+    }
+
+    body {
+      font-family: 'Pretendard', -apple-system, sans-serif;
+      background-color: var(--arcade-bg);
+      color: #F1F5F9;
+      overflow-x: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .arcade-panel {
+      background: rgba(19, 27, 46, 0.9);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.5), 0 0 15px rgba(56, 189, 248, 0.1);
+    }
+
+    .card-stack-container {
+      position: relative;
+      width: 100%;
+      max-width: 440px;
+      height: 480px;
+      perspective: 1000px;
+      margin: 0 auto;
+    }
+
+    .swipe-card {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 1.5rem;
+      background: linear-gradient(145deg, #1E293B 0%, #0F172A 100%);
+      border: 2px solid rgba(148, 163, 184, 0.2);
+      box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.7), 0 0 20px rgba(56, 189, 248, 0.1);
+      cursor: grab;
+      touch-action: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1.75rem;
+      transition: box-shadow 0.2s ease, transform 0.1s ease;
+      will-change: transform;
+    }
+
+    .swipe-card.dragging {
+      cursor: grabbing;
+      box-shadow: 0 25px 45px -5px rgba(0, 0, 0, 0.8), 0 0 30px rgba(56, 189, 248, 0.25);
+    }
+
+    /* Rubber stamp watermark */
+    .stamp-badge {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-15deg);
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.75rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      padding: 0.5rem 1.75rem;
+      border-radius: 1rem;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s ease, transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 30;
+      border-width: 5px;
+      letter-spacing: 0.1em;
+    }
+
+    .stamp-buy {
+      color: #10B981;
+      border-color: #10B981;
+      background: rgba(16, 185, 129, 0.15);
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+      transform: translate(-50%, -50%) rotate(12deg) scale(0.9);
+    }
+
+    .stamp-sell {
+      color: #F43F5E;
+      border-color: #F43F5E;
+      background: rgba(244, 63, 94, 0.15);
+      box-shadow: 0 0 25px rgba(244, 63, 94, 0.4);
+      transform: translate(-50%, -50%) rotate(-14deg) scale(0.9);
+    }
+
+    .stamp-visible {
+      opacity: 0.95;
+      transform: translate(-50%, -50%) rotate(0deg) scale(1.15) !important;
+    }
+
+    /* Timer bar pulse */
+    .timer-progress {
+      transition: width 0.05s linear, background-color 0.3s ease;
+    }
+
+    /* Custom scrollbar */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(56, 189, 248, 0.4);
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-amber-500 selection:text-white">
+
+  <!-- GNB Header -->
+  <header class="sticky top-0 z-50 bg-slate-950/85 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-6">
+        <a href="company_preview.html" class="flex items-center space-x-2.5 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-cyan-500/20">🎯</div>
+          <div>
+            <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Easy-DART</span>
+            <span class="text-[10px] text-slate-400 block -mt-1 font-semibold uppercase tracking-wider">주린이 금융 놀이터</span>
+          </div>
+        </a>
+        <nav class="hidden md:flex items-center space-x-1 text-sm font-medium">
+          <a href="company_preview.html" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition">기업 둘러보기</a>
+          <a href="game_arcade_preview.html" class="px-3 py-1.5 rounded-lg bg-amber-500/15 text-amber-400 border border-amber-500/30 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+            DART 오락실
+          </a>
+          <a href="quiz_preview.html" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition">공시 퀴즈</a>
+        </nav>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button id="soundToggleBtn" class="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-cyan-400 transition" title="효과음 켜기/끄기">
+          <i data-lucide="volume-2" class="w-5 h-5"></i>
+        </button>
+        <button id="pauseBtn" class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition flex items-center gap-1 text-sm font-semibold">
+          <i data-lucide="pause" class="w-4 h-4"></i>
+          <span>일시정지 (ESC)</span>
+        </button>
+        <a href="game_arcade_preview.html" class="px-3 py-1.5 rounded-xl bg-slate-800/70 border border-slate-700 text-slate-300 hover:text-white hover:bg-slate-700 transition text-sm flex items-center gap-1.5">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">로비로 나가기</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Game Container -->
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-6 flex flex-col items-center justify-start">
+    
+    <!-- Top HUD Banner -->
+    <div class="w-full arcade-panel rounded-2xl p-4 sm:p-5 mb-6 flex flex-wrap items-center justify-between gap-4 border-amber-500/30">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-rose-500 flex items-center justify-center text-white text-2xl shadow-lg shadow-amber-500/20">
+          ⚖️
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-xl font-black text-white tracking-tight">DART 실전 투자 심사관</h1>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">BUY or SELL</span>
+          </div>
+          <p class="text-xs text-slate-400 mt-0.5">공시 원문을 정독하고 정확하게 판정하세요! ⚡ 3초 이내 판단 시 번개 보너스(+100P)</p>
+        </div>
+      </div>
+
+      <!-- Score & Streak Dashboard -->
+      <div class="flex items-center gap-6 ml-auto sm:ml-0">
+        <div class="text-center">
+          <div class="text-[10px] font-bold text-slate-400 tracking-wider uppercase">현재 시총 (점수)</div>
+          <div id="scoreDisplay" class="text-2xl font-black text-amber-400 font-mono tracking-tight">0</div>
+        </div>
+        <div class="h-8 w-px bg-slate-800"></div>
+        <div class="text-center">
+          <div class="text-[10px] font-bold text-slate-400 tracking-wider uppercase">연속 정답</div>
+          <div id="streakDisplay" class="text-2xl font-black text-emerald-400 font-mono tracking-tight">0<span class="text-xs text-slate-500"> combo</span></div>
+        </div>
+        <div class="h-8 w-px bg-slate-800"></div>
+        <div class="text-center">
+          <div class="text-[10px] font-bold text-slate-400 tracking-wider uppercase">남은 안건</div>
+          <div id="progressDisplay" class="text-2xl font-black text-cyan-400 font-mono tracking-tight">1 / 10</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Speed Mode & Timer Countdown Bar -->
+    <div class="w-full max-w-md mb-4 space-y-2">
+      <!-- Speed Presets -->
+      <div class="flex items-center justify-between gap-1 p-1 rounded-2xl bg-slate-900/90 border border-slate-800 text-xs">
+        <button id="modeReadBtn" class="flex-1 py-1.5 px-2 rounded-xl font-bold transition border border-transparent text-slate-400 hover:text-white hover:bg-slate-800 text-center">
+          🐢 정독 (10s)
+        </button>
+        <button id="modeStandardBtn" class="flex-1 py-1.5 px-2 rounded-xl font-bold transition border border-amber-500/50 bg-amber-500/20 text-amber-300 shadow-sm text-center">
+          ⚖️ 표준 (8s)
+        </button>
+        <button id="modeSpeedBtn" class="flex-1 py-1.5 px-2 rounded-xl font-bold transition border border-transparent text-slate-400 hover:text-white hover:bg-slate-800 text-center">
+          ⚡ 쾌속 (5s)
+        </button>
+      </div>
+
+      <!-- Timer Bar Header -->
+      <div class="flex items-center justify-between text-xs font-bold px-1">
+        <span class="text-slate-400 flex items-center gap-1">
+          <i data-lucide="clock" class="w-3.5 h-3.5 text-amber-400"></i> 심사 제한시간
+        </span>
+        <div id="lightningBadge" class="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/40 transition-all">
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>
+          <span>⚡ 3초 이내 번개 보너스 존</span>
+        </div>
+        <span id="timerText" class="text-amber-400 font-mono font-bold text-sm">8.0s</span>
+      </div>
+
+      <!-- Timer Progress Bar -->
+      <div class="w-full h-2.5 bg-slate-900 rounded-full overflow-hidden border border-slate-800 p-0.5">
+        <div id="timerBar" class="timer-progress h-full rounded-full bg-emerald-400 w-full"></div>
+      </div>
+    </div>
+
+    <!-- Card Arena & Swipe Area -->
+    <div class="w-full flex flex-col items-center justify-center my-2">
+      <div class="card-stack-container" id="cardStack">
+        <!-- Floating Decision Feedback Banner -->
+        <div id="decisionBanner" class="absolute -top-10 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full text-xs font-black shadow-2xl opacity-0 pointer-events-none transition-all duration-300 z-50 flex items-center gap-1.5 scale-90 whitespace-nowrap"></div>
+
+        <!-- Interactive card inserted via JavaScript -->
+        <div class="swipe-card" id="activeCard">
+          <div class="stamp-badge stamp-buy" id="stampBuy">APPROVED<br><span class="text-lg">매수 (BUY)</span></div>
+          <div class="stamp-badge stamp-sell" id="stampSell">REJECTED<br><span class="text-lg">손절 (SELL)</span></div>
+
+          <!-- Card Header -->
+          <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div class="flex items-center gap-2">
+              <span id="cardCompany" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">CJ올리브영</span>
+              <span id="cardCategory" class="px-2 py-0.5 rounded text-[11px] font-medium bg-slate-800 text-slate-300">영업실적</span>
+            </div>
+            <span class="text-xs font-semibold text-slate-400 font-mono" id="cardDARTDate">DART 정기공시</span>
+          </div>
+
+          <!-- Card Body: Main Disclosure Title & Metric -->
+          <div class="my-auto py-2">
+            <div class="text-xs font-bold text-amber-400 mb-1 tracking-wider uppercase flex items-center gap-1">
+              <i data-lucide="file-text" class="w-3.5 h-3.5"></i> 공시 요약문
+            </div>
+            <h2 id="cardTitle" class="text-xl sm:text-2xl font-black text-white leading-snug mb-3">
+              연간 영업이익 4,600억 돌파, 역대 최대 실적 경신
+            </h2>
+            <div id="cardContentBox" class="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 text-sm text-slate-300 leading-relaxed font-normal">
+              외국인 관광객(K-뷰티) 쇼핑 급증 및 당일배송(오늘드림) 비중이 30%를 돌파하며 전년 대비 영업이익이 65% 급증했습니다.
+            </div>
+          </div>
+
+          <!-- Card Footer: Call to Action Prompt -->
+          <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+            <div class="flex items-center gap-1 font-medium text-rose-400">
+              <i data-lucide="arrow-left" class="w-4 h-4"></i> 악재 (SELL)
+            </div>
+            <span class="text-[11px] text-slate-500">카드를 좌/우로 밀거나 버튼 클릭</span>
+            <div class="flex items-center gap-1 font-medium text-emerald-400">
+              호재 (BUY) <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Buttons for Keyboard/Mouse/Touch -->
+      <div class="flex items-center justify-center gap-4 w-full max-w-md mt-6">
+        <button id="btnSell" class="flex-1 py-3.5 px-4 rounded-2xl bg-rose-500/15 hover:bg-rose-500/25 border-2 border-rose-500/40 text-rose-400 font-black text-base transition flex items-center justify-center gap-2 active:scale-95 shadow-lg shadow-rose-500/10">
+          <i data-lucide="thumbs-down" class="w-5 h-5"></i>
+          <span>손절 / 악재 (◀)</span>
+        </button>
+        <button id="btnBuy" class="flex-1 py-3.5 px-4 rounded-2xl bg-emerald-500/15 hover:bg-emerald-500/25 border-2 border-emerald-500/40 text-emerald-400 font-black text-base transition flex items-center justify-center gap-2 active:scale-95 shadow-lg shadow-emerald-500/10">
+          <span>매수 / 호재 (▶)</span>
+          <i data-lucide="thumbs-up" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Keyboard Hotkey Guide -->
+      <p class="text-xs text-slate-500 mt-3 text-center">
+        키보드 방향키 <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">◀</kbd> 손절 | <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">▶</kbd> 매수 | <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">ESC</kbd> 일시정지
+      </p>
+    </div>
+  </main>
+
+  <!-- PAUSE MODAL -->
+  <div id="pauseModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="arcade-panel max-w-sm w-full rounded-2xl p-6 text-center border-cyan-500/40">
+      <div class="w-14 h-14 rounded-2xl bg-cyan-500/20 border border-cyan-500/40 text-cyan-400 flex items-center justify-center mx-auto mb-4 text-2xl">
+        ⏸️
+      </div>
+      <h2 class="text-2xl font-black text-white mb-1">심사 일시정지</h2>
+      <p class="text-xs text-slate-400 mb-6">잠시 숨을 고르고 다음 공시 안건을 검토하세요.</p>
+      <div class="space-y-2.5">
+        <button id="resumeBtn" class="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 text-slate-950 font-black text-sm hover:opacity-90 transition">
+          심사 계속하기 (Resume)
+        </button>
+        <button id="restartBtn" class="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition">
+          처음부터 다시하기
+        </button>
+        <a href="game_arcade_preview.html" class="block w-full py-2.5 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-400 hover:text-white text-xs font-bold transition">
+          오락실 로비로 나가기
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME OVER / REPORT MODAL (오답노트 및 투자 브리핑) -->
+  <div id="resultModal" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-lg flex items-center justify-center p-4 hidden">
+    <div class="arcade-panel max-w-xl w-full rounded-3xl p-6 sm:p-8 max-h-[90vh] flex flex-col border-amber-500/40 shadow-2xl">
+      <!-- Modal Header -->
+      <div class="text-center pb-4 border-b border-slate-800">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-rose-500 text-slate-950 text-3xl font-black shadow-lg shadow-amber-500/20 mb-3">
+          🎓
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight" id="resultGradeTitle">수석 투자 심사역 합격!</h2>
+        <p class="text-xs sm:text-sm text-slate-400 mt-1" id="resultGradeDesc">DART 공시 분석력 상위 5%의 놀라운 직관을 보여주셨습니다.</p>
+        
+        <!-- Stats Summary -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-4">
+          <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800">
+            <div class="text-[10px] text-slate-400 font-bold uppercase">최종 시총 점수</div>
+            <div id="finalScore" class="text-xl font-black text-amber-400 font-mono mt-0.5">0</div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800">
+            <div class="text-[10px] text-slate-400 font-bold uppercase">심사 정확도</div>
+            <div id="finalAccuracy" class="text-xl font-black text-emerald-400 font-mono mt-0.5">100%</div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800">
+            <div class="text-[10px] text-slate-400 font-bold uppercase">최대 콤보</div>
+            <div id="finalMaxCombo" class="text-xl font-black text-cyan-400 font-mono mt-0.5">0 combo</div>
+          </div>
+          <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800">
+            <div class="text-[10px] text-slate-400 font-bold uppercase">⚡ 번개 보너스</div>
+            <div id="finalLightningBonus" class="text-xl font-black text-amber-300 font-mono mt-0.5">0회</div>
+          </div>
+        </div>
+      
+
+        <!-- AI Post-Game Debriefing Card -->
+        <div id="aiDebriefBox" class="mt-3 p-3.5 rounded-2xl bg-gradient-to-r from-purple-950/50 to-slate-900 border border-purple-500/40 text-left">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="text-xs font-black text-purple-300 flex items-center gap-1.5">
+              <span>🤖</span> <span>AI 투자 코치 1:1 하브루타 처방전</span>
+            </span>
+            <span class="text-[9px] px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 font-mono font-bold">GEMINI AI</span>
+          </div>
+          <div id="aiDebriefContent" class="text-xs text-slate-200 leading-relaxed space-y-1">
+            분석 대기 중... 💭
+          </div>
+        </div>
+      </div>
+
+      <!-- Educational Review List (오답노트 및 공시 꿀팁 해설) -->
+      <div class="flex-1 overflow-y-auto custom-scrollbar my-4 pr-1 space-y-3" id="reviewReportList">
+        <!-- Injected via JavaScript -->
+      </div>
+
+      <!-- Modal Footer Actions -->
+      <div class="pt-3 border-t border-slate-800 flex gap-3">
+        <button id="modalPlayAgainBtn" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-rose-500 text-slate-950 font-black text-sm hover:opacity-95 transition flex items-center justify-center gap-2">
+          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+          <span>한 판 더 심사하기</span>
+        </button>
+        <a href="game_arcade_preview.html" class="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-sm transition flex items-center justify-center gap-2">
+          <i data-lucide="layout-grid" class="w-4 h-4"></i>
+          <span>오락실 목록</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Audio Synthesizer via Web Audio API
+    class ArcadeSoundSynth {
+      constructor() {
+        this.ctx = null;
+        this.isMuted = false;
+      }
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) this.ctx = new AudioContext();
+        }
+      }
+      toggleMute() {
+        this.isMuted = !this.isMuted;
+        return this.isMuted;
+      }
+      playSwipe() {
+        if (this.isMuted || !this.ctx) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          const now = this.ctx.currentTime;
+          osc.frequency.setValueAtTime(300, now);
+          osc.frequency.exponentialRampToValueAtTime(800, now + 0.08);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        } catch (e) {}
+      }
+      playApproved() {
+        if (this.isMuted || !this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          [523.25, 659.25, 783.99].forEach((freq, i) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + i * 0.06);
+            gain.gain.setValueAtTime(0.25, now + i * 0.06);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.06 + 0.18);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now + i * 0.06);
+            osc.stop(now + i * 0.06 + 0.18);
+          });
+        } catch (e) {}
+      }
+      playRejected() {
+        if (this.isMuted || !this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          [340, 220].forEach((freq, i) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(freq, now + i * 0.08);
+            gain.gain.setValueAtTime(0.2, now + i * 0.08);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.08 + 0.15);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now + i * 0.08);
+            osc.stop(now + i * 0.08 + 0.15);
+          });
+        } catch (e) {}
+      }
+      playTimeOver() {
+        if (this.isMuted || !this.ctx) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sawtooth';
+          const now = this.ctx.currentTime;
+          osc.frequency.setValueAtTime(180, now);
+          osc.frequency.linearRampToValueAtTime(80, now + 0.25);
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        } catch (e) {}
+      }
+      playLightning() {
+        if (this.isMuted || !this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + i * 0.05);
+            gain.gain.setValueAtTime(0.22, now + i * 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.005, now + i * 0.05 + 0.14);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now + i * 0.05);
+            osc.stop(now + i * 0.05 + 0.14);
+          });
+        } catch (e) {}
+      }
+    }
+
+    // Realistic DART Case Database (CJ올리브영, 아성다이소, 현대차, 스타벅스 등)
+    const DART_CASES = [
+      {
+        id: "c1",
+        company: "CJ올리브영",
+        category: "영업실적",
+        date: "2024 감사보고서",
+        title: "연간 영업이익 4,600억 돌파, 역대 최대 실적 경신",
+        content: "외국인 관광객(K-뷰티) 쇼핑 급증 및 당일배송(오늘드림) 비중이 30%를 돌파하며 전년 대비 영업이익이 65% 급증했습니다.",
+        isBuy: true, // BUY 호재
+        explanation: "본업의 수익성과 시장 점유율이 동시에 폭발적으로 성장한 강력한 매수 신호입니다.",
+        tip: "영업이익의 지속적 우상향은 주가 상승의 가장 기본적이고 튼튼한 엔진입니다."
+      },
+      {
+        id: "c2",
+        company: "코스닥 A상장사",
+        category: "감사보고서",
+        date: "2024 정기보고서",
+        title: "외부감사인 감사보고서 '감사의견 거절' 수령",
+        content: "삼일회계법인은 계속기업으로서의 존속능력 불확실성 및 주요 재고자산 입증 자료 미제출로 의견 형성이 불가능하다고 밝혔습니다.",
+        isBuy: false, // SELL 악재
+        explanation: "감사의견 거절은 코스닥 시장 즉시 상장폐지 실질심사 대상이 되는 최고 등급의 사망 선고입니다.",
+        tip: "감사의견 거절 공시가 뜨면 주식 매매가 즉시 정지되므로 그 전에 부실 징후를 피해야 합니다."
+      },
+      {
+        id: "c3",
+        company: "아성다이소",
+        category: "지배구조",
+        date: "2024 지분변동",
+        title: "일본 대주주 지분 34% 전량 5,000억 원에 전격 인수",
+        content: "일본 다이소산교와의 20여 년 지분 관계를 완전히 정리하고 100% 순수 한국 토종 지배구조를 완성했습니다.",
+        isBuy: true, // BUY 호재
+        explanation: "외국계 배당 유출을 차단하고 한국 대표 국민 유통 브랜드로서의 독자 생존 및 상장 기틀을 마련했습니다.",
+        tip: "지분 분쟁 위험 해소와 안정적인 배당 정책 유지는 중장기 기업 가치에 큰 호재입니다."
+      },
+      {
+        id: "c4",
+        company: "바이오 B기업",
+        category: "자본잠식",
+        date: "2024 분기공시",
+        title: "누적 결손금 확대로 '완전자본잠식' 진입 공시",
+        content: "지속된 연구개발비 지출과 영업손실로 주주들이 낸 자본금이 모두 바닥나 자본총계가 -320억 원으로 마이너스 전환되었습니다.",
+        isBuy: false, // SELL 악재
+        explanation: "내 돈이 한 푼도 남아있지 않고 빚만 남은 상태로, 코스닥 관리종목 지정 및 상장폐지 지뢰입니다.",
+        tip: "재무제표의 '자본총계'가 마이너스인지 반드시 DART에서 확인해야 합니다."
+      },
+      {
+        id: "c5",
+        company: "현대자동차",
+        category: "주주환원",
+        date: "2024 수시공시",
+        title: "주주가치 제고를 위한 4조 원 규모 자사주 매입 및 전량 소각",
+        content: "향후 3개년에 걸쳐 발행주식총수의 1%씩을 매년 장내 매수한 후 즉시 불태워 영구 소각하기로 결의했습니다.",
+        isBuy: true, // BUY 호재
+        explanation: "주식 수가 줄어들면 1주당 순이익(EPS)이 자동으로 상승하여 기존 주주들의 지분 가치가 극대화됩니다.",
+        tip: "단순 '자사주 취득'보다 '자사주 소각' 공시가 훨씬 강력한 주가 부양 호재입니다."
+      },
+      {
+        id: "c6",
+        company: "2차전지 테마 C사",
+        category: "자금조달",
+        date: "2024 주요사항보고",
+        title: "시가총액의 60%에 달하는 대규모 전환사채(CB) 300억 발행",
+        content: "표면이자율 0%로 300억 원 규모의 사모 전환사채를 발행하며, 1년 뒤 시가의 70% 가격으로 신주 발행 청구가 가능합니다.",
+        isBuy: false, // SELL 악재
+        explanation: "향후 헐값의 신주가 쏟아져 나와 기존 주주들의 지분 가치를 무참히 희석시키는 '물량 폭탄' 공시입니다.",
+        tip: "시총 대비 CB 발행 규모가 과도한 기업은 주가 급락의 위험이 매우 큽니다."
+      },
+      {
+        id: "c7",
+        company: "SCK컴퍼니(스타벅스)",
+        category: "배당결정",
+        date: "2024 정기보고서",
+        title: "현금배당 결의: 주당 배당금 5,200원 (배당수익률 6.2%)",
+        content: "안정적인 현금흐름과 점포 확대 이익을 바탕으로 전년 대비 배당금을 40% 증액하여 총 1,200억 원을 현금 지급합니다.",
+        isBuy: true, // BUY 호재
+        explanation: "고금리 시대에 6%대의 탄탄한 배당수익률은 하방 경직성을 제공하는 강력한 투자 메리트입니다.",
+        tip: "배당 성향이 높고 현금흐름이 원활한 기업은 시장 폭락기에도 든든한 방패가 됩니다."
+      },
+      {
+        id: "c8",
+        company: "엔터테인먼트 D사",
+        category: "사법리스크",
+        date: "2024 횡령배임",
+        title: "전 대표이사 및 재무임원 450억 원대 횡령·배임 혐의 피소",
+        content: "자기자본 대비 38%에 해당하는 회사 공금을 해외 페이퍼컴퍼니로 무단 송금한 정황이 포착되어 고발장이 접수되었습니다.",
+        isBuy: false, // SELL 악재
+        explanation: "자기자본의 수십%를 도둑맞은 사건으로, 거래소에서 즉각 주식 매매거래정지 조치를 내리는 중대 악재입니다.",
+        tip: "대주주나 임원의 도덕적 해이와 횡령은 기업의 기본 신뢰를 완전히 붕괴시킵니다."
+      },
+      {
+        id: "c9",
+        company: "에너지 솔루션 E사",
+        category: "수주계약",
+        date: "2024 단일판매공급",
+        title: "북미 빅테크 대상 2.4조 원 규모 에너지저장장치(ESS) 공급 계약 체결",
+        content: "최근 매출액 대비 125%에 달하는 사상 최대 규모의 5개년 장기 공급 독점 계약을 정식 체결했습니다.",
+        isBuy: true, // BUY 호재
+        explanation: "연간 매출의 100%를 초과하는 메가톤급 수주는 향후 수년간의 실적 안정성을 완벽히 담보합니다.",
+        tip: "'단일판매·공급계약 체결' 공시에서 '최근 매출액 대비 비율'을 반드시 확인하세요!"
+      },
+      {
+        id: "c10",
+        company: "제조업 F사",
+        category: "매출실적",
+        date: "2024 관리종목우려",
+        title: "최근 4개 사업연도 연속 영업손실 발생 (코스닥 관리종목 지정 우려)",
+        content: "중국산 저가 공세로 본업 영업이익이 4년 연속 마이너스를 기록하여 관리종목 지정 요건에 해당되었습니다.",
+        isBuy: false, // SELL 악재
+        explanation: "코스닥 상장사는 4년 연속 영업손실 시 관리종목 지정, 5년 연속 시 상장폐지 실질심사를 받습니다.",
+        tip: "연속 적자 기업은 아무리 주가가 싸 보여도 절대 진입하면 안 되는 위험 구역입니다."
+      }
+    ];
+
+    // Game Engine State
+    class JudgeGame {
+      constructor() {
+        this.sound = new ArcadeSoundSynth();
+        this.cards = [...DART_CASES].sort(() => Math.random() - 0.5);
+        this.currentIndex = 0;
+        this.score = 0;
+        this.streak = 0;
+        this.maxStreak = 0;
+        this.correctCount = 0;
+        this.lightningCount = 0;
+        this.history = []; // record player choices
+
+        this.timeLimit = 8.0; // seconds (기본 여유 모드)
+        this.selectedMode = 'standard';
+        this.timeRemaining = this.timeLimit;
+        this.timerInterval = null;
+        this.cardStartTime = 0;
+        this.isPaused = false;
+        this.isGameOver = false;
+
+        this.initDOMElements();
+        this.initTouchAndDrag();
+        this.initEvents();
+      }
+
+      initDOMElements() {
+        this.cardCompanyEl = document.getElementById('cardCompany');
+        this.cardCategoryEl = document.getElementById('cardCategory');
+        this.cardDARTDateEl = document.getElementById('cardDARTDate');
+        this.cardTitleEl = document.getElementById('cardTitle');
+        this.cardContentBoxEl = document.getElementById('cardContentBox');
+        this.activeCardEl = document.getElementById('activeCard');
+        this.stampBuyEl = document.getElementById('stampBuy');
+        this.stampSellEl = document.getElementById('stampSell');
+        this.scoreDisplayEl = document.getElementById('scoreDisplay');
+        this.streakDisplayEl = document.getElementById('streakDisplay');
+        this.progressDisplayEl = document.getElementById('progressDisplay');
+        this.timerBarEl = document.getElementById('timerBar');
+        this.timerTextEl = document.getElementById('timerText');
+        this.lightningBadgeEl = document.getElementById('lightningBadge');
+        this.decisionBannerEl = document.getElementById('decisionBanner');
+        this.modeReadBtn = document.getElementById('modeReadBtn');
+        this.modeStandardBtn = document.getElementById('modeStandardBtn');
+        this.modeSpeedBtn = document.getElementById('modeSpeedBtn');
+        this.pauseModalEl = document.getElementById('pauseModal');
+        this.resultModalEl = document.getElementById('resultModal');
+      }
+
+      start() {
+        this.sound.init();
+        this.currentIndex = 0;
+        this.score = 0;
+        this.streak = 0;
+        this.maxStreak = 0;
+        this.correctCount = 0;
+        this.lightningCount = 0;
+        this.history = [];
+        this.isGameOver = false;
+        this.isPaused = false;
+
+        this.updateHUD();
+        this.loadCurrentCard();
+      }
+
+      setMode(mode) {
+        this.selectedMode = mode;
+        if (mode === 'read') {
+          this.timeLimit = 10.0;
+        } else if (mode === 'speed') {
+          this.timeLimit = 5.0;
+        } else {
+          this.timeLimit = 8.0;
+        }
+
+        // Update button styles
+        [this.modeReadBtn, this.modeStandardBtn, this.modeSpeedBtn].forEach(b => {
+          b.className = 'flex-1 py-1.5 px-2 rounded-xl font-bold transition border border-transparent text-slate-400 hover:text-white hover:bg-slate-800 text-center';
+        });
+
+        if (mode === 'read') {
+          this.modeReadBtn.className = 'flex-1 py-1.5 px-2 rounded-xl font-bold transition border border-cyan-500/50 bg-cyan-500/20 text-cyan-300 shadow-sm text-center';
+        } else if (mode === 'speed') {
+          this.modeSpeedBtn.className = 'flex-1 py-1.5 px-2 rounded-xl font-bold transition border border-rose-500/50 bg-rose-500/20 text-rose-300 shadow-sm text-center';
+        } else {
+          this.modeStandardBtn.className = 'flex-1 py-1.5 px-2 rounded-xl font-bold transition border border-amber-500/50 bg-amber-500/20 text-amber-300 shadow-sm text-center';
+        }
+
+        if (!this.isGameOver && !this.isPaused) {
+          this.startTimer();
+        }
+      }
+
+      showBanner(text, styleClasses) {
+        if (!this.decisionBannerEl) return;
+        this.decisionBannerEl.className = `absolute -top-10 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full text-xs font-black shadow-2xl transition-all duration-300 z-50 flex items-center gap-1.5 whitespace-nowrap opacity-100 scale-100 ${styleClasses}`;
+        this.decisionBannerEl.innerHTML = text;
+        setTimeout(() => {
+          if (this.decisionBannerEl) {
+            this.decisionBannerEl.classList.remove('opacity-100', 'scale-100');
+            this.decisionBannerEl.classList.add('opacity-0', 'scale-90');
+          }
+        }, 1100);
+      }
+
+      loadCurrentCard() {
+        if (this.currentIndex >= this.cards.length) {
+          this.endGame();
+          return;
+        }
+
+        const data = this.cards[this.currentIndex];
+        this.cardCompanyEl.textContent = data.company;
+        this.cardCategoryEl.textContent = data.category;
+        this.cardDARTDateEl.textContent = data.date;
+        this.cardTitleEl.textContent = data.title;
+        this.cardContentBoxEl.textContent = data.content;
+
+        // Reset transform & stamps
+        this.activeCardEl.style.transform = 'translate(0px, 0px) rotate(0deg)';
+        this.activeCardEl.style.transition = 'transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        this.stampBuyEl.classList.remove('stamp-visible');
+        this.stampSellEl.classList.remove('stamp-visible');
+
+        this.cardStartTime = Date.now();
+        this.updateHUD();
+        this.startTimer();
+      }
+
+      updateHUD() {
+        this.scoreDisplayEl.textContent = this.score.toLocaleString();
+        this.streakDisplayEl.innerHTML = `${this.streak}<span class="text-xs text-slate-500"> combo</span>`;
+        this.progressDisplayEl.textContent = `${this.currentIndex + 1} / ${this.cards.length}`;
+      }
+
+      startTimer() {
+        clearInterval(this.timerInterval);
+        this.timeRemaining = this.timeLimit;
+        this.timerBarEl.style.width = '100%';
+        this.timerBarEl.className = 'timer-progress h-full rounded-full bg-emerald-400 w-full';
+
+        const stepTime = 50; // ms
+        this.timerInterval = setInterval(() => {
+          if (this.isPaused || this.isGameOver) return;
+          this.timeRemaining -= stepTime / 1000;
+
+          if (this.timeRemaining <= 0) {
+            this.timeRemaining = 0;
+            clearInterval(this.timerInterval);
+            this.handleTimeout();
+            return;
+          }
+
+          const pct = Math.max(0, (this.timeRemaining / this.timeLimit) * 100);
+          this.timerBarEl.style.width = pct + '%';
+          this.timerTextEl.textContent = this.timeRemaining.toFixed(1) + 's';
+
+          // Lightning bonus indicator (< 3.0s elapsed)
+          const elapsed = (Date.now() - this.cardStartTime) / 1000;
+          if (elapsed <= 3.0) {
+            this.lightningBadgeEl.className = 'flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/40 transition-all';
+            this.lightningBadgeEl.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span><span>⚡ 번개 보너스 (${(3.0 - elapsed).toFixed(1)}s)</span>`;
+          } else {
+            this.lightningBadgeEl.className = 'flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-800 text-slate-400 border border-slate-700 transition-all';
+            this.lightningBadgeEl.innerHTML = `<span>✓ 정독 심사 모드</span>`;
+          }
+
+          if (pct < 25) {
+            this.timerBarEl.className = 'timer-progress h-full rounded-full bg-rose-500 w-full animate-pulse';
+          } else if (pct < 55) {
+            this.timerBarEl.className = 'timer-progress h-full rounded-full bg-amber-400 w-full';
+          } else {
+            this.timerBarEl.className = 'timer-progress h-full rounded-full bg-emerald-400 w-full';
+          }
+        }, stepTime);
+      }
+
+      handleTimeout() {
+        this.sound.playTimeOver();
+        const currentData = this.cards[this.currentIndex];
+        this.streak = 0;
+        this.score = Math.max(0, this.score - 50);
+        this.history.push({
+          card: currentData,
+          playerChoice: 'TIMEOUT',
+          isCorrect: false,
+          elapsedSec: this.timeLimit.toFixed(1),
+          isLightning: false,
+          reason: `제한 시간(${this.timeLimit}초) 초과로 인한 심사 지연`
+        });
+
+        this.showBanner('⏰ 심사 시간 초과! (-50P)', 'bg-rose-700 text-white font-bold');
+
+        // Flash timeout effect
+        this.cardContentBoxEl.classList.add('border-rose-500');
+        setTimeout(() => {
+          this.cardContentBoxEl.classList.remove('border-rose-500');
+          this.currentIndex++;
+          this.loadCurrentCard();
+        }, 700);
+      }
+
+      judge(decision) {
+        if (this.isPaused || this.isGameOver) return;
+        clearInterval(this.timerInterval);
+        this.sound.init();
+
+        const elapsedSec = Math.max(0.1, (Date.now() - this.cardStartTime) / 1000);
+        const currentData = this.cards[this.currentIndex];
+        const isCorrect = (decision === 'BUY' && currentData.isBuy) || (decision === 'SELL' && !currentData.isBuy);
+        const isLightning = isCorrect && (elapsedSec <= 3.0);
+
+        // Stamp and animation
+        if (decision === 'BUY') {
+          this.stampBuyEl.classList.add('stamp-visible');
+          this.activeCardEl.style.transition = 'transform 0.35s ease, opacity 0.35s ease';
+          this.activeCardEl.style.transform = 'translate(450px, -40px) rotate(25deg)';
+          this.activeCardEl.style.opacity = '0';
+        } else {
+          this.stampSellEl.classList.add('stamp-visible');
+          this.activeCardEl.style.transition = 'transform 0.35s ease, opacity 0.35s ease';
+          this.activeCardEl.style.transform = 'translate(-450px, -40px) rotate(-25deg)';
+          this.activeCardEl.style.opacity = '0';
+        }
+
+        if (isCorrect) {
+          this.sound.playApproved();
+          this.correctCount++;
+          this.streak++;
+          if (this.streak > this.maxStreak) this.maxStreak = this.streak;
+          const streakBonus = Math.floor(this.streak * 20);
+          const lightningBonus = isLightning ? 100 : 0;
+          this.score += (150 + streakBonus + lightningBonus);
+
+          if (isLightning) {
+            this.lightningCount++;
+            this.sound.playLightning();
+            this.showBanner(`⚡ 번개 판단 보너스! +${150 + streakBonus + lightningBonus}P (${elapsedSec.toFixed(1)}초)`, 'bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 font-black');
+          } else {
+            this.showBanner(`✓ 신중한 정답 판정! +${150 + streakBonus}P (${elapsedSec.toFixed(1)}초)`, 'bg-emerald-500 text-slate-950 font-black');
+          }
+        } else {
+          this.sound.playRejected();
+          this.streak = 0;
+          this.score = Math.max(0, this.score - 80);
+          this.showBanner(`✗ 판단 실패 (${decision === 'BUY' ? '호재 오판' : '악재 오판'}) -80P`, 'bg-rose-600 text-white font-black');
+        }
+
+        this.history.push({
+          card: currentData,
+          playerChoice: decision,
+          isCorrect: isCorrect,
+          elapsedSec: elapsedSec.toFixed(1),
+          isLightning: isLightning
+        });
+
+        this.updateHUD();
+
+        setTimeout(() => {
+          this.activeCardEl.style.opacity = '1';
+          this.currentIndex++;
+          this.loadCurrentCard();
+        }, 340);
+      }
+
+      initTouchAndDrag() {
+        let isDragging = false;
+        let startX = 0;
+        let startY = 0;
+        let currentX = 0;
+
+        const onStart = (e) => {
+          if (this.isPaused || this.isGameOver) return;
+          this.sound.init();
+          isDragging = true;
+          this.activeCardEl.classList.add('dragging');
+          startX = (e.touches ? e.touches[0].clientX : e.clientX);
+          startY = (e.touches ? e.touches[0].clientY : e.clientY);
+          this.activeCardEl.style.transition = 'none';
+        };
+
+        const onMove = (e) => {
+          if (!isDragging) return;
+          const clientX = (e.touches ? e.touches[0].clientX : e.clientX);
+          const clientY = (e.touches ? e.touches[0].clientY : e.clientY);
+          currentX = clientX - startX;
+          const currentY = clientY - startY;
+          const rotate = currentX * 0.08;
+
+          this.activeCardEl.style.transform = `translate(${currentX}px, ${currentY}px) rotate(${rotate}deg)`;
+
+          // Visual cue stamps
+          if (currentX > 50) {
+            this.stampBuyEl.classList.add('stamp-visible');
+            this.stampSellEl.classList.remove('stamp-visible');
+          } else if (currentX < -50) {
+            this.stampSellEl.classList.add('stamp-visible');
+            this.stampBuyEl.classList.remove('stamp-visible');
+          } else {
+            this.stampBuyEl.classList.remove('stamp-visible');
+            this.stampSellEl.classList.remove('stamp-visible');
+          }
+        };
+
+        const onEnd = () => {
+          if (!isDragging) return;
+          isDragging = false;
+          this.activeCardEl.classList.remove('dragging');
+
+          if (currentX > 90) {
+            this.judge('BUY');
+          } else if (currentX < -90) {
+            this.judge('SELL');
+          } else {
+            // Spring back
+            this.activeCardEl.style.transition = 'transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            this.activeCardEl.style.transform = 'translate(0px, 0px) rotate(0deg)';
+            this.stampBuyEl.classList.remove('stamp-visible');
+            this.stampSellEl.classList.remove('stamp-visible');
+          }
+          currentX = 0;
+        };
+
+        this.activeCardEl.addEventListener('mousedown', onStart);
+        window.addEventListener('mousemove', onMove);
+        window.addEventListener('mouseup', onEnd);
+
+        this.activeCardEl.addEventListener('touchstart', onStart, { passive: true });
+        window.addEventListener('touchmove', onMove, { passive: true });
+        window.addEventListener('touchend', onEnd);
+      }
+
+      initEvents() {
+        // Speed presets
+        document.getElementById('modeReadBtn').addEventListener('click', () => this.setMode('read'));
+        document.getElementById('modeStandardBtn').addEventListener('click', () => this.setMode('standard'));
+        document.getElementById('modeSpeedBtn').addEventListener('click', () => this.setMode('speed'));
+
+        // Buttons
+        document.getElementById('btnBuy').addEventListener('click', () => this.judge('BUY'));
+        document.getElementById('btnSell').addEventListener('click', () => this.judge('SELL'));
+
+        // Keyboard hotkeys
+        window.addEventListener('keydown', (e) => {
+          if (this.isGameOver) return;
+          if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+            this.judge('BUY');
+          } else if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+            this.judge('SELL');
+          } else if (e.key === 'Escape' || e.key === 'p' || e.key === 'P') {
+            this.togglePause();
+          }
+        });
+
+        // Pause / Resume
+        document.getElementById('pauseBtn').addEventListener('click', () => this.togglePause());
+        document.getElementById('resumeBtn').addEventListener('click', () => this.togglePause(false));
+        document.getElementById('restartBtn').addEventListener('click', () => {
+          this.togglePause(false);
+          this.start();
+        });
+
+        // Sound Toggle
+        document.getElementById('soundToggleBtn').addEventListener('click', () => {
+          const muted = this.sound.toggleMute();
+          document.getElementById('soundToggleBtn').innerHTML = muted 
+            ? '<i data-lucide="volume-x" class="w-5 h-5 text-rose-400"></i>'
+            : '<i data-lucide="volume-2" class="w-5 h-5"></i>';
+          lucide.createIcons();
+        });
+
+        // Play Again in Modal
+        document.getElementById('modalPlayAgainBtn').addEventListener('click', () => {
+          this.resultModalEl.classList.add('hidden');
+          this.start();
+        });
+      }
+
+      togglePause(forceState) {
+        if (this.isGameOver) return;
+        this.isPaused = (forceState !== undefined) ? forceState : !this.isPaused;
+        if (this.isPaused) {
+          this.pauseModalEl.classList.remove('hidden');
+        } else {
+          this.pauseModalEl.classList.add('hidden');
+        }
+      }
+
+      endGame() {
+        this.isGameOver = true;
+        clearInterval(this.timerInterval);
+
+        const accuracy = Math.round((this.correctCount / this.cards.length) * 100);
+        document.getElementById('finalScore').textContent = this.score.toLocaleString();
+        document.getElementById('finalAccuracy').textContent = `${accuracy}% (${this.correctCount}/${this.cards.length})`;
+        document.getElementById('finalMaxCombo').textContent = `${this.maxStreak} combo`;
+        document.getElementById('finalLightningBonus').textContent = `${this.lightningCount}회`;
+
+        // Determine Title
+        const titleEl = document.getElementById('resultGradeTitle');
+        const descEl = document.getElementById('resultGradeDesc');
+        if (accuracy >= 90) {
+          titleEl.textContent = '🏆 수석 투자 심사역 합격!';
+          descEl.textContent = `DART 공시의 본질을 완벽히 꿰뚫는 특급 투자자입니다! (⚡번개 판단 ${this.lightningCount}회 달성)`;
+        } else if (accuracy >= 70) {
+          titleEl.textContent = '💼 공인 투자 심사역 수료!';
+          descEl.textContent = '상폐 지뢰를 훌륭히 피하고 호재를 정밀하게 포착하셨습니다.';
+        } else {
+          titleEl.textContent = '📚 초보 심사역 재도전 권고!';
+          descEl.textContent = '아래 오답노트 해설을 꼼꼼히 복습하고 정독 모드로 다시 도전해 보세요!';
+        }
+
+        // Render Review Report (오답노트 & 꿀팁)
+        const listEl = document.getElementById('reviewReportList');
+        listEl.innerHTML = '';
+
+        this.history.forEach((item, idx) => {
+          const row = document.createElement('div');
+          const isCorrect = item.isCorrect;
+          row.className = `p-3.5 rounded-xl border ${isCorrect ? 'bg-slate-900/90 border-emerald-500/30' : 'bg-rose-950/20 border-rose-500/40'}`;
+          
+          row.innerHTML = `
+            <div class="flex items-center justify-between gap-2 mb-1.5 flex-wrap">
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold px-2 py-0.5 rounded ${isCorrect ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}">
+                  ${isCorrect ? '정답 PASS' : '오답 FAIL'}
+                </span>
+                <span class="text-xs font-semibold text-slate-300">${item.card.company}</span>
+                <span class="text-[11px] text-slate-400 font-mono">⏱️ ${item.elapsedSec || '-'}초</span>
+                ${item.isLightning ? '<span class="px-1.5 py-0.2 rounded text-[10px] font-black bg-amber-500/20 text-amber-300 border border-amber-500/40">⚡ 번개 판단 (+100P)</span>' : ''}
+              </div>
+              <span class="text-[11px] font-mono ${item.card.isBuy ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold'}">
+                정답: ${item.card.isBuy ? '호재 (BUY)' : '악재 (SELL)'}
+              </span>
+            </div>
+            <div class="text-sm font-bold text-white mb-1">${item.card.title}</div>
+            <div class="text-xs text-slate-300 bg-slate-950/60 p-2 rounded-lg border border-slate-800/80 mb-1.5">
+              💡 <span class="font-semibold text-cyan-300">공시 해석:</span> ${item.card.explanation}
+            </div>
+            <div class="text-[11px] text-amber-300/90 font-medium">
+              🎯 <span class="text-slate-400">실전 투자 꿀팁:</span> ${item.card.tip}
+            </div>
+          `;
+          listEl.appendChild(row);
+        });
+
+        this.resultModalEl.classList.remove('hidden');
+        lucide.createIcons();
+
+        // Trigger AI Debriefing
+        const wrongTitles = this.history.filter(h => !h.isCorrect).map(h => `${h.card.company}: ${h.card.title}`);
+        this.fetchAIDebrief(wrongTitles);
+      }
+
+      async fetchAIDebrief(missedItems) {
+        const debriefEl = document.getElementById('aiDebriefContent');
+        if (!debriefEl) return;
+        debriefEl.innerHTML = 'AI 투자 코치가 방금 플레이를 분석하고 1:1 처방전을 작성 중입니다... ⏳';
+
+        try {
+          const res = await fetch('http://localhost:8000/api/quiz/ai-debrief', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ missed_items: missedItems, game_title: 'DART 실전 투자 심사관' })
+          });
+          const data = await res.json();
+          if (data && data.message) {
+            debriefEl.innerHTML = `
+              <p class="font-bold text-cyan-300">${data.coach_title || '💡 핑거코치 복기'}</p>
+              <p class="text-slate-200">${data.message}</p>
+              ${data.havruta_question ? `<p class="mt-1 text-amber-300 bg-amber-950/40 p-2 rounded-lg border border-amber-800/40 font-medium">❓ <b>하브루타 질문:</b> ${data.havruta_question}</p>` : ''}
+              ${data.key_takeaway ? `<p class="mt-1 text-emerald-300 text-[10px]">📌 <b>투자 생존 팁:</b> ${data.key_takeaway}</p>` : ''}
+            `;
+            return;
+          }
+        } catch (e) {}
+
+        if (!missedItems || missedItems.length === 0) {
+          debriefEl.innerHTML = `
+            <p class="font-bold text-emerald-400">🎯 퍼펙트 심사관 통과!</p>
+            <p class="text-slate-200">단 하나의 상폐 지뢰에도 낚이지 않고 모든 공시를 정확하게 판정하셨습니다! 실전 공시 감각이 이미 상위 1% 수준입니다.</p>
+          `;
+        } else {
+          const first = missedItems[0];
+          debriefEl.innerHTML = `
+            <p class="font-bold text-cyan-300">💡 [${first}] 핵심 복기 처방전</p>
+            <p class="text-slate-200">"화려한 공시 제목에 속지 마세요! 회사가 돈을 빌려오거나(CB), 자본을 늘릴 때 기존 주주들의 주식 가치가 쪼그라드는지(희석) 반드시 먼저 확인해야 합니다."</p>
+            <p class="mt-1 text-amber-300 bg-amber-950/40 p-2 rounded-lg border border-amber-800/40 font-medium">❓ <b>하브루타 질문:</b> 친구와 50:50으로 차린 카페에 제3자가 헐값 지분으로 들어온다면 내 권리는 어떻게 될까요?</p>
+          `;
+        }
+      }
+    }
+
+    // Launch game on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      const game = new JudgeGame();
+      game.start();
+    });
+  </script>
+</body>
+</html>
