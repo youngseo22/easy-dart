@@ -14,6 +14,296 @@ import {
 let currentCompanyId = 'olive';
 let currentFinancialYear = '2024';
 
+// 1~3단계 스크롤 이동 및 탭 하이라이트 함수
+function scrollToSection(stepNumber) {
+  const step = parseInt(stepNumber, 10) || 1;
+  const targetSection = document.getElementById(`stepSection${step}`);
+  if (targetSection) {
+    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    updateActiveTab(step);
+  }
+}
+window.scrollToSection = scrollToSection;
+window.switchMainStep = scrollToSection; // 하위 호환성 유지
+
+// 탭 버튼 활성화 스타일 업데이트
+function updateActiveTab(step) {
+  [1, 2, 3].forEach(s => {
+    const btn = document.getElementById(`tabBtnStep${s}`);
+    if (btn) {
+      const badge = btn.querySelector('.step-num-badge');
+      if (s === step) {
+        btn.className = 'step-tab-btn active flex-1 py-3 px-3 rounded-2xl text-xs sm:text-sm font-extrabold flex items-center justify-center gap-2 cursor-pointer transition-all';
+        if (badge) {
+          badge.className = 'step-num-badge w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-black shadow-xs';
+        }
+      } else {
+        btn.className = 'step-tab-btn flex-1 py-3 px-3 rounded-2xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center justify-center gap-2 cursor-pointer transition-all';
+        if (badge) {
+          badge.className = 'step-num-badge w-6 h-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-xs font-black shadow-xs';
+        }
+      }
+    }
+  });
+
+  if (window.lucide) {
+    lucide.createIcons();
+  }
+}
+window.updateActiveTab = updateActiveTab;
+
+// 스크롤 위치 기반 스크롤 스파이 (Scroll Spy)
+function setupScrollSpy() {
+  const sections = [1, 2, 3].map(s => document.getElementById(`stepSection${s}`)).filter(Boolean);
+  
+  if (!sections.length) return;
+
+  const observerOptions = {
+    root: null,
+    rootMargin: '-20% 0px -60% 0px',
+    threshold: 0
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        const stepNum = parseInt(id.replace('stepSection', ''), 10);
+        if (stepNum) {
+          updateActiveTab(stepNum);
+        }
+      }
+    });
+  }, observerOptions);
+
+  sections.forEach(section => observer.observe(section));
+}
+
+// 1단계: 3대 공시 서류 인터랙티브 프리뷰 렌더러
+const DOC_PREVIEW_DATA = {
+  IS: {
+    badge: '손익계산서 (IS : Income Statement)',
+    badgeColor: 'bg-emerald-600',
+    title: '연결 포괄손익계산서 (DART 실제 공시 양식)',
+    tipBg: 'bg-emerald-50 border-emerald-200 text-emerald-950',
+    tipText: '<strong>손익계산서 핵심 포인트:</strong> 매출이 늘어나는 것도 중요하지만, 본업의 실력인 <strong>"영업이익"</strong>과 최종 알짜 이익인 <strong>"당기순이익"</strong>이 매년 우상향하는지 확인하는 것이 가장 중요해요!',
+    html: `
+      <div class="border-b border-slate-200 pb-2 mb-2 flex justify-between items-center text-[11px] font-bold text-slate-500">
+        <span>과목 (계정과목)</span>
+        <div class="flex gap-8">
+          <span>당기 (2024년)</span>
+          <span>전기 (2023년)</span>
+        </div>
+      </div>
+      <div class="space-y-1.5 leading-tight text-[11.5px]">
+        <div class="flex justify-between items-center py-1 px-2 rounded bg-sky-50 text-sky-950 font-bold border border-sky-200">
+          <span class="flex items-center gap-1"><span>Ⅰ.</span> <span>매출액 (총 결제액)</span></span>
+          <span class="font-mono font-black">3,868,236 백만원</span>
+        </div>
+        <div class="flex justify-between items-center py-0.5 px-2 text-slate-500 pl-4">
+          <span>Ⅱ. 매출원가 (상품 떼온 값)</span>
+          <span class="font-mono">2,154,200 백만원</span>
+        </div>
+        <div class="flex justify-between items-center py-0.5 px-2 text-slate-700 font-semibold">
+          <span>Ⅲ. 매출총이익 (원가 뺀 이익)</span>
+          <span class="font-mono font-bold">1,714,036 백만원</span>
+        </div>
+        <div class="flex justify-between items-center py-0.5 px-2 text-slate-500 pl-4">
+          <span>Ⅳ. 판매비와관리비 (임대료/알바비/배송비)</span>
+          <span class="font-mono">1,248,310 백만원</span>
+        </div>
+        <div class="flex justify-between items-center py-1 px-2 rounded bg-amber-50 text-amber-950 font-bold border border-amber-200">
+          <span class="flex items-center gap-1"><span>Ⅴ.</span> <span>영업이익 (본업 알짜 이익) 👑</span></span>
+          <span class="font-mono font-black text-amber-900">465,726 백만원</span>
+        </div>
+        <div class="flex justify-between items-center py-0.5 px-2 text-slate-500 pl-4">
+          <span>Ⅵ. 금융수익 및 기타이익/손실</span>
+          <span class="font-mono">+12,500 백만원</span>
+        </div>
+        <div class="flex justify-between items-center py-0.5 px-2 text-slate-500 pl-4">
+          <span>Ⅶ. 법인세비용 (세금)</span>
+          <span class="font-mono">112,040 백만원</span>
+        </div>
+        <div class="flex justify-between items-center py-1 px-2 rounded bg-emerald-100 text-emerald-950 font-black border border-emerald-300">
+          <span class="flex items-center gap-1"><span>Ⅷ.</span> <span>당기순이익 (최종 금고에 남은 돈) ⭐</span></span>
+          <span class="font-mono text-emerald-800">366,186 백만원</span>
+        </div>
+      </div>
+    `
+  },
+  BS: {
+    badge: '재무상태표 (BS : Balance Sheet)',
+    badgeColor: 'bg-blue-600',
+    title: '연결 재무상태표 (DART 실제 공시 양식)',
+    tipBg: 'bg-blue-50 border-blue-200 text-blue-950',
+    tipText: '<strong>재무상태표 핵심 공식:</strong> <strong>자산(전체) = 부채(빚) + 자본(순수 내 돈)</strong>! 부채비율(부채 ÷ 자본)이 200% 이하로 안정적인지, 매년 이익이 쌓여 자본이 불어나는지가 핵심이에요.',
+    html: `
+      <div class="border-b border-slate-200 pb-2 mb-2 flex justify-between items-center text-[11px] font-bold text-slate-500">
+        <span>자산 / 부채 / 자본 구성</span>
+        <div class="flex gap-8">
+          <span>당기 (2024년)</span>
+          <span>전기 (2023년)</span>
+        </div>
+      </div>
+      <div class="space-y-1.5 leading-tight text-[11.5px]">
+        <div class="flex justify-between items-center py-1 px-2 rounded bg-blue-50 text-blue-950 font-bold border border-blue-200">
+          <span class="flex items-center gap-1"><span>Ⅰ.</span> <span>자산총계 (회사의 모든 재산)</span></span>
+          <span class="font-mono font-black">2,410,500 백만원</span>
+        </div>
+        <div class="flex justify-between items-center py-0.5 px-2 text-slate-500 pl-4">
+          <span>ㆍ유동자산 (1년 내 현금화 가능 자산)</span>
+          <span class="font-mono">1,120,300 백만원</span>
+        </div>
+        <div class="flex justify-between items-center py-0.5 px-2 text-slate-500 pl-4">
+          <span>ㆍ비유동자산 (매장 설비/물류센터/부동산)</span>
+          <span class="font-mono">1,290,200 백만원</span>
+        </div>
+        <div class="flex justify-between items-center py-1 px-2 rounded bg-rose-50 text-rose-950 font-bold border border-rose-200 mt-1">
+          <span class="flex items-center gap-1"><span>Ⅱ.</span> <span>부채총계 (갚아야 할 빚) 💳</span></span>
+          <span class="font-mono font-black text-rose-700">1,340,200 백만원</span>
+        </div>
+        <div class="flex justify-between items-center py-0.5 px-2 text-slate-500 pl-4">
+          <span>ㆍ유동부채 (1년 내 갚을 외상/단기채무)</span>
+          <span class="font-mono">980,100 백만원</span>
+        </div>
+        <div class="flex justify-between items-center py-1 px-2 rounded bg-emerald-50 text-emerald-950 font-bold border border-emerald-300 mt-1">
+          <span class="flex items-center gap-1"><span>Ⅲ.</span> <span>자본총계 (진짜 순수한 내 돈) 💰</span></span>
+          <span class="font-mono font-black text-emerald-800">1,070,300 백만원</span>
+        </div>
+        <div class="flex justify-between items-center py-0.5 px-2 text-emerald-700 font-semibold pl-4">
+          <span>ㆍ이익잉여금 (그동안 장사해 쌓아둔 순이익)</span>
+          <span class="font-mono font-bold">950,200 백만원</span>
+        </div>
+      </div>
+    `
+  },
+  CF: {
+    badge: '현금흐름표 (CF : Cash Flow)',
+    badgeColor: 'bg-purple-600',
+    title: '연결 현금흐름표 (DART 실제 공시 양식)',
+    tipBg: 'bg-purple-50 border-purple-200 text-purple-950',
+    tipText: '<strong>현금흐름표 황금 패턴:</strong> 가장 우량한 기업은 <strong>영업(+) / 투자(-) / 재무(-)</strong> 조합입니다. 본업으로 현금을 넉넉히 벌어(+), 미래 성장을 위해 적극 투자하고(-), 빚을 갚아나가는(-) 구조예요.',
+    html: `
+      <div class="border-b border-slate-200 pb-2 mb-2 flex justify-between items-center text-[11px] font-bold text-slate-500">
+        <span>현금 흐름 3대 활동</span>
+        <div class="flex gap-8">
+          <span>당기 (2024년)</span>
+          <span>상태 평가</span>
+        </div>
+      </div>
+      <div class="space-y-1.5 leading-tight text-[11.5px]">
+        <div class="flex justify-between items-center py-1.5 px-2 rounded bg-emerald-50 text-emerald-950 font-bold border border-emerald-200">
+          <div class="flex items-center gap-1.5">
+            <span class="text-emerald-600 text-base">🟢</span>
+            <span>1. 영업활동 현금흐름 (장사로 번 현금)</span>
+          </div>
+          <span class="font-mono font-black text-emerald-700">+512,400 백만원 (플러스 👍)</span>
+        </div>
+        <div class="flex justify-between items-center py-1.5 px-2 rounded bg-sky-50 text-sky-950 font-bold border border-sky-200">
+          <div class="flex items-center gap-1.5">
+            <span class="text-sky-600 text-base">🔵</span>
+            <span>2. 투자활동 현금흐름 (설비/미래 투자)</span>
+          </div>
+          <span class="font-mono font-black text-sky-700">-185,300 백만원 (미래 투자 👍)</span>
+        </div>
+        <div class="flex justify-between items-center py-1.5 px-2 rounded bg-indigo-50 text-indigo-950 font-bold border border-indigo-200">
+          <div class="flex items-center gap-1.5">
+            <span class="text-indigo-600 text-base">🟣</span>
+            <span>3. 재무활동 현금흐름 (차입금 상환/배당)</span>
+          </div>
+          <span class="font-mono font-black text-indigo-700">-120,500 백만원 (빚 상환/배당 👍)</span>
+        </div>
+        <div class="mt-2 pt-2 border-t border-slate-200 flex justify-between items-center px-2 py-1 bg-purple-50 rounded text-purple-950 font-black">
+          <span>기말의 현금및현금성자산 (통장 잔고)</span>
+          <span class="font-mono text-purple-800">428,900 백만원</span>
+        </div>
+      </div>
+    `
+  }
+};
+
+function selectDocType(type) {
+  const docKey = type && DOC_PREVIEW_DATA[type] ? type : 'IS';
+  const data = DOC_PREVIEW_DATA[docKey];
+
+  // 좌측 3개 카드 활성화 상태 토글
+  ['IS', 'BS', 'CF'].forEach(k => {
+    const card = document.getElementById(`docCard${k}`);
+    if (card) {
+      if (k === docKey) {
+        card.className = 'doc-card selected cursor-pointer p-4 sm:p-5 rounded-2xl bg-emerald-50 border-2 border-emerald-500 shadow-xs space-y-2 transition-all';
+      } else {
+        card.className = 'doc-card cursor-pointer p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-slate-300 hover:bg-slate-100/60 space-y-2 transition-all';
+      }
+    }
+  });
+
+  // 우측 프리뷰 내용 교체
+  const badgeEl = document.getElementById('docPreviewBadge');
+  const contentEl = document.getElementById('docPreviewContent');
+  const tipEl = document.getElementById('docPreviewTip');
+  const tipTextEl = document.getElementById('docPreviewTipText');
+
+  if (badgeEl) {
+    badgeEl.textContent = data.badge;
+    badgeEl.className = `px-2.5 py-1 ${data.badgeColor} text-white text-[11px] font-black rounded-lg shadow-2xs`;
+  }
+  if (contentEl) {
+    contentEl.innerHTML = data.html;
+  }
+  if (tipEl) {
+    tipEl.className = `p-3.5 rounded-xl ${data.tipBg} text-xs font-medium leading-relaxed flex items-start gap-2.5`;
+  }
+  if (tipTextEl) {
+    tipTextEl.innerHTML = data.tipText;
+  }
+}
+window.selectDocType = selectDocType;
+
+// 1단계 내 4대 핵심 카드 선택 인터랙션 함수
+function selectStatCard(index) {
+  const cardIdx = parseInt(index, 10) || 4;
+  
+  // 1~4번 카드 스타일 토글
+  [1, 2, 3, 4].forEach(i => {
+    const card = document.getElementById(`statCard${i}`);
+    if (card) {
+      card.classList.remove('selected', 'selected-1', 'selected-2', 'selected-3', 'selected-4');
+      if (i === cardIdx) {
+        card.classList.add('selected', `selected-${i}`);
+      }
+    }
+  });
+
+  // 하단 해석 텍스트 동적 교체
+  const insightEl = document.getElementById('compOpInsightText');
+  const highlightEl = document.getElementById('compTipHighlight');
+
+  const cardInsights = {
+    1: {
+      insight: '손님이 결제한 총매출 규모예요. 매출이 전년 대비 지속 성장하고 있다면 브랜드의 시장 점유율과 제품 인기가 계속 확장되고 있다는 강력한 신호입니다.',
+      highlight: '1. 매출액 (외형 성장 분석)'
+    },
+    2: {
+      insight: '물건을 떼온 원가와 매장 임대료, 알바비, 물류 배송비 등 운영비의 총합이에요. 매출 성장률보다 비용 증가율을 낮게 통제할수록 회사의 마진 방어력이 뛰어납니다.',
+      highlight: '2. 빠져나간 비용 (원가 통제력 분석)'
+    },
+    3: {
+      insight: '본업 장사로 순수하게 남긴 알짜배기 이익이에요! 주가와 기업가치에 가장 직접적인 영향을 미치며, 매출보다 영업이익이 더 가파르게 늘어날 때 영업 레버리지 황금기가 찾아옵니다.',
+      highlight: '3. 영업이익 (본업 수익성 분석)'
+    },
+    4: {
+      insight: '이자 비용과 법인세 세금까지 싹 털고 주주와 회사의 최종 금고에 남은 진짜 최종 순이익이에요! 이 돈이 매년 쌓여 회사의 튼튼한 순자산(자본)이 됩니다.',
+      highlight: '4. 당기순이익 (최종 귀속 순이익)'
+    }
+  };
+
+  const selectedData = cardInsights[cardIdx] || cardInsights[4];
+  if (insightEl) insightEl.innerText = selectedData.insight;
+  if (highlightEl) highlightEl.innerText = selectedData.highlight;
+}
+window.selectStatCard = selectStatCard;
+
 // 연도 변경 함수 (글로벌 window 바인딩)
 async function changeFinancialYear(year) {
   currentFinancialYear = String(year);
@@ -115,10 +405,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // 버튼 초기 상태 반영
   changeFinancialYear(currentFinancialYear);
+  selectDocType('IS');
 
   setupSpendInputListener();
   setupCompanySwitcherListener();
   setupFinancialModeToggle();
+  setupScrollSpy();
   await loadCompanyDetails(currentCompanyId, currentFinancialYear);
   await loadCompanyQuiz(currentCompanyId);
 });
@@ -261,14 +553,15 @@ function renderDartTable(rows, companyInfo = null) {
             <span class="text-slate-900 tracking-tight">
               <span class="font-serif font-bold text-slate-700">${prefix}</span>${r.account_nm}
             </span>
-            <!-- 주린이 친절 해설 툴팁 -->
-            <div class="relative inline-block cursor-help group/tooltip shrink-0">
-              <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-800 text-[10px] font-bold transition-colors">💡</span>
-              <div class="pointer-events-none opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-200 absolute right-0 sm:left-6 sm:right-auto top-1/2 -translate-y-1/2 z-30 w-72 p-3 bg-slate-900/95 backdrop-blur-sm text-white text-[11px] rounded-xl shadow-2xl border border-slate-700">
-                <div class="font-extrabold text-blue-400 flex items-center gap-1.5 mb-1">
+            <!-- 주린이 친절 스마트 툴팁 (모바일 터치 & 데스크톱 호버 완벽 지원) -->
+            <div class="smart-tooltip-trigger relative inline-block cursor-help shrink-0" onmouseleave="this.classList.remove('active')" onclick="this.classList.toggle('active')">
+              <span class="inline-flex items-center justify-center w-4 h-4 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-800 text-[10px] font-bold transition-colors shadow-xs">💡</span>
+              <div class="tooltip-bubble w-64 sm:w-72 p-3 bg-slate-900/95 backdrop-blur-sm text-white text-[11px] rounded-xl shadow-2xl border border-slate-700">
+                <div class="font-extrabold text-blue-400 flex items-center justify-between gap-1.5 mb-1">
                   <span>${r.easy_name || r.account_nm}</span>
+                  <span class="text-[9px] text-slate-400 font-normal">터치 시 고정/해제</span>
                 </div>
-                <p class="text-slate-200 leading-snug font-normal text-[11px]">${r.description || '재무제표 계정과목입니다.'}</p>
+                <p class="text-slate-200 leading-snug font-normal text-[11px] break-keep">${r.description || '재무제표 계정과목입니다.'}</p>
               </div>
             </div>
           </div>
@@ -552,6 +845,9 @@ function setupCompanySwitcherListener() {
   }
 }
 
+/**
+ * [페르소나 1 김지은 특화] 실시간 소비 이익 + 기업 매출 기여도 + 스케일 환산
+ */
 function updateLiveSpendMetaphor(companyId, spendAmount) {
   const result = calculateSpendMetaphor(companyId, spendAmount);
   if (!result) return;
@@ -561,12 +857,252 @@ function updateLiveSpendMetaphor(companyId, spendAmount) {
   const iconEl = document.getElementById('detailItemIcon');
   const pctEl = document.getElementById('widgetMarginPct');
   const widgetCompEl = document.getElementById('widgetCompName');
+  const spendContribEl = document.getElementById('spendContributionText');
+  const spendScaleEl = document.getElementById('spendNationalScaleText');
 
   if (earnedEl) earnedEl.innerText = `${result.marginEarned.toLocaleString()}원 남김`;
   if (countTextEl) countTextEl.innerText = result.summaryText || `${result.itemCount}${result.unit}`;
   if (iconEl) iconEl.innerText = result.icon || '🎁';
   if (pctEl) pctEl.innerText = `${result.marginRatePct}%`;
   if (widgetCompEl) widgetCompEl.innerText = result.brandName;
+
+  // 기업 매출 대비 기여도 (%) 계산
+  const brandData = BRAND_METAPHOR_MAP[companyId];
+  let approxRev = 4000000000000; // 4조 기본값
+  if (companyId === 'hyundai') approxRev = 175000000000000;
+  if (companyId === 'olive') approxRev = 4800000000000;
+  if (companyId === 'musinsa') approxRev = 1000000000000;
+
+  const contributionPct = ((spendAmount / approxRev) * 100).toFixed(7);
+  if (spendContribEl) {
+    spendContribEl.innerHTML = `이 기업 연 매출의 <span class="text-emerald-600 font-black">${contributionPct}%</span>를 기여했어요!`;
+  }
+
+  if (spendScaleEl && brandData) {
+    spendScaleEl.innerText = `"${brandData.scaleSummary || '20대 청년들이 함께 만든 거대한 소비 생태계'}"`;
+  }
+}
+
+/**
+ * [페르소나 2 박민우 특화] 🔥 5분 DART 스스로 진단 프레임워크 계산 엔진
+ */
+function renderSelfCheckingDashboard(rows, comp, year) {
+  const parseNum = (val) => {
+    if (!val) return 0;
+    const str = val.toString().replace(/,/g, '').replace(/\(/g, '-').replace(/\)/g, '').trim();
+    return parseFloat(str) || 0;
+  };
+
+  const parseRate = (val) => {
+    if (!val || val === '-') return 0;
+    const clean = val.replace('%', '').replace('+', '').trim();
+    return parseFloat(clean) || 0;
+  };
+
+  const findRow = (keys) => rows.find(r => keys.some(k => r.account_nm.includes(k)));
+  const revRow = findRow(['수익(매출액)', '매출액']);
+  const opRow = findRow(['영업이익', '영업이익(손실)']);
+  const debtRow = findRow(['부채총계']);
+  const equityRow = findRow(['자본총계']);
+
+  const revGrowth = revRow ? parseRate(revRow.growth_rate) : 0;
+  const revThstrm = revRow ? parseNum(revRow.thstrm_amount) : 1;
+  const opThstrm = opRow ? parseNum(opRow.thstrm_amount) : 0;
+  const opRate = revThstrm > 0 ? (opThstrm / revThstrm) * 100 : 0;
+  
+  const debtThstrm = debtRow ? parseNum(debtRow.thstrm_amount) : 0;
+  const equityThstrm = equityRow ? parseNum(equityRow.thstrm_amount) : 1;
+  const debtRatio = equityThstrm > 0 ? (debtThstrm / equityThstrm) * 100 : 0;
+
+  // 진단표 타이틀 업데이트
+  const corpNameEl = document.getElementById('diagCorpName');
+  const noteCorpNameEl = document.getElementById('noteCorpName');
+  if (corpNameEl) corpNameEl.innerText = comp.name || '이 기업';
+  if (noteCorpNameEl) noteCorpNameEl.innerText = comp.name || '이 기업';
+
+  // 1. 성장성 (매출 성장률 > 0)
+  const isGrowthPassed = revGrowth > 0;
+  const valGrowthEl = document.getElementById('diagGrowthValue');
+  const badgeGrowthEl = document.getElementById('badgeGrowth');
+  const cardGrowth = document.getElementById('cardGrowth');
+  const chkGrowth = document.getElementById('chkGrowth');
+
+  if (valGrowthEl) valGrowthEl.innerText = `${revGrowth >= 0 ? '+' : ''}${revGrowth.toFixed(1)}% YoY 매출 성장`;
+  if (badgeGrowthEl) {
+    badgeGrowthEl.className = isGrowthPassed 
+      ? 'text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200'
+      : 'text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 border border-rose-200';
+    badgeGrowthEl.innerText = isGrowthPassed ? '통과 🟢' : '주의 ⚠️';
+  }
+  if (chkGrowth) chkGrowth.checked = isGrowthPassed;
+  if (cardGrowth) cardGrowth.className = `diag-card p-4 sm:p-5 rounded-2xl border space-y-3 ${isGrowthPassed ? 'passed' : 'caution'}`;
+
+  // 2. 수익성 (영업이익률 > 8%)
+  const isProfitPassed = opRate >= 8;
+  const valProfitEl = document.getElementById('diagProfitValue');
+  const badgeProfitEl = document.getElementById('badgeProfit');
+  const cardProfit = document.getElementById('cardProfit');
+  const chkProfit = document.getElementById('chkProfit');
+
+  if (valProfitEl) valProfitEl.innerText = `영업이익률 ${opRate.toFixed(1)}% (${opRate >= 10 ? '두 자릿수 고마진' : '수익 방어'})`;
+  if (badgeProfitEl) {
+    badgeProfitEl.className = isProfitPassed 
+      ? 'text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200'
+      : 'text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200';
+    badgeProfitEl.innerText = isProfitPassed ? '통과 🟢' : '보통 🟡';
+  }
+  if (chkProfit) chkProfit.checked = isProfitPassed;
+  if (cardProfit) cardProfit.className = `diag-card p-4 sm:p-5 rounded-2xl border space-y-3 ${isProfitPassed ? 'passed' : 'caution'}`;
+
+  // 3. 안전성 (부채비율 < 200%)
+  const isSafetyPassed = debtRatio > 0 && debtRatio <= 200;
+  const valSafetyEl = document.getElementById('diagSafetyValue');
+  const badgeSafetyEl = document.getElementById('badgeSafety');
+  const cardSafety = document.getElementById('cardSafety');
+  const chkSafety = document.getElementById('chkSafety');
+
+  if (valSafetyEl) valSafetyEl.innerText = `부채비율 ${debtRatio.toFixed(0)}% (200% 이하 건전)`;
+  if (badgeSafetyEl) {
+    badgeSafetyEl.className = isSafetyPassed 
+      ? 'text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200'
+      : 'text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 border border-rose-200';
+    badgeSafetyEl.innerText = isSafetyPassed ? '안전 🟢' : '주의 ⚠️';
+  }
+  if (chkSafety) chkSafety.checked = isSafetyPassed;
+  if (cardSafety) cardSafety.className = `diag-card p-4 sm:p-5 rounded-2xl border space-y-3 ${isSafetyPassed ? 'passed' : 'caution'}`;
+
+  // 점수 계산 및 리스너 등록
+  const updateDiagScore = () => {
+    let score = 0;
+    if (chkGrowth && chkGrowth.checked) score += 35;
+    if (chkProfit && chkProfit.checked) score += 35;
+    if (chkSafety && chkSafety.checked) score += 30;
+
+    const scoreEl = document.getElementById('diagScoreText');
+    const gradeIconEl = document.getElementById('diagGradeIcon');
+    const commentEl = document.getElementById('diagSummaryComment');
+
+    if (scoreEl) scoreEl.innerText = score;
+    if (gradeIconEl) {
+      if (score >= 90) gradeIconEl.innerText = '🎯';
+      else if (score >= 60) gradeIconEl.innerText = '⚖️';
+      else gradeIconEl.innerText = '⚠️';
+    }
+    if (commentEl) {
+      if (score === 100) {
+        commentEl.innerText = '3개 핵심 지표를 모두 충족했습니다! 실전에서도 안정적인 실적 기반 투자 대상에 속해요.';
+      } else if (score >= 65) {
+        commentEl.innerText = '일부 지표에서 주의가 필요하지만, 본업 경쟁력은 유지되고 있어요. 추가 분기 실적을 체크해보세요.';
+      } else {
+        commentEl.innerText = '수익성 또는 재무 안정성에 신호가 켜졌습니다. 보수적인 관망 후 진입을 추천해요.';
+      }
+    }
+  };
+
+  [chkGrowth, chkProfit, chkSafety].forEach(chk => {
+    if (chk) chk.onchange = updateDiagScore;
+  });
+
+  const btnReset = document.getElementById('btnResetDiag');
+  if (btnReset) {
+    btnReset.onclick = () => {
+      if (chkGrowth) chkGrowth.checked = isGrowthPassed;
+      if (chkProfit) chkProfit.checked = isProfitPassed;
+      if (chkSafety) chkSafety.checked = isSafetyPassed;
+      updateDiagScore();
+    };
+  }
+
+  updateDiagScore();
+}
+
+/**
+ * [페르소나 2 박민우 특화] 📝 나만의 매수 결정 스위치 & 로컬스토리지 저장
+ */
+let currentUserDecision = 'BUY';
+
+function setUserDecision(decision) {
+  currentUserDecision = decision;
+  const buyBtn = document.getElementById('btnDecisionBuy');
+  const holdBtn = document.getElementById('btnDecisionHold');
+  const watchBtn = document.getElementById('btnDecisionWatch');
+  const statusText = document.getElementById('decisionStatusText');
+
+  [buyBtn, holdBtn, watchBtn].forEach(b => {
+    if (b) {
+      b.classList.remove('active-buy', 'active-hold', 'active-watch');
+      b.className = 'decision-btn py-2.5 px-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 flex flex-col items-center gap-1 cursor-pointer';
+    }
+  });
+
+  if (decision === 'BUY' && buyBtn) {
+    buyBtn.classList.add('active-buy');
+    if (statusText) statusText.innerHTML = '<span class="text-emerald-700 font-semibold">현재 상태: [적극 매수] — DART 실적 지표가 탄탄하여 분할 매수 고려</span>';
+  } else if (decision === 'HOLD' && holdBtn) {
+    holdBtn.classList.add('active-hold');
+    if (statusText) statusText.innerHTML = '<span class="text-amber-700 font-semibold">현재 상태: [관망 / 홀딩] — 다음 분기 실적 및 밸류에이션 추이를 지켜봄</span>';
+  } else if (decision === 'WATCH' && watchBtn) {
+    watchBtn.classList.add('active-watch');
+    if (statusText) statusText.innerHTML = '<span class="text-slate-600 font-semibold">현재 상태: [매수 보류] — 재무 리스크 해소 전까지 진입 보류</span>';
+  }
+}
+window.setUserDecision = setUserDecision;
+
+function saveUserInvestmentNote() {
+  const noteEl = document.getElementById('userInvestmentNote');
+  const noteContent = noteEl ? noteEl.value : '';
+  const payload = {
+    decision: currentUserDecision,
+    note: noteContent,
+    updatedAt: new Date().toLocaleDateString('ko-KR') + ' ' + new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })
+  };
+
+  localStorage.setItem(`easydart_note_${currentCompanyId}`, JSON.stringify(payload));
+
+  const noteStatusEl = document.getElementById('noteSavedStatus');
+  if (noteStatusEl) {
+    noteStatusEl.innerText = `마지막 저장: ${payload.updatedAt}`;
+  }
+
+  // 토스트 알림 표시
+  showToast(`[${currentCompanyId.toUpperCase()}] 매수 결정(${currentUserDecision})과 원칙 노트가 저장되었습니다.`);
+}
+window.saveUserInvestmentNote = saveUserInvestmentNote;
+
+function loadUserInvestmentNote(companyId) {
+  try {
+    const saved = localStorage.getItem(`easydart_note_${companyId}`);
+    const noteEl = document.getElementById('userInvestmentNote');
+    const noteStatusEl = document.getElementById('noteSavedStatus');
+
+    if (saved) {
+      const data = JSON.parse(saved);
+      if (data.decision) setUserDecision(data.decision);
+      if (noteEl && data.note) noteEl.value = data.note;
+      if (noteStatusEl && data.updatedAt) noteStatusEl.innerText = `마지막 저장: ${data.updatedAt}`;
+    } else {
+      setUserDecision('BUY');
+      if (noteEl) noteEl.value = '';
+      if (noteStatusEl) noteStatusEl.innerText = '마지막 저장: 없음';
+    }
+  } catch (e) {
+    console.warn('노트 불러오기 실패:', e);
+  }
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toastNotification');
+  const toastMsg = document.getElementById('toastMessage');
+  if (!toast || !toastMsg) return;
+
+  toastMsg.innerText = msg;
+  toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+  toast.classList.add('translate-y-0', 'opacity-100');
+
+  setTimeout(() => {
+    toast.classList.remove('translate-y-0', 'opacity-100');
+    toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+  }, 2500);
 }
 
 async function loadCompanyDetails(id, year = '') {
@@ -597,7 +1133,7 @@ async function loadCompanyDetails(id, year = '') {
     // Scale Metaphor (페르소나 2 맞춤)
     const scaleMeta = getCompanyScaleMetaphor(id);
     if (metaphorHeadEl && scaleMeta) {
-      metaphorHeadEl.innerText = `"${scaleMeta.annualMetaphor || scaleMeta.scaleSummary || '연간 실적 체감 환산'}"`;
+      metaphorHeadEl.innerText = `"${scaleMeta.headline || scaleMeta.annualMetaphor || scaleMeta.scaleSummary || comp.highlight || '연간 실적 체감 환산'}"`;
     }
 
     // Spend Metaphor Initial Render (페르소나 1 맞춤)
@@ -667,7 +1203,9 @@ async function loadCompanyDetails(id, year = '') {
     // 실제 DART 데이터 수치를 변수화하여 "어떤 상황으로 읽히는지 & 투자 액션" 동적 분석 수행
     renderDynamicSituationalAnalysis(dartRows, comp, selectedYear);
 
-
+    // [신규] 5분 스스로 진단 프레임워크 렌더링 & 나만의 매수 원칙 노트 로드
+    renderSelfCheckingDashboard(dartRows, comp, selectedYear);
+    loadUserInvestmentNote(id);
 
     // Micro Investment Metaphor
     const microInvest = calculateMicroInvestmentMetaphor(id, 50000);
@@ -754,7 +1292,9 @@ async function loadCompanyDetails(id, year = '') {
     if (document.getElementById('compHighlightBadge')) document.getElementById('compHighlightBadge').innerText = comp.highlight;
     
     const scaleMeta = getCompanyScaleMetaphor(id);
-    if (document.getElementById('compMetaphorHead')) document.getElementById('compMetaphorHead').innerText = `"${scaleMeta.headline}"`;
+    if (document.getElementById('compMetaphorHead')) {
+      document.getElementById('compMetaphorHead').innerText = `"${scaleMeta?.headline || scaleMeta?.annualMetaphor || scaleMeta?.scaleSummary || comp.highlight || '연간 실적 체감 환산'}"`;
+    }
     updateLiveSpendMetaphor(id, parseInt(document.getElementById('detailSpendInput')?.value, 10) || 35000);
 
     // Financials
@@ -793,10 +1333,13 @@ async function loadCompanyDetails(id, year = '') {
 
     // DART Table
     const companyFallbacks = FALLBACK_DART_TABLES[id] || FALLBACK_DART_TABLES['olive'];
-    renderDartTable(companyFallbacks[selectedYear] || companyFallbacks['2024'], comp);
+    const fallbackRows = companyFallbacks[selectedYear] || companyFallbacks['2024'];
+    renderDartTable(fallbackRows, comp);
+    renderDynamicSituationalAnalysis(fallbackRows, comp, selectedYear);
 
-
-
+    // [신규] 5분 스스로 진단 프레임워크 렌더링 & 나만의 매수 원칙 노트 로드
+    renderSelfCheckingDashboard(fallbackRows, comp, selectedYear);
+    loadUserInvestmentNote(id);
 
     // Summary
     document.getElementById('summaryList').innerHTML = ai.summary.map(s => 
@@ -813,14 +1356,54 @@ async function loadCompanyDetails(id, year = '') {
   }
 }
 
+const FALLBACK_QUIZZES = {
+  olive: {
+    question: 'CJ올리브영의 2024년 영업이익률은 12.2%에 달합니다. 일반 대형마트(3~5%) 대비 이렇게 압도적인 마진을 낼 수 있는 핵심 비결은 무엇일까요?',
+    options: [
+      { text: '인기 PB 상품 확대 및 오늘드림 온·오프라인 옴니채널 독점력', is_correct: true },
+      { text: '매장 수를 절반으로 줄여 임대료를 대폭 절감했기 때문', is_correct: false },
+      { text: '해외 지사를 모두 철수하고 국내 배달만 집중했기 때문', is_correct: false },
+      { text: '화장품 가격을 10배 이상 인상했기 때문', is_correct: false }
+    ],
+    explanation: '올리브영은 전국 1,340여 개 매장을 거점으로 하는 당일 배송(오늘드림)과 고마진 자체 브랜드(PB) 판매 확대로 압도적인 영업이익률을 달성했습니다.'
+  },
+  hyundai: {
+    question: '현대자동차가 2023~2024년 역대 최대 영업이익(상장사 1위)을 달성할 수 있었던 일등공신은 무엇일까요?',
+    options: [
+      { text: '경차와 저가 승용차 위주의 대량 박리다매 판매', is_correct: false },
+      { text: '고수익 제네시스 럭셔리 라인업과 하이브리드(HEV)·SUV 판매 호조', is_correct: true },
+      { text: '모든 생산 공장을 100% 무인 로봇으로 전환했기 때문', is_correct: false },
+      { text: '전기차 전 차종에 대한 50% 파격 할인 프로모션', is_correct: false }
+    ],
+    explanation: '현대차는 단가가 높은 제네시스 럭셔리 브랜드와 SUV, 그리고 전기차 캐즘 속에서 하이브리드(HEV) 차량 판매가 폭발하며 역대급 실적을 기록했습니다.'
+  },
+  musinsa: {
+    question: '무신사의 DART 공시에서 주목할 만한 성장 동력과 수익 모델의 핵심은 무엇일까요?',
+    options: [
+      { text: '입점 브랜드 중개 수수료와 자체 브랜드(무신사 스탠다드)의 동반 성장', is_correct: true },
+      { text: '해외 명품 직수입 독점 판매', is_correct: false },
+      { text: '오프라인 백화점 단독 입점 전략', is_correct: false },
+      { text: '배송비 전액 유료화 정책', is_correct: false }
+    ],
+    explanation: '무신사는 20대 패션 플랫폼 1위 지배력을 바탕으로 중개 수수료와 가성비/고품질 PB인 무신사 스탠다드 오프라인 매장 확장을 통해 성장하고 있습니다.'
+  }
+};
+
 async function loadCompanyQuiz(id) {
   try {
     const res = await apiClient.getCompanyQuiz(id);
     if (res && res.quiz) {
       renderCompanyQuizSection('companyQuizContainer', res.quiz);
+      return;
     }
   } catch (err) {
-    console.warn('퀴즈 API 연동 실패:', err);
+    console.warn('퀴즈 API 연동 실패, 로컬 fallback 퀴즈 로드:', err);
+  }
+
+  // Fallback 퀴즈 로드
+  const quiz = FALLBACK_QUIZZES[id] || FALLBACK_QUIZZES['olive'];
+  if (quiz) {
+    renderCompanyQuizSection('companyQuizContainer', quiz);
   }
 }
 

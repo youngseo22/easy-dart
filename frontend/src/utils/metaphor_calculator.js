@@ -359,9 +359,10 @@ export function getCompanyScaleMetaphor(companyId) {
   return {
     brandName: brand.name,
     icon: brand.icon,
-    annualMetaphor: brand.annualProfitMetaphor,
-    scaleSummary: brand.scaleSummary,
-    highlight: brand.highlight,
+    headline: brand.annualProfitMetaphor || brand.scaleSummary || brand.highlight || '연간 실적 체감 환산',
+    annualMetaphor: brand.annualProfitMetaphor || brand.scaleSummary || '연간 실적 체감 환산',
+    scaleSummary: brand.scaleSummary || brand.annualProfitMetaphor || '연간 실적 체감 환산',
+    highlight: brand.highlight || '실적 분석',
     marginRatePct: (brand.marginRate * 100).toFixed(1)
   };
 }
