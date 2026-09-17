@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
+  <base href="/frontend/src/pages/company_detail/">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Easy-DART | 기업 공시 심층 파헤치기</title>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -15,7 +16,7 @@
   <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <div class="flex items-center space-x-8">
-        <a href="../company_list/index.html" class="flex items-center space-x-2.5 group">
+        <a href="/company-list" class="flex items-center space-x-2.5 group">
           <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-black text-xl shadow-md">📈</div>
           <div>
             <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Easy-DART</span>
@@ -24,16 +25,16 @@
         </a>
 
         <nav class="flex items-center space-x-2">
-          <a href="../company_list/index.html" class="px-4 py-2 rounded-xl text-sm font-bold bg-slate-900 text-white shadow-sm flex items-center gap-1.5">
+          <a href="/company-list" class="px-4 py-2 rounded-xl text-sm font-bold bg-slate-900 text-white shadow-sm flex items-center gap-1.5">
             <i data-lucide="sparkles" class="w-4 h-4 text-emerald-400"></i> 기업 파헤치기
           </a>
-          <a href="../quiz_terms/index.html" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors flex items-center gap-1.5">
+          <a href="/quiz" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors flex items-center gap-1.5">
             <i data-lucide="help-circle" class="w-4 h-4"></i> 주식 용어 퀴즈
           </a>
         </nav>
       </div>
 
-      <a href="../company_list/index.html" class="flex items-center gap-1 text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-full transition-all">
+      <a href="/company-list" class="flex items-center gap-1 text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-full transition-all">
         <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> 목록으로
       </a>
     </div>
