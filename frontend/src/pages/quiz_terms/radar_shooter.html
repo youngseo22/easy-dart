@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Easy-DART | DART 공시 레이더 미사일 슈팅</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="../../styles/common.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-cyan-500 selection:text-white">
+
+  <!-- GNB Header -->
+  <header class="sticky top-0 z-50 bg-slate-950/85 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-6">
+        <a href="../company_list/index.html" class="flex items-center space-x-2.5 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-cyan-500/20">🎯</div>
+          <div>
+            <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Easy-DART</span>
+            <span class="hidden sm:inline-block ml-2 text-xs font-bold px-2.5 py-0.5 bg-cyan-950/80 text-cyan-300 rounded-full border border-cyan-800">DART 오락실</span>
+          </div>
+        </a>
+
+        <nav class="flex items-center space-x-2">
+          <a href="../company_list/index.html" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors flex items-center gap-1.5">
+            <i data-lucide="building-2" class="w-4 h-4"></i> 기업 파헤치기
+          </a>
+          <a href="index.html" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors flex items-center gap-1.5">
+            <i data-lucide="layout-grid" class="w-4 h-4"></i> 퀴즈/오락실 홈
+          </a>
+          <a href="radar_shooter.html" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-500/20 flex items-center gap-1.5">
+            <i data-lucide="gamepad-2" class="w-4 h-4 text-cyan-200"></i> 공시 레이더 미사일
+          </a>
+        </nav>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button id="soundToggleBtn" class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 hover:text-white hover:border-cyan-500 text-xs font-semibold flex items-center gap-1.5 transition-all">
+          <i data-lucide="volume-2" id="soundIcon" class="w-4 h-4 text-cyan-400"></i>
+          <span id="soundLabel">사운드 ON</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 py-6 flex-1 w-full space-y-4">
+    
+    <!-- Top HUD Banner -->
+    <div class="arcade-panel rounded-2xl p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4">
+      <!-- Score & Combo -->
+      <div class="flex items-center space-x-6">
+        <div>
+          <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">공시 방어 점수</div>
+          <div id="scoreDisplay" class="text-2xl sm:text-3xl font-black text-cyan-400 glow-cyan">0</div>
+        </div>
+
+        <div class="h-8 w-px bg-slate-800"></div>
+
+        <div>
+          <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">콤보 연쇄</div>
+          <div id="comboDisplay" class="text-xl sm:text-2xl font-black text-amber-400 flex items-center gap-1">
+            <span>0</span><span class="text-xs text-amber-300 font-bold">COMBO</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Health Bar (Market Cap) -->
+      <div class="w-full sm:w-64 space-y-1.5">
+        <div class="flex items-center justify-between text-xs font-bold">
+          <span class="text-slate-300 flex items-center gap-1.5">
+            <i data-lucide="shield-alert" class="w-4 h-4 text-emerald-400"></i>
+            기업 시가총액 (방어막)
+          </span>
+          <span id="hpText" class="text-emerald-400 font-black">100%</span>
+        </div>
+        <div class="w-full h-3.5 bg-slate-900 rounded-full overflow-hidden border border-slate-700/80 p-0.5">
+          <div id="hpBarFill" class="hp-bar-fill h-full bg-emerald-500 rounded-full" style="width: 100%;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top How to Play Guide Banner -->
+    <div class="arcade-panel rounded-2xl p-4 sm:p-5 border-cyan-500/30 bg-gradient-to-b from-slate-900/95 to-slate-950/95 shadow-xl">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-3.5">
+        <div class="flex items-center gap-2">
+          <span class="text-base">🕹️</span>
+          <h2 class="text-sm font-black text-white tracking-wide">30초 마스터! 공시 레이더 미사일 핵심 교전 수칙</h2>
+        </div>
+        <span class="text-[11px] font-bold text-cyan-400 bg-cyan-950/80 px-2.5 py-0.5 rounded-full border border-cyan-800">
+          피아식별 조작 가이드
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+        <!-- Bad News Rule -->
+        <div class="p-3.5 rounded-xl bg-rose-950/20 border-2 border-rose-500/40 flex items-start gap-3">
+          <div class="w-10 h-10 rounded-xl bg-rose-500/20 border border-rose-500/50 flex items-center justify-center text-rose-400 text-xl shrink-0">
+            🎯
+          </div>
+          <div class="space-y-1">
+            <div class="flex items-center gap-1.5">
+              <span class="text-xs font-black text-rose-400">악재 공시 [상폐 지뢰]</span>
+              <span class="text-[10px] px-1.5 py-0.2 rounded bg-rose-500 text-slate-950 font-black">미사일로 격추!</span>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              <span class="font-bold text-white">[감사의견 거절, 완전자본잠식, 횡령배임]</span> 등은 회사를 망하게 하는 지뢰입니다. <span class="text-rose-400 font-bold">스페이스바(Space)</span>로 쏴서 파괴하세요! (+100P, 방치 또는 충돌 시 시총 폭락)
+            </p>
+          </div>
+        </div>
+
+        <!-- Good News Rule -->
+        <div class="p-3.5 rounded-xl bg-emerald-950/20 border-2 border-emerald-500/40 flex items-start gap-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/50 flex items-center justify-center text-emerald-400 text-xl shrink-0">
+            🍀
+          </div>
+          <div class="space-y-1">
+            <div class="flex items-center gap-1.5">
+              <span class="text-xs font-black text-emerald-400">호재 공시 [우량 실적]</span>
+              <span class="text-[10px] px-1.5 py-0.2 rounded bg-emerald-500 text-slate-950 font-black">비행선으로 먹기!</span>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              <span class="font-bold text-white">[영업이익 흑자, 자사주 소각, 적정의견]</span>은 좋은 공시입니다. 쏘지 말고 <span class="text-emerald-400 font-bold">비행선 몸체로 직접 닿아서 흡수</span>하세요! (+120P & 💚시총 +10% 회복, 쏘면 오발 페널티)
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400 flex-wrap gap-2">
+        <span class="flex items-center gap-1.5">
+          <i data-lucide="keyboard" class="w-3.5 h-3.5 text-cyan-400"></i>
+          조작법: <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">▲</kbd> <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">▼</kbd> <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">◀</kbd> <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">▶</kbd> (W, S, A, D) 전후좌우 기동 / <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">Space</kbd> 미사일 발사 (마우스 & 터치 드래그 지원)
+        </span>
+        <span class="text-cyan-400 font-semibold flex items-center gap-1">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> 목표: 기업 시가총액(100%)을 방어하며 클리어
+        </span>
+      </div>
+    </div>
+
+    <!-- Canvas Game Container -->
+    <div class="relative w-full rounded-3xl overflow-hidden shadow-2xl">
+      <canvas id="gameCanvas"></canvas>
+
+      <!-- Mission Briefing / Start Overlay -->
+      <div id="startOverlay" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-6 transition-all duration-300">
+        <div class="max-w-md w-full text-center space-y-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/90 text-cyan-400 text-xs font-bold border border-cyan-800">
+            <span>🚀</span> DART 특별 수사본부 아케이드
+          </div>
+          
+          <div class="space-y-2">
+            <h1 class="text-2xl sm:text-3xl font-black text-white">"상장폐지 지뢰는 <span class="text-rose-400">격추</span>하고,<br>우량 호재는 <span class="text-emerald-400">몸으로 흡수</span>하라!"</h1>
+            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+              <span class="text-rose-400 font-bold">악재 공시</span>는 미사일로 요격하고, <span class="text-emerald-400 font-bold">호재 공시</span>는 비행선으로 직접 받아먹으세요!<br>
+              실수로 호재를 쏘거나 지뢰와 충돌하면 시총이 급락합니다.
+            </p>
+          </div>
+
+          <!-- Rules Card -->
+          <div class="bg-slate-900/90 rounded-2xl p-4 border border-slate-800 text-left space-y-2.5 text-xs">
+            <div class="flex items-center gap-2 text-rose-400 font-bold">
+              <span class="w-5 h-5 rounded-md bg-rose-950/80 border border-rose-800 flex items-center justify-center">🎯</span>
+              <span>미사일 요격: [감사의견 거절], [완전자본잠식], [횡령·배임] (+100점)</span>
+            </div>
+            <div class="flex items-center gap-2 text-emerald-400 font-bold">
+              <span class="w-5 h-5 rounded-md bg-emerald-950/80 border border-emerald-800 flex items-center justify-center">🍀</span>
+              <span>비행선 흡수: [적정의견], [영업흑자], [자사주 소각] (+120점 & 💚시총 +10% 회복)</span>
+            </div>
+            <div class="flex items-center gap-2 text-slate-400 pt-1 border-t border-slate-800/80">
+              <span>⌨️ 조작: 방향키(또는 W, A, S, D) 4방향 전후좌우 기동 / 발사: 스페이스바 (화면 마우스/터치 드래그 지원)</span>
+            </div>
+          </div>
+
+          <button id="startGameBtn" class="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-black text-base shadow-xl shadow-cyan-500/25 transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2">
+            <i data-lucide="play" class="w-5 h-5 fill-current"></i>
+            미션 시작하기 (Start Game)
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Virtual Controls (Shown on Mobile / Small screens) -->
+    <div class="sm:hidden flex flex-col items-center gap-2 pt-2">
+      <div class="flex justify-center">
+        <button id="vBtnUp" class="virtual-btn py-2.5 px-8 rounded-2xl bg-slate-900 border border-slate-700 text-cyan-400 flex items-center justify-center font-black text-lg shadow-lg active:bg-slate-800">
+          <i data-lucide="chevron-up" class="w-6 h-6"></i>
+        </button>
+      </div>
+      <div class="grid grid-cols-3 gap-2.5 w-full max-w-xs">
+        <button id="vBtnLeft" class="virtual-btn py-3.5 rounded-2xl bg-slate-900 border border-slate-700 text-cyan-400 flex items-center justify-center font-black text-lg shadow-lg active:bg-slate-800">
+          <i data-lucide="chevron-left" class="w-6 h-6"></i>
+        </button>
+        <button id="vBtnFire" class="virtual-btn py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 to-amber-600 text-white flex items-center justify-center font-black text-sm shadow-lg shadow-rose-600/30 gap-1 active:scale-95">
+          <i data-lucide="crosshair" class="w-4 h-4"></i> 발사
+        </button>
+        <button id="vBtnRight" class="virtual-btn py-3.5 rounded-2xl bg-slate-900 border border-slate-700 text-cyan-400 flex items-center justify-center font-black text-lg shadow-lg active:bg-slate-800">
+          <i data-lucide="chevron-right" class="w-6 h-6"></i>
+        </button>
+      </div>
+      <div class="flex justify-center">
+        <button id="vBtnDown" class="virtual-btn py-2.5 px-8 rounded-2xl bg-slate-900 border border-slate-700 text-cyan-400 flex items-center justify-center font-black text-lg shadow-lg active:bg-slate-800">
+          <i data-lucide="chevron-down" class="w-6 h-6"></i>
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Game Over & Review Modal -->
+  <div id="gameOverModal" class="hidden fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-lg flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div class="max-w-2xl w-full bg-slate-900 border border-slate-700/80 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl my-8">
+      
+      <!-- Result Title -->
+      <div class="text-center space-y-2">
+        <div id="userBadge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-950/80 border border-amber-700 text-amber-300 text-xs font-bold">
+          <span>👑</span> 스마트 머니 (공시 마스터)
+        </div>
+        <h2 id="gameOverHeading" class="text-2xl sm:text-3xl font-black text-white">미션 종료!</h2>
+        <p id="gameOverReason" class="text-xs sm:text-sm text-slate-400">기업 시가총액이 모두 소진되어 방어에 실패했습니다.</p>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="grid grid-cols-3 gap-3">
+        <div class="bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800 text-center">
+          <div class="text-[11px] text-slate-400 font-bold">최종 점수</div>
+          <div id="finalScore" class="text-xl sm:text-2xl font-black text-cyan-400 glow-cyan">1,250</div>
+        </div>
+        <div class="bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800 text-center">
+          <div class="text-[11px] text-slate-400 font-bold">최대 콤보</div>
+          <div id="finalCombo" class="text-xl sm:text-2xl font-black text-amber-400">7x</div>
+        </div>
+        <div class="bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800 text-center">
+          <div class="text-[11px] text-slate-400 font-bold">생존 시간</div>
+          <div id="finalSurvival" class="text-xl sm:text-2xl font-black text-emerald-400">48초</div>
+        </div>
+      </div>
+
+      <!-- Ranking & Nickname Registration Box -->
+      <div id="rankingSubmitCard" class="bg-slate-950/80 p-4 rounded-2xl border border-cyan-500/30 space-y-2.5">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-1.5 text-xs font-black text-white">
+            <span>🏆</span> <span>명예의 전당 랭킹 등록</span>
+          </div>
+          <span id="recordBadge" class="hidden px-2 py-0.5 rounded text-[10px] font-black bg-rose-500 text-white animate-pulse">
+            🔥 최고 기록 갱신!
+          </span>
+        </div>
+        <div class="flex items-center gap-2">
+          <input type="text" id="playerNicknameInput" maxlength="10" placeholder="닉네임 입력 (예: 여의도황소)"
+            class="flex-1 bg-slate-900 border border-slate-700 focus:border-cyan-400 rounded-xl px-3 py-2 text-xs text-white placeholder:text-slate-500 outline-none transition" />
+          <button id="registerRankBtn" class="px-4 py-2 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs rounded-xl shadow-md transition-all active:scale-95 whitespace-nowrap">
+            기록 저장 🏅
+          </button>
+        </div>
+        <div id="rankSubmitFeedback" class="hidden text-[11px] text-emerald-400 font-bold flex items-center gap-1">
+          <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> <span id="rankFeedbackText">성공적으로 저장되었습니다! 메인 화면 명예의 전당에서 확인하세요.</span>
+        </div>
+      </div>
+
+      <!-- Educational Review Sheet (오답노트 & 공시 용어 정복 리스트) -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm font-extrabold text-white flex items-center gap-1.5">
+            <span>📚</span> 오늘 만난 DART 공시 핵심 오답노트
+          </h3>
+          <span class="text-[11px] text-slate-400">실전 투자 필수 상식</span>
+        </div>
+
+        <div id="reviewListContainer" class="max-h-60 overflow-y-auto space-y-2.5 pr-1 custom-scrollbar">
+          <!-- Dynamically populated review cards -->
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-3 pt-2">
+        <button id="restartGameBtn" class="flex-1 py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-black text-sm shadow-lg shadow-cyan-500/25 transition-all flex items-center justify-center gap-2">
+          <i data-lucide="rotate-ccw" class="w-4 h-4"></i> 다시 도전하기
+        </button>
+        <a href="../company_list/index.html" class="px-5 py-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-sm border border-slate-700 transition-all flex items-center justify-center">
+          기업 목록 가기
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="bg-slate-950 border-t border-slate-900 py-6 mt-8 text-center text-xs text-slate-500">
+    <p class="font-semibold text-slate-400">📈 Easy-DART — 주린이를 위한 체감형 DART 공시 아케이드</p>
+  </footer>
+
+  <script type="module">
+    import { DartRadarShooter } from './games/radar_shooter.js';
+    import { saveGameResult, getUserStats, calculateGrade } from './games/ranking_helper.js';
+
+    lucide.createIcons();
+
+    const canvas = document.getElementById('gameCanvas');
+    const startOverlay = document.getElementById('startOverlay');
+    const startGameBtn = document.getElementById('startGameBtn');
+    const restartGameBtn = document.getElementById('restartGameBtn');
+    const gameOverModal = document.getElementById('gameOverModal');
+
+    // HUD Elements
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const comboDisplay = document.getElementById('comboDisplay');
+    const hpText = document.getElementById('hpText');
+    const hpBarFill = document.getElementById('hpBarFill');
+
+    // Sound elements
+    const soundToggleBtn = document.getElementById('soundToggleBtn');
+    const soundIcon = document.getElementById('soundIcon');
+    const soundLabel = document.getElementById('soundLabel');
+
+    // Virtual Buttons
+    const vBtnUp = document.getElementById('vBtnUp');
+    const vBtnDown = document.getElementById('vBtnDown');
+    const vBtnLeft = document.getElementById('vBtnLeft');
+    const vBtnRight = document.getElementById('vBtnRight');
+    const vBtnFire = document.getElementById('vBtnFire');
+
+    // Modal stats
+    const gameOverHeading = document.getElementById('gameOverHeading');
+    const gameOverReason = document.getElementById('gameOverReason');
+    const userBadge = document.getElementById('userBadge');
+    const finalScore = document.getElementById('finalScore');
+    const finalCombo = document.getElementById('finalCombo');
+    const finalSurvival = document.getElementById('finalSurvival');
+    const reviewListContainer = document.getElementById('reviewListContainer');
+
+    // Ranking Elements
+    const recordBadge = document.getElementById('recordBadge');
+    const playerNicknameInput = document.getElementById('playerNicknameInput');
+    const registerRankBtn = document.getElementById('registerRankBtn');
+    const rankSubmitFeedback = document.getElementById('rankSubmitFeedback');
+    const rankFeedbackText = document.getElementById('rankFeedbackText');
+
+    let game = null;
+
+    function initGame() {
+      game = new DartRadarShooter(canvas, {
+        onStateChange: (state) => {
+          scoreDisplay.textContent = state.score.toLocaleString();
+          
+          if (state.combo > 1) {
+            comboDisplay.innerHTML = `<span>${state.combo}</span><span class="text-xs text-amber-300 font-bold">COMBO! 🔥</span>`;
+            comboDisplay.classList.add('combo-active');
+          } else {
+            comboDisplay.innerHTML = `<span>0</span><span class="text-xs text-amber-300 font-bold">COMBO</span>`;
+            comboDisplay.classList.remove('combo-active');
+          }
+
+          hpText.textContent = `${state.marketCap}%`;
+          hpBarFill.style.width = `${state.marketCap}%`;
+
+          if (state.marketCap > 50) {
+            hpBarFill.className = 'hp-bar-fill h-full bg-emerald-500 rounded-full';
+            hpText.className = 'text-emerald-400 font-black';
+          } else if (state.marketCap > 25) {
+            hpBarFill.className = 'hp-bar-fill h-full bg-amber-500 rounded-full';
+            hpText.className = 'text-amber-400 font-black';
+          } else {
+            hpBarFill.className = 'hp-bar-fill h-full bg-rose-500 rounded-full';
+            hpText.className = 'text-rose-400 font-black animate-pulse';
+          }
+        },
+        onGameOver: (result) => {
+          showGameOverModal(result);
+        }
+      });
+    }
+
+    function showGameOverModal(result) {
+      gameOverModal.classList.remove('hidden');
+
+      finalScore.textContent = result.score.toLocaleString();
+      finalCombo.textContent = `${result.maxCombo}x`;
+      finalSurvival.textContent = `${result.survivalSeconds}초`;
+      gameOverReason.textContent = result.reason;
+
+      const defeatedBombs = (result.reviewList || []).reduce((sum, r) => sum + (r.item && r.item.isDanger ? (r.countShot || 0) : 0), 0);
+
+      // Determine Dynamic Badge
+      const grade = calculateGrade(result.score, defeatedBombs);
+      userBadge.innerHTML = `<span>${grade.icon}</span> ${grade.name}`;
+
+      // Setup High Score & Ranking Submit
+      const currentStats = getUserStats();
+      if (playerNicknameInput) {
+        playerNicknameInput.value = currentStats.nickname || '';
+      }
+      const isNewRecord = result.score > (currentStats.highScore || 0) && result.score > 0;
+      if (recordBadge) {
+        if (isNewRecord) recordBadge.classList.remove('hidden');
+        else recordBadge.classList.add('hidden');
+      }
+      if (rankSubmitFeedback) rankSubmitFeedback.classList.add('hidden');
+      if (registerRankBtn) {
+        registerRankBtn.disabled = false;
+        registerRankBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        registerRankBtn.innerHTML = '기록 저장 🏅';
+
+        registerRankBtn.onclick = () => {
+          const nick = (playerNicknameInput ? playerNicknameInput.value.trim() : '') || '익명의 주린이';
+          const { isNewRecord: savedNewRecord, myRank, stats } = saveGameResult({
+            score: result.score,
+            defeatedBombs,
+            nickname: nick,
+            gameTitle: '공시 레이더'
+          });
+
+          if (rankFeedbackText) {
+            if (myRank) {
+              rankFeedbackText.textContent = `축하합니다! 명예의 전당 ${myRank}위에 등록되었습니다! 🏆`;
+            } else {
+              rankFeedbackText.textContent = `기록이 정상 저장되었습니다! (최고점: ${stats.highScore.toLocaleString()} PTS)`;
+            }
+          }
+          if (rankSubmitFeedback) rankSubmitFeedback.classList.remove('hidden');
+          registerRankBtn.disabled = true;
+          registerRankBtn.classList.add('opacity-50', 'cursor-not-allowed');
+          registerRankBtn.textContent = '저장 완료 ✓';
+          lucide.createIcons();
+        };
+      }
+
+      // Populate Educational Review List
+      reviewListContainer.innerHTML = '';
+      if (result.reviewList && result.reviewList.length > 0) {
+        result.reviewList.forEach(({ item, countShot = 0, countAbsorbed = 0, countCollided = 0, countMissed = 0 }) => {
+          const card = document.createElement('div');
+          const isDanger = item.isDanger;
+          const statusBorder = isDanger ? 'border-rose-900/60 bg-rose-950/20' : 'border-emerald-900/60 bg-emerald-950/20';
+          const tagBg = isDanger ? 'bg-rose-950 text-rose-300 border-rose-800' : 'bg-emerald-950 text-emerald-300 border-emerald-800';
+          const icon = isDanger ? '🎯 악재 [격추대상]' : '🍀 호재 [몸체흡수]';
+
+          let resultText = '';
+          let resultColor = '';
+          if (isDanger) {
+            if (countShot > 0) {
+              resultText = `✅ ${countShot}회 미사일 요격 성공`;
+              resultColor = 'text-emerald-400';
+            } else if (countCollided > 0) {
+              resultText = `💥 ${countCollided}회 비행선 직접 충돌`;
+              resultColor = 'text-rose-400';
+            } else {
+              resultText = `⚠️ ${countMissed}회 방치 (기지 타격)`;
+              resultColor = 'text-rose-400';
+            }
+          } else {
+            if (countAbsorbed > 0) {
+              resultText = `💚 ${countAbsorbed}회 비행선 흡수(+회복) 성공!`;
+              resultColor = 'text-emerald-400';
+            } else if (countShot > 0) {
+              resultText = `❌ ${countShot}회 오발 파괴!`;
+              resultColor = 'text-rose-400';
+            } else {
+              resultText = `💨 ${countMissed}회 미흡수 통과`;
+              resultColor = 'text-slate-400';
+            }
+          }
+
+          card.className = `p-3.5 rounded-2xl border ${statusBorder} space-y-1.5 text-xs`;
+          card.innerHTML = `
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold border ${tagBg}">${icon}</span>
+                <span class="font-extrabold text-white text-sm">${item.keyword}</span>
+              </div>
+              <span class="font-bold ${resultColor}">${resultText}</span>
+            </div>
+            <p class="text-slate-300 leading-relaxed text-[11px]">${item.summary}</p>
+            <div class="text-[11px] text-amber-300/90 font-medium pt-1 border-t border-slate-800/60 flex items-center gap-1">
+              <span>💡 주린이 팁:</span> <span>${item.tip}</span>
+            </div>
+          `;
+          reviewListContainer.appendChild(card);
+        });
+      } else {
+        reviewListContainer.innerHTML = '<div class="text-xs text-slate-500 py-4 text-center">공시 데이터 로딩 대기 중</div>';
+      }
+
+      lucide.createIcons();
+    }
+
+    startGameBtn.addEventListener('click', () => {
+      startOverlay.classList.add('hidden');
+      if (!game) initGame();
+      game.start();
+    });
+
+    restartGameBtn.addEventListener('click', () => {
+      gameOverModal.classList.add('hidden');
+      game.start();
+    });
+
+    // Sound toggle
+    let isSoundOn = true;
+    soundToggleBtn.addEventListener('click', () => {
+      isSoundOn = !isSoundOn;
+      if (game) game.sound.isMuted = !isSoundOn;
+      soundLabel.textContent = isSoundOn ? '사운드 ON' : '사운드 OFF';
+      soundIcon.setAttribute('data-lucide', isSoundOn ? 'volume-2' : 'volume-x');
+      lucide.createIcons();
+    });
+
+    // Mobile Virtual controls
+    if (vBtnUp) {
+      vBtnUp.addEventListener('touchstart', (e) => { e.preventDefault(); if (game) game.keys.up = true; });
+      vBtnUp.addEventListener('touchend', (e) => { e.preventDefault(); if (game) game.keys.up = false; });
+      vBtnUp.addEventListener('mousedown', () => { if (game) game.keys.up = true; });
+      vBtnUp.addEventListener('mouseup', () => { if (game) game.keys.up = false; });
+    }
+
+    if (vBtnDown) {
+      vBtnDown.addEventListener('touchstart', (e) => { e.preventDefault(); if (game) game.keys.down = true; });
+      vBtnDown.addEventListener('touchend', (e) => { e.preventDefault(); if (game) game.keys.down = false; });
+      vBtnDown.addEventListener('mousedown', () => { if (game) game.keys.down = true; });
+      vBtnDown.addEventListener('mouseup', () => { if (game) game.keys.down = false; });
+    }
+
+    if (vBtnLeft) {
+      vBtnLeft.addEventListener('touchstart', (e) => { e.preventDefault(); if (game) game.keys.left = true; });
+      vBtnLeft.addEventListener('touchend', (e) => { e.preventDefault(); if (game) game.keys.left = false; });
+      vBtnLeft.addEventListener('mousedown', () => { if (game) game.keys.left = true; });
+      vBtnLeft.addEventListener('mouseup', () => { if (game) game.keys.left = false; });
+    }
+
+    if (vBtnRight) {
+      vBtnRight.addEventListener('touchstart', (e) => { e.preventDefault(); if (game) game.keys.right = true; });
+      vBtnRight.addEventListener('touchend', (e) => { e.preventDefault(); if (game) game.keys.right = false; });
+      vBtnRight.addEventListener('mousedown', () => { if (game) game.keys.right = true; });
+      vBtnRight.addEventListener('mouseup', () => { if (game) game.keys.right = false; });
+    }
+
+    if (vBtnFire) {
+      vBtnFire.addEventListener('touchstart', (e) => { e.preventDefault(); if (game) game.shoot(); });
+      vBtnFire.addEventListener('mousedown', () => { if (game) game.shoot(); });
+    }
+
+    // Auto-init for display
+    initGame();
+  </script>
+</body>
+</html>

@@ -87,3 +87,64 @@ input[type="range"] {
 #toastNotification {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* DART 원본 공시 뷰어 실제 재무제표 스타일 */
+.dart-viewer-paper {
+  background-color: #ffffff;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+  font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", NanumGothic, "나눔고딕", dotum, 돋움, sans-serif;
+}
+
+.dart-doc-header {
+  border-bottom: 2px solid #1e3a8a;
+  padding-bottom: 12px;
+}
+
+.dart-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-top: 2px solid #334155;
+  border-bottom: 2px solid #334155;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.dart-table th {
+  background-color: #f1f5f9;
+  color: #1e293b;
+  font-weight: 700;
+  text-align: center;
+  padding: 8px 10px;
+  border: 1px solid #cbd5e1;
+  letter-spacing: -0.2px;
+}
+
+.dart-table td {
+  padding: 7px 10px;
+  border: 1px solid #e2e8f0;
+  color: #1e293b;
+}
+
+.dart-table tr:hover td {
+  background-color: #f8fafc;
+}
+
+.dart-table tr.dart-row-highlight td {
+  background-color: #f8fafc;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.dart-table tr.dart-row-total td {
+  background-color: #f1f5f9;
+  font-weight: 800;
+  border-top: 1.5px solid #64748b;
+  border-bottom: 2px double #334155;
+  color: #0f172a;
+}
+
+.dart-num {
+  font-family: "Pretendard", "Segoe UI", "Consolas", monospace;
+  letter-spacing: -0.3px;
+}
+
