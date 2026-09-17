@@ -130,11 +130,20 @@
 
 ---
 
-## 7. 화면 구성 및 파일 구조
+## 7. 화면 구성 및 통일된 3대 GNB 아키텍처
 
-- **페이지 경로**: [`frontend/src/pages/quiz_terms/mock_invest.html`](file:///c:/Users/admy7/OneDrive/바탕%20화면/FingerDART/frontend/src/pages/quiz_terms/mock_invest.html)
-- **오락실 로비 캐비닛 연동**: [`frontend/src/pages/quiz_terms/index.html`](file:///c:/Users/admy7/OneDrive/바탕%20화면/FingerDART/frontend/src/pages/quiz_terms/index.html) (Machine 04 및 GNB 탭)
-- **심사관 & 러너 연동**: [`judge.html`](file:///c:/Users/admy7/OneDrive/바탕%20화면/FingerDART/frontend/src/pages/quiz_terms/judge.html), [`runner.html`](file:///c:/Users/admy7/OneDrive/바탕%20화면/FingerDART/frontend/src/pages/quiz_terms/runner.html) 상단 GNB에 통일된 네비게이션 제공.
+Easy-DART의 전역 내비게이션은 **3대 1-Depth 핵심 서비스**로 완벽하게 통합되었습니다:
+1. **`[🏢 기업 파헤치기]` (`/company-list`)**: 20대 일상 소비 기반 기업 실적 환산기 및 DART 공시 심층 해설
+2. **`[📈 실전 모의투자]` (`/mock-invest`)**: 5대 전략, 패가망신 락업, 종토방, 플렉스 샵이 결합된 고난도 시뮬레이터
+3. **`[🕹️ DART 오락실]` (`/quiz`)**: 3초 심사관, 급행 레인 러너, 단타 챌린지 등 금융 아케이드
+
+### 파일 및 라우팅 연동 현황
+- **백엔드 라우터**: [`backend/app/main.py`](file:///c:/Users/admy7/OneDrive/바탕%20화면/FingerDART/backend/app/main.py) (`/mock-invest`, `/mock-investment` ➔ `mock_invest.html`)
+- **기업 파헤치기 목록**: [`frontend/src/pages/company_list/index.html`](file:///c:/Users/admy7/OneDrive/바탕%20화면/FingerDART/frontend/src/pages/company_list/index.html) (상단 헤더 3대 탭 동기화)
+- **기업 파헤치기 상세**: [`frontend/src/pages/company_detail/index.html`](file:///c:/Users/admy7/OneDrive/바탕%20화면/FingerDART/frontend/src/pages/company_detail/index.html) (상단 헤더 3대 탭 동기화)
+- **실전 모의투자**: [`frontend/src/pages/quiz_terms/mock_invest.html`](file:///c:/Users/admy7/OneDrive/바탕%20화면/FingerDART/frontend/src/pages/quiz_terms/mock_invest.html) (Active 탭)
+- **DART 오락실 로비**: [`frontend/src/pages/quiz_terms/index.html`](file:///c:/Users/admy7/OneDrive/바탕%20화면/FingerDART/frontend/src/pages/quiz_terms/index.html) (Machine 04 캐비닛 및 헤더 3대 탭)
+- **아케이드 서브게임**: [`judge.html`](file:///c:/Users/admy7/OneDrive/바탕%20화면/FingerDART/frontend/src/pages/quiz_terms/judge.html), [`runner.html`](file:///c:/Users/admy7/OneDrive/바탕%20화면/FingerDART/frontend/src/pages/quiz_terms/runner.html) 상단 GNB 3대 탭 완벽 동기화.
 
 ---
 
