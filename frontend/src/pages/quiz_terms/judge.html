@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
@@ -350,13 +350,26 @@
             <div id="finalMaxCombo" class="text-xl font-black text-cyan-400 font-mono mt-0.5">0 combo</div>
           </div>
           <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800">
-            <div class="text-[10px] text-slate-400 font-bold uppercase">??踰덇컻 蹂대꼫??/div>
-            <div id="finalLightningBonus" class="text-xl font-black text-amber-300 font-mono mt-0.5">0??/div>
+            <div class="text-[10px] text-slate-400 font-bold uppercase">번개 보너스</div>
+            <div id="finalLightningBonus" class="text-xl font-black text-amber-300 font-mono mt-0.5">0회</div>
+          </div>
+        </div>
+
+        <!-- AI Post-Game Debriefing Card -->
+        <div id="aiDebriefBox" class="mt-3 p-3.5 rounded-2xl bg-gradient-to-r from-purple-950/50 to-slate-900 border border-purple-500/40 text-left">
+          <div class="flex items-center justify-between mb-1.5">
+            <span class="text-xs font-black text-purple-300 flex items-center gap-1.5">
+              <span>🤖</span> <span>AI 투자 코치 1:1 하브루타 처방전</span>
+            </span>
+            <span class="text-[9px] px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/40 font-mono font-bold">GEMINI AI</span>
+          </div>
+          <div id="aiDebriefContent" class="text-xs text-slate-200 leading-relaxed space-y-1">
+            분석 대기 중... 💭
           </div>
         </div>
       </div>
 
-      <!-- Educational Review List (?ㅻ떟?명듃 諛?怨듭떆 轅???댁꽕) -->
+      <!-- Educational Review List (?ㅻ떟?명듃 諛??ъ옄 釉뚮━?? -->
       <div class="flex-1 overflow-y-auto custom-scrollbar my-4 pr-1 space-y-3" id="reviewReportList">
         <!-- Injected via JavaScript -->
       </div>
@@ -1044,6 +1057,48 @@
 
         this.resultModalEl.classList.remove('hidden');
         lucide.createIcons();
+
+        // Trigger AI Debriefing
+        const wrongTitles = this.history.filter(h => !h.isCorrect).map(h => `${h.card.company}: ${h.card.title}`);
+        this.fetchAIDebrief(wrongTitles);
+      }
+
+      async fetchAIDebrief(missedItems) {
+        const debriefEl = document.getElementById('aiDebriefContent');
+        if (!debriefEl) return;
+        debriefEl.innerHTML = 'AI 투자 코치가 방금 플레이를 분석하고 1:1 처방전을 작성 중입니다... ⏳';
+
+        try {
+          const res = await fetch('http://localhost:8000/api/quiz/ai-debrief', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ missed_items: missedItems, game_title: 'DART 실전 투자 심사관' })
+          });
+          const data = await res.json();
+          if (data && data.message) {
+            debriefEl.innerHTML = `
+              <p class="font-bold text-cyan-300">${data.coach_title || '💡 핑거코치 복기'}</p>
+              <p class="text-slate-200">${data.message}</p>
+              ${data.havruta_question ? `<p class="mt-1 text-amber-300 bg-amber-950/40 p-2 rounded-lg border border-amber-800/40 font-medium">❓ <b>하브루타 질문:</b> ${data.havruta_question}</p>` : ''}
+              ${data.key_takeaway ? `<p class="mt-1 text-emerald-300 text-[10px]">📌 <b>투자 생존 팁:</b> ${data.key_takeaway}</p>` : ''}
+            `;
+            return;
+          }
+        } catch (e) {}
+
+        if (!missedItems || missedItems.length === 0) {
+          debriefEl.innerHTML = `
+            <p class="font-bold text-emerald-400">🎯 퍼펙트 심사관 통과!</p>
+            <p class="text-slate-200">단 하나의 상폐 지뢰에도 낚이지 않고 모든 공시를 정확하게 판정하셨습니다! 실전 공시 감각이 이미 상위 1% 수준입니다.</p>
+          `;
+        } else {
+          const first = missedItems[0];
+          debriefEl.innerHTML = `
+            <p class="font-bold text-cyan-300">💡 [${first}] 핵심 복기 처방전</p>
+            <p class="text-slate-200">"화려한 공시 제목에 속지 마세요! 회사가 돈을 빌려오거나(CB), 자본을 늘릴 때 기존 주주들의 주식 가치가 쪼그라드는지(희석) 반드시 먼저 확인해야 합니다."</p>
+            <p class="mt-1 text-amber-300 bg-amber-950/40 p-2 rounded-lg border border-amber-800/40 font-medium">❓ <b>하브루타 질문:</b> 친구와 50:50으로 차린 카페에 제3자가 헐값 지분으로 들어온다면 내 권리는 어떻게 될까요?</p>
+          `;
+        }
       }
     }
 

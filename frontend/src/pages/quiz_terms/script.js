@@ -333,6 +333,55 @@ function handleOptionClick(idx) {
     fb.className = 'p-5 rounded-2xl bg-rose-950/85 border-2 border-rose-500/70 text-xs sm:text-sm text-rose-200 space-y-2 shadow-lg shadow-rose-950/40';
     if (titleEl) titleEl.innerHTML = '<span class="text-base">💡</span> <span>아쉽지만 오답이에요! (실전 흑우 방지 꿀팁)</span>';
   }
-  if (contentEl) contentEl.innerHTML = q.explanation;
+  if (contentEl) {
+    contentEl.innerHTML = `
+      <div>${q.explanation}</div>
+      <div class="mt-3 pt-3 border-t border-slate-700/50 flex flex-col gap-2">
+        <button id="btnAskAiCoach" class="self-start text-[11px] font-black px-3 py-1.5 rounded-xl bg-purple-600/30 hover:bg-purple-600/50 text-purple-200 border border-purple-500/40 transition-all flex items-center gap-1.5 active:scale-95">
+          <span>🤖</span> <span>AI 튜터에게 20대 일상 비유로 더 쉽게 물어보기</span>
+        </button>
+        <div id="aiCoachAnswerBox" class="hidden p-3 rounded-xl bg-purple-950/40 border border-purple-500/30 text-xs text-purple-100 leading-relaxed">
+          <div class="font-bold flex items-center gap-1 text-purple-300 mb-1">
+            <span>✨</span> <span>AI 핑거코치의 1:1 눈높이 처방전</span>
+          </div>
+          <div id="aiCoachText" class="text-[11px] text-slate-200 space-y-1">로딩 중... 💭</div>
+        </div>
+      </div>
+    `;
+
+    const aiBtn = document.getElementById('btnAskAiCoach');
+    const aiBox = document.getElementById('aiCoachAnswerBox');
+    const aiText = document.getElementById('aiCoachText');
+
+    if (aiBtn && aiBox && aiText) {
+      aiBtn.addEventListener('click', async () => {
+        aiBtn.classList.add('hidden');
+        aiBox.classList.remove('hidden');
+        aiText.innerHTML = 'AI 튜터가 20대 일상 비유를 생성하고 있습니다... ⏳';
+
+        try {
+          const debrief = await apiClient.getAIDebrief([q.question], '1분 기초 용어 퀴즈');
+          if (debrief && debrief.message) {
+            aiText.innerHTML = `
+              <p class="font-bold text-cyan-300">${debrief.coach_title || '💡 핵심 콕 짚어보기'}</p>
+              <p class="text-slate-200">${debrief.message}</p>
+              ${debrief.havruta_question ? `<p class="mt-1 text-amber-300 bg-amber-950/40 p-2 rounded-lg border border-amber-800/40 font-medium">❓ <b>스스로 던져보는 하브루타 질문:</b> ${debrief.havruta_question}</p>` : ''}
+              ${debrief.key_takeaway ? `<p class="mt-1 text-emerald-300 text-[10px]">📌 <b>핵심 요약:</b> ${debrief.key_takeaway}</p>` : ''}
+            `;
+          } else {
+            throw new Error('No debrief data');
+          }
+        } catch (e) {
+          // 오프라인 스마트 대체 설명
+          aiText.innerHTML = `
+            <p class="font-bold text-cyan-300">💡 핑거코치의 20대 맞춤 비유</p>
+            <p class="text-slate-200">"어려운 한자 용어에 속지 마세요! 이 개념의 핵심은 결국 <b>'내 지갑에서 진짜 돈이 나가는지, 아니면 장부상 숫자놀음인지'</b>를 꿰뚫어 보는 것입니다."</p>
+            <p class="mt-1 text-amber-300 bg-amber-950/40 p-2 rounded-lg border border-amber-800/40 font-medium">❓ <b>생각해볼 점:</b> 내가 만약 친구와 동업할 때 이 숫자를 속인다면 어떻게 될까요?</p>
+          `;
+        }
+      });
+    }
+  }
   lucide.createIcons();
 }
+

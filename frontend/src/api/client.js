@@ -31,5 +31,21 @@ export const apiClient = {
   async getCompanyQuiz(companyId) {
     const res = await fetch(`${API_BASE_URL}/quiz/company/${companyId}`);
     return res.json();
+  },
+
+  // 팀원 C 인게임 AI API
+  async getAIDebrief(missedItems, gameTitle = '아케이드 게임') {
+    const res = await fetch(`${API_BASE_URL}/quiz/ai-debrief`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ missed_items: missedItems, game_title: gameTitle })
+    });
+    return res.json();
+  },
+
+  async getAIScenario(category = 'mix') {
+    const res = await fetch(`${API_BASE_URL}/quiz/ai-scenario?category=${category}`);
+    return res.json();
   }
 };
+

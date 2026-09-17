@@ -30,3 +30,23 @@ def get_game_disclosures():
     """DART 공시 레이더 미사일 슈팅 게임용 악재/호재 공시 데이터 조회"""
     disclosures = QuizService.get_game_disclosures()
     return {"count": len(disclosures), "disclosures": disclosures}
+
+class AIDebriefRequest(BaseModel):
+    missed_items: list = []
+    game_title: str = "3대 금융 아케이드"
+
+@router.post("/ai-debrief")
+async def get_ai_postgame_debrief(req: AIDebriefRequest):
+    """
+    [팀원 C 인게임 AI] 게임 종료 후 실수한 공시 분석 및 1:1 하브루타 오답 처방전 반환
+    """
+    debrief = await QuizService.generate_ai_debrief(req.missed_items, req.game_title)
+    return debrief
+
+@router.get("/ai-scenario")
+async def get_ai_dynamic_scenario(category: str = "mix"):
+    """
+    [팀원 C 인게임 AI] 실전 심사관/슈팅 게임용 20대 일상 기업 공시 딜레마 카드 실시간 생성
+    """
+    scenario = await QuizService.generate_ai_scenario(category)
+    return scenario
