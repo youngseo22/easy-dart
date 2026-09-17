@@ -147,22 +147,27 @@
           클래식 아케이드 게임을 플레이하며 회계 원리와 위험 공시 감별법을 본능적으로 체득하세요!
         </p>
 
-        <div class="pt-4 flex flex-wrap items-center justify-center gap-4 text-xs font-bold">
+        <div class="pt-4 flex flex-wrap items-center justify-center gap-3 text-xs font-bold">
           <div class="px-4 py-2 rounded-2xl bg-slate-950/80 border border-slate-800 flex items-center gap-2">
-            <span class="text-base">🐣</span>
+            <span class="text-base" id="userGradeIcon">🐣</span>
             <span class="text-slate-400">내 주린이 등급:</span>
-            <span class="text-cyan-300 font-extrabold">새싹 주린이 (LV.1)</span>
+            <span id="userGradeText" class="text-emerald-300 font-extrabold">새싹 주린이 (LV.1)</span>
           </div>
           <div class="px-4 py-2 rounded-2xl bg-slate-950/80 border border-slate-800 flex items-center gap-2">
             <span class="text-base">🏆</span>
             <span class="text-slate-400">아케이드 최고점:</span>
-            <span class="text-amber-400 font-extrabold">1,420 PTS</span>
+            <span id="userHighScoreText" class="text-amber-400 font-extrabold">0 PTS</span>
           </div>
           <div class="px-4 py-2 rounded-2xl bg-slate-950/80 border border-slate-800 flex items-center gap-2">
             <span class="text-base">🛡️</span>
             <span class="text-slate-400">격퇴한 상폐 공시:</span>
-            <span class="text-rose-400 font-extrabold">18건</span>
+            <span id="userDefeatedText" class="text-rose-400 font-extrabold">0건</span>
           </div>
+          <button id="editNicknameBtn" class="px-3.5 py-2 rounded-2xl bg-slate-900/90 border border-slate-700 hover:border-cyan-400 flex items-center gap-1.5 text-slate-300 hover:text-white transition group shadow-sm" title="닉네임 변경하기">
+            <span class="text-slate-400">👤 닉네임:</span>
+            <span id="userNicknameText" class="text-cyan-300 font-extrabold">익명의 주린이</span>
+            <i data-lucide="edit-3" class="w-3.5 h-3.5 text-slate-500 group-hover:text-cyan-400 transition"></i>
+          </button>
         </div>
       </div>
 
@@ -278,6 +283,46 @@
         </div>
       </div>
 
+      <!-- Hall of Fame Section (실시간 랭킹 전광판) -->
+      <div class="rounded-3xl bg-gradient-to-b from-slate-900/90 via-slate-950/90 to-slate-900/90 border border-slate-800 p-6 sm:p-8 space-y-5 shadow-2xl relative overflow-hidden">
+        <div class="absolute -top-12 -right-12 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800/80 pb-4">
+          <div class="space-y-1">
+            <div class="inline-flex items-center gap-1.5 text-[11px] font-black text-amber-400 uppercase tracking-widest">
+              <span>⭐</span> LOCAL LEADERBOARD
+            </div>
+            <h2 class="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
+              <span>🏆</span> DART 오락실 명예의 전당 (TOP 5)
+            </h2>
+            <p class="text-xs text-slate-400">상장폐지 지뢰 공시를 격퇴하고 세운 최고 기록 명단입니다.</p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button id="resetRankBtn" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-[11px] font-bold text-slate-400 hover:text-slate-200 border border-slate-800 transition" title="내 기록 초기화">
+              기록 초기화
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr class="border-b border-slate-800 text-slate-400 font-bold uppercase tracking-wider">
+                <th class="py-3 px-3 w-16 text-center">순위</th>
+                <th class="py-3 px-4">플레이어 닉네임</th>
+                <th class="py-3 px-4">플레이 게임</th>
+                <th class="py-3 px-4 text-right">달성 점수</th>
+                <th class="py-3 px-4 text-center w-24">기록일</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboardTableBody" class="divide-y divide-slate-800/60 font-semibold">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
 
     <!-- SECTION 2: 1-Minute Term Quiz (기존 팀원 C 퀴즈 모듈) -->
@@ -338,7 +383,9 @@
   <script type="module" src="script.js"></script>
 
   <!-- Arcade UI & Tab Interaction Script -->
-  <script>
+  <script type="module">
+    import { getUserStats, getHallOfFame, calculateGrade, saveUserNickname } from './games/ranking_helper.js';
+
     lucide.createIcons();
 
     // Tab Switching Logic
@@ -424,6 +471,81 @@
         coinBtn.classList.remove('scale-105');
       }, 200);
     });
+
+    // Ranks & Stats Rendering
+    const userGradeIcon = document.getElementById('userGradeIcon');
+    const userGradeText = document.getElementById('userGradeText');
+    const userHighScoreText = document.getElementById('userHighScoreText');
+    const userDefeatedText = document.getElementById('userDefeatedText');
+    const userNicknameText = document.getElementById('userNicknameText');
+    const editNicknameBtn = document.getElementById('editNicknameBtn');
+    const resetRankBtn = document.getElementById('resetRankBtn');
+    const leaderboardTableBody = document.getElementById('leaderboardTableBody');
+
+    function renderUserStatsAndLeaderboard() {
+      const stats = getUserStats();
+      const grade = calculateGrade(stats.highScore, stats.defeatedBombs);
+
+      if (userGradeIcon) userGradeIcon.textContent = grade.icon;
+      if (userGradeText) {
+        userGradeText.textContent = grade.name;
+        userGradeText.className = `${grade.textClass} font-extrabold`;
+      }
+      if (userHighScoreText) userHighScoreText.textContent = `${(stats.highScore || 0).toLocaleString()} PTS`;
+      if (userDefeatedText) userDefeatedText.textContent = `${stats.defeatedBombs || 0}건`;
+      if (userNicknameText) userNicknameText.textContent = stats.nickname || '익명의 주린이';
+
+      // Render Leaderboard
+      if (leaderboardTableBody) {
+        const fame = getHallOfFame();
+        leaderboardTableBody.innerHTML = fame.map(item => {
+          let rankBadge = '';
+          if (item.rank === 1) rankBadge = '<span class="text-base">🥇</span> <span class="font-black text-amber-300">1위</span>';
+          else if (item.rank === 2) rankBadge = '<span class="text-base">🥈</span> <span class="font-black text-slate-300">2위</span>';
+          else if (item.rank === 3) rankBadge = '<span class="text-base">🥉</span> <span class="font-black text-amber-600">3위</span>';
+          else rankBadge = `<span class="text-slate-400 font-bold">${item.rank}위</span>`;
+
+          const isMeStyle = item.isMe ? 'bg-cyan-500/15 border-l-2 border-cyan-400' : 'hover:bg-slate-900/40';
+          const meTag = item.isMe ? '<span class="ml-1.5 px-1.5 py-0.5 rounded text-[10px] bg-cyan-900/80 text-cyan-300 border border-cyan-700 font-bold">MY</span>' : '';
+
+          return `
+            <tr class="${isMeStyle} transition-colors">
+              <td class="py-3 px-3 text-center">${rankBadge}</td>
+              <td class="py-3 px-4 font-bold text-white flex items-center">
+                <span>${item.nickname}</span>${meTag}
+              </td>
+              <td class="py-3 px-4 text-slate-400">${item.game}</td>
+              <td class="py-3 px-4 text-right font-black text-amber-300">${item.score.toLocaleString()} PTS</td>
+              <td class="py-3 px-4 text-center text-slate-500 font-mono text-[11px]">${item.date}</td>
+            </tr>
+          `;
+        }).join('');
+      }
+      lucide.createIcons();
+    }
+
+    if (editNicknameBtn) {
+      editNicknameBtn.addEventListener('click', () => {
+        const stats = getUserStats();
+        const newNick = prompt('새로운 닉네임을 입력하세요 (최대 10자):', stats.nickname || '');
+        if (newNick !== null && newNick.trim() !== '') {
+          saveUserNickname(newNick);
+          renderUserStatsAndLeaderboard();
+        }
+      });
+    }
+
+    if (resetRankBtn) {
+      resetRankBtn.addEventListener('click', () => {
+        if (confirm('모든 점수와 랭킹 기록을 초기화하시겠습니까?')) {
+          localStorage.removeItem('easy_dart_user_stats');
+          localStorage.removeItem('easy_dart_hall_of_fame');
+          renderUserStatsAndLeaderboard();
+        }
+      });
+    }
+
+    renderUserStatsAndLeaderboard();
   </script>
 </body>
 </html>

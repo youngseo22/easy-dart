@@ -225,6 +225,28 @@
         </div>
       </div>
 
+      <!-- Ranking & Nickname Registration Box -->
+      <div id="rankingSubmitCard" class="bg-slate-950/80 p-4 rounded-2xl border border-cyan-500/30 space-y-2.5">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-1.5 text-xs font-black text-white">
+            <span>🏆</span> <span>명예의 전당 랭킹 등록</span>
+          </div>
+          <span id="recordBadge" class="hidden px-2 py-0.5 rounded text-[10px] font-black bg-rose-500 text-white animate-pulse">
+            🔥 최고 기록 갱신!
+          </span>
+        </div>
+        <div class="flex items-center gap-2">
+          <input type="text" id="playerNicknameInput" maxlength="10" placeholder="닉네임 입력 (예: 여의도황소)"
+            class="flex-1 bg-slate-900 border border-slate-700 focus:border-cyan-400 rounded-xl px-3 py-2 text-xs text-white placeholder:text-slate-500 outline-none transition" />
+          <button id="registerRankBtn" class="px-4 py-2 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black text-xs rounded-xl shadow-md transition-all active:scale-95 whitespace-nowrap">
+            기록 저장 🏅
+          </button>
+        </div>
+        <div id="rankSubmitFeedback" class="hidden text-[11px] text-emerald-400 font-bold flex items-center gap-1">
+          <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> <span id="rankFeedbackText">성공적으로 저장되었습니다! 메인 화면 명예의 전당에서 확인하세요.</span>
+        </div>
+      </div>
+
       <!-- Educational Review Sheet (오답노트 & 공시 용어 정복 리스트) -->
       <div class="space-y-3">
         <div class="flex items-center justify-between">
@@ -258,6 +280,7 @@
 
   <script type="module">
     import { DartRadarShooter } from './games/radar_shooter.js';
+    import { saveGameResult, getUserStats, calculateGrade } from './games/ranking_helper.js';
 
     lucide.createIcons();
 
@@ -291,6 +314,13 @@
     const finalCombo = document.getElementById('finalCombo');
     const finalSurvival = document.getElementById('finalSurvival');
     const reviewListContainer = document.getElementById('reviewListContainer');
+
+    // Ranking Elements
+    const recordBadge = document.getElementById('recordBadge');
+    const playerNicknameInput = document.getElementById('playerNicknameInput');
+    const registerRankBtn = document.getElementById('registerRankBtn');
+    const rankSubmitFeedback = document.getElementById('rankSubmitFeedback');
+    const rankFeedbackText = document.getElementById('rankFeedbackText');
 
     let game = null;
 
@@ -335,21 +365,51 @@
       finalSurvival.textContent = `${result.survivalSeconds}초`;
       gameOverReason.textContent = result.reason;
 
-      // Determine Badge
-      let badgeIcon = '🐣';
-      let badgeName = '새싹 주린이';
-      let badgeDesc = 'DART 공시의 쓴맛을 경험했습니다. 복습노트를 확인하세요!';
-      if (result.score >= 1000) {
-        badgeIcon = '👑';
-        badgeName = '스마트 머니 (공시 마스터)';
-        badgeDesc = '완벽한 위험 감지 센스! 상장폐지 지뢰를 모두 차단했습니다!';
-      } else if (result.score >= 400) {
-        badgeIcon = '🔍';
-        badgeName = '노련한 지뢰 감별사';
-        badgeDesc = '주요 악재 공시를 상당수 격추하여 회사를 방어했습니다!';
-      }
+      const defeatedBombs = (result.reviewList || []).reduce((sum, r) => sum + (r.item && r.item.isDanger ? (r.countShot || 0) : 0), 0);
 
-      userBadge.innerHTML = `<span>${badgeIcon}</span> ${badgeName}`;
+      // Determine Dynamic Badge
+      const grade = calculateGrade(result.score, defeatedBombs);
+      userBadge.innerHTML = `<span>${grade.icon}</span> ${grade.name}`;
+
+      // Setup High Score & Ranking Submit
+      const currentStats = getUserStats();
+      if (playerNicknameInput) {
+        playerNicknameInput.value = currentStats.nickname || '';
+      }
+      const isNewRecord = result.score > (currentStats.highScore || 0) && result.score > 0;
+      if (recordBadge) {
+        if (isNewRecord) recordBadge.classList.remove('hidden');
+        else recordBadge.classList.add('hidden');
+      }
+      if (rankSubmitFeedback) rankSubmitFeedback.classList.add('hidden');
+      if (registerRankBtn) {
+        registerRankBtn.disabled = false;
+        registerRankBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        registerRankBtn.innerHTML = '기록 저장 🏅';
+
+        registerRankBtn.onclick = () => {
+          const nick = (playerNicknameInput ? playerNicknameInput.value.trim() : '') || '익명의 주린이';
+          const { isNewRecord: savedNewRecord, myRank, stats } = saveGameResult({
+            score: result.score,
+            defeatedBombs,
+            nickname: nick,
+            gameTitle: '공시 레이더'
+          });
+
+          if (rankFeedbackText) {
+            if (myRank) {
+              rankFeedbackText.textContent = `축하합니다! 명예의 전당 ${myRank}위에 등록되었습니다! 🏆`;
+            } else {
+              rankFeedbackText.textContent = `기록이 정상 저장되었습니다! (최고점: ${stats.highScore.toLocaleString()} PTS)`;
+            }
+          }
+          if (rankSubmitFeedback) rankSubmitFeedback.classList.remove('hidden');
+          registerRankBtn.disabled = true;
+          registerRankBtn.classList.add('opacity-50', 'cursor-not-allowed');
+          registerRankBtn.textContent = '저장 완료 ✓';
+          lucide.createIcons();
+        };
+      }
 
       // Populate Educational Review List
       reviewListContainer.innerHTML = '';
