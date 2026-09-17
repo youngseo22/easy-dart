@@ -214,7 +214,7 @@
       <div class="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400 flex-wrap gap-2">
         <span class="flex items-center gap-1.5">
           <i data-lucide="keyboard" class="w-3.5 h-3.5 text-cyan-400"></i>
-          조작법: <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">◀</kbd> <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">▶</kbd> 이동 / <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">Space</kbd> 미사일 발사 (마우스 드래그 & 터치 지원)
+          조작법: <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">▲</kbd> <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">▼</kbd> <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">◀</kbd> <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">▶</kbd> (W, S, A, D) 전후좌우 기동 / <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px]">Space</kbd> 미사일 발사 (마우스 & 터치 드래그 지원)
         </span>
         <span class="text-cyan-400 font-semibold flex items-center gap-1">
           <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> 목표: 기업 시가총액(100%)을 방어하며 클리어
@@ -252,7 +252,7 @@
               <span>비행선 흡수: [적정의견], [영업흑자], [자사주 소각] (+120점 & 💚시총 +10% 회복)</span>
             </div>
             <div class="flex items-center gap-2 text-slate-400 pt-1 border-t border-slate-800/80">
-              <span>⌨️ 조작: 좌우 방향키(또는 A, D) / 발사: 스페이스바 (화면 마우스/터치 드래그 지원)</span>
+              <span>⌨️ 조작: 방향키(또는 W, A, S, D) 4방향 전후좌우 기동 / 발사: 스페이스바 (화면 마우스/터치 드래그 지원)</span>
             </div>
           </div>
 
@@ -265,16 +265,28 @@
     </div>
 
     <!-- Mobile Virtual Controls -->
-    <div class="sm:hidden grid grid-cols-3 gap-3 pt-2">
-      <button id="vBtnLeft" class="virtual-btn py-4 rounded-2xl bg-slate-900 border border-slate-700 text-cyan-400 flex items-center justify-center font-black text-xl shadow-lg">
-        <i data-lucide="chevron-left" class="w-7 h-7"></i>
-      </button>
-      <button id="vBtnFire" class="virtual-btn py-4 rounded-2xl bg-gradient-to-r from-rose-600 to-amber-600 text-white flex items-center justify-center font-black text-base shadow-lg shadow-rose-600/30 gap-1.5">
-        <i data-lucide="crosshair" class="w-5 h-5"></i> 발사
-      </button>
-      <button id="vBtnRight" class="virtual-btn py-4 rounded-2xl bg-slate-900 border border-slate-700 text-cyan-400 flex items-center justify-center font-black text-xl shadow-lg">
-        <i data-lucide="chevron-right" class="w-7 h-7"></i>
-      </button>
+    <div class="sm:hidden flex flex-col items-center gap-2 pt-2">
+      <div class="flex justify-center">
+        <button id="vBtnUp" class="virtual-btn py-2.5 px-8 rounded-2xl bg-slate-900 border border-slate-700 text-cyan-400 flex items-center justify-center font-black text-lg shadow-lg active:bg-slate-800">
+          <i data-lucide="chevron-up" class="w-6 h-6"></i>
+        </button>
+      </div>
+      <div class="grid grid-cols-3 gap-2.5 w-full max-w-xs">
+        <button id="vBtnLeft" class="virtual-btn py-3.5 rounded-2xl bg-slate-900 border border-slate-700 text-cyan-400 flex items-center justify-center font-black text-lg shadow-lg active:bg-slate-800">
+          <i data-lucide="chevron-left" class="w-6 h-6"></i>
+        </button>
+        <button id="vBtnFire" class="virtual-btn py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 to-amber-600 text-white flex items-center justify-center font-black text-sm shadow-lg shadow-rose-600/30 gap-1 active:scale-95">
+          <i data-lucide="crosshair" class="w-4 h-4"></i> 발사
+        </button>
+        <button id="vBtnRight" class="virtual-btn py-3.5 rounded-2xl bg-slate-900 border border-slate-700 text-cyan-400 flex items-center justify-center font-black text-lg shadow-lg active:bg-slate-800">
+          <i data-lucide="chevron-right" class="w-6 h-6"></i>
+        </button>
+      </div>
+      <div class="flex justify-center">
+        <button id="vBtnDown" class="virtual-btn py-2.5 px-8 rounded-2xl bg-slate-900 border border-slate-700 text-cyan-400 flex items-center justify-center font-black text-lg shadow-lg active:bg-slate-800">
+          <i data-lucide="chevron-down" class="w-6 h-6"></i>
+        </button>
+      </div>
     </div>
 
   </main>
@@ -654,7 +666,7 @@
         this.floatingTexts = [];
         this.stars = [];
 
-        this.keys = { left: false, right: false, shoot: false };
+        this.keys = { left: false, right: false, up: false, down: false, shoot: false };
 
         this.lastSpawnTime = 0;
         this.spawnInterval = 1700;
@@ -702,36 +714,56 @@
             this.togglePause();
             return;
           }
-          if (['ArrowLeft', 'KeyA', 'a', 'A'].includes(e.code)) this.keys.left = true;
-          if (['ArrowRight', 'KeyD', 'd', 'D'].includes(e.code)) this.keys.right = true;
-          if (['Space', 'KeyW', 'ArrowUp'].includes(e.code)) {
+          if (['ArrowLeft', 'KeyA', 'a', 'A'].includes(e.code) || ['ArrowLeft', 'a', 'A'].includes(e.key)) {
+            this.keys.left = true;
+            if (this.gameState === 'PLAYING') e.preventDefault();
+          }
+          if (['ArrowRight', 'KeyD', 'd', 'D'].includes(e.code) || ['ArrowRight', 'd', 'D'].includes(e.key)) {
+            this.keys.right = true;
+            if (this.gameState === 'PLAYING') e.preventDefault();
+          }
+          if (['ArrowUp', 'KeyW', 'w', 'W'].includes(e.code) || ['ArrowUp', 'w', 'W'].includes(e.key)) {
+            this.keys.up = true;
+            if (this.gameState === 'PLAYING') e.preventDefault();
+          }
+          if (['ArrowDown', 'KeyS', 's', 'S'].includes(e.code) || ['ArrowDown', 's', 'S'].includes(e.key)) {
+            this.keys.down = true;
+            if (this.gameState === 'PLAYING') e.preventDefault();
+          }
+          if (['Space', 'KeyJ', 'KeyZ'].includes(e.code) || e.key === ' ' || e.code === 'Space') {
             this.keys.shoot = true;
             if (this.gameState === 'PLAYING') e.preventDefault();
           }
         });
 
         window.addEventListener('keyup', (e) => {
-          if (['ArrowLeft', 'KeyA', 'a', 'A'].includes(e.code)) this.keys.left = false;
-          if (['ArrowRight', 'KeyD', 'd', 'D'].includes(e.code)) this.keys.right = false;
-          if (['Space', 'KeyW', 'ArrowUp'].includes(e.code)) this.keys.shoot = false;
+          if (['ArrowLeft', 'KeyA', 'a', 'A'].includes(e.code) || ['ArrowLeft', 'a', 'A'].includes(e.key)) this.keys.left = false;
+          if (['ArrowRight', 'KeyD', 'd', 'D'].includes(e.code) || ['ArrowRight', 'd', 'D'].includes(e.key)) this.keys.right = false;
+          if (['ArrowUp', 'KeyW', 'w', 'W'].includes(e.code) || ['ArrowUp', 'w', 'W'].includes(e.key)) this.keys.up = false;
+          if (['ArrowDown', 'KeyS', 's', 'S'].includes(e.code) || ['ArrowDown', 's', 'S'].includes(e.key)) this.keys.down = false;
+          if (['Space', 'KeyJ', 'KeyZ'].includes(e.code) || e.key === ' ' || e.code === 'Space') this.keys.shoot = false;
         });
 
         let isTouching = false;
-        const handlePointerMove = (clientX) => {
+        const handlePointerMove = (clientX, clientY) => {
           const rect = this.canvas.getBoundingClientRect();
           const x = clientX - rect.left;
           this.player.x = Math.max(30, Math.min(this.width - 30, x));
+          if (clientY !== undefined) {
+            const y = clientY - rect.top;
+            this.player.y = Math.max(80, Math.min(this.height - 45, y));
+          }
         };
 
         this.canvas.addEventListener('mousedown', (e) => {
           this.sound.init();
           isTouching = true;
-          handlePointerMove(e.clientX);
+          handlePointerMove(e.clientX, e.clientY);
           this.keys.shoot = true;
         });
 
         window.addEventListener('mousemove', (e) => {
-          if (isTouching) handlePointerMove(e.clientX);
+          if (isTouching) handlePointerMove(e.clientX, e.clientY);
         });
 
         window.addEventListener('mouseup', () => {
@@ -743,13 +775,13 @@
           this.sound.init();
           if (e.touches.length > 0) {
             isTouching = true;
-            handlePointerMove(e.touches[0].clientX);
+            handlePointerMove(e.touches[0].clientX, e.touches[0].clientY);
             this.keys.shoot = true;
           }
         }, { passive: true });
 
         this.canvas.addEventListener('touchmove', (e) => {
-          if (e.touches.length > 0) handlePointerMove(e.touches[0].clientX);
+          if (e.touches.length > 0) handlePointerMove(e.touches[0].clientX, e.touches[0].clientY);
         }, { passive: true });
 
         this.canvas.addEventListener('touchend', () => {
@@ -894,7 +926,10 @@
 
         if (this.keys.left) this.player.x -= this.player.speed;
         if (this.keys.right) this.player.x += this.player.speed;
+        if (this.keys.up) this.player.y -= this.player.speed;
+        if (this.keys.down) this.player.y += this.player.speed;
         this.player.x = Math.max(30, Math.min(this.width - 30, this.player.x));
+        this.player.y = Math.max(80, Math.min(this.height - 45, this.player.y));
 
         if (this.keys.shoot) this.shoot();
         if (this.player.cooldown > 0) this.player.cooldown--;
@@ -1284,6 +1319,8 @@
     const soundIcon = document.getElementById('soundIcon');
     const soundLabel = document.getElementById('soundLabel');
 
+    const vBtnUp = document.getElementById('vBtnUp');
+    const vBtnDown = document.getElementById('vBtnDown');
     const vBtnLeft = document.getElementById('vBtnLeft');
     const vBtnRight = document.getElementById('vBtnRight');
     const vBtnFire = document.getElementById('vBtnFire');
@@ -1449,6 +1486,20 @@
       soundIcon.setAttribute('data-lucide', isSoundOn ? 'volume-2' : 'volume-x');
       lucide.createIcons();
     });
+
+    if (vBtnUp) {
+      vBtnUp.addEventListener('touchstart', (e) => { e.preventDefault(); game.keys.up = true; });
+      vBtnUp.addEventListener('touchend', (e) => { e.preventDefault(); game.keys.up = false; });
+      vBtnUp.addEventListener('mousedown', () => { game.keys.up = true; });
+      vBtnUp.addEventListener('mouseup', () => { game.keys.up = false; });
+    }
+
+    if (vBtnDown) {
+      vBtnDown.addEventListener('touchstart', (e) => { e.preventDefault(); game.keys.down = true; });
+      vBtnDown.addEventListener('touchend', (e) => { e.preventDefault(); game.keys.down = false; });
+      vBtnDown.addEventListener('mousedown', () => { game.keys.down = true; });
+      vBtnDown.addEventListener('mouseup', () => { game.keys.down = false; });
+    }
 
     if (vBtnLeft) {
       vBtnLeft.addEventListener('touchstart', (e) => { e.preventDefault(); game.keys.left = true; });

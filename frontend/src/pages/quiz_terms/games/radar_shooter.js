@@ -169,10 +169,12 @@ export class DartRadarShooter {
     this.floatingTexts = [];
     this.stars = [];
 
-    // Controls
+    // Controls (전후좌우 4방향 기동 지원)
     this.keys = {
       left: false,
       right: false,
+      up: false,
+      down: false,
       shoot: false
     };
 
@@ -219,13 +221,23 @@ export class DartRadarShooter {
 
     window.addEventListener('keydown', (e) => {
       this.sound.init();
-      if (['ArrowLeft', 'KeyA', 'a', 'A'].includes(e.code)) {
+      if (['ArrowLeft', 'KeyA', 'a', 'A'].includes(e.code) || ['ArrowLeft', 'a', 'A'].includes(e.key)) {
         this.keys.left = true;
+        if (this.gameState === 'PLAYING') e.preventDefault();
       }
-      if (['ArrowRight', 'KeyD', 'd', 'D'].includes(e.code)) {
+      if (['ArrowRight', 'KeyD', 'd', 'D'].includes(e.code) || ['ArrowRight', 'd', 'D'].includes(e.key)) {
         this.keys.right = true;
+        if (this.gameState === 'PLAYING') e.preventDefault();
       }
-      if (['Space', 'KeyW', 'ArrowUp'].includes(e.code)) {
+      if (['ArrowUp', 'KeyW', 'w', 'W'].includes(e.code) || ['ArrowUp', 'w', 'W'].includes(e.key)) {
+        this.keys.up = true;
+        if (this.gameState === 'PLAYING') e.preventDefault();
+      }
+      if (['ArrowDown', 'KeyS', 's', 'S'].includes(e.code) || ['ArrowDown', 's', 'S'].includes(e.key)) {
+        this.keys.down = true;
+        if (this.gameState === 'PLAYING') e.preventDefault();
+      }
+      if (['Space', 'KeyJ', 'KeyZ'].includes(e.code) || e.key === ' ' || e.code === 'Space') {
         this.keys.shoot = true;
         if (this.gameState === 'PLAYING') {
           e.preventDefault();
@@ -234,35 +246,45 @@ export class DartRadarShooter {
     });
 
     window.addEventListener('keyup', (e) => {
-      if (['ArrowLeft', 'KeyA', 'a', 'A'].includes(e.code)) {
+      if (['ArrowLeft', 'KeyA', 'a', 'A'].includes(e.code) || ['ArrowLeft', 'a', 'A'].includes(e.key)) {
         this.keys.left = false;
       }
-      if (['ArrowRight', 'KeyD', 'd', 'D'].includes(e.code)) {
+      if (['ArrowRight', 'KeyD', 'd', 'D'].includes(e.code) || ['ArrowRight', 'd', 'D'].includes(e.key)) {
         this.keys.right = false;
       }
-      if (['Space', 'KeyW', 'ArrowUp'].includes(e.code)) {
+      if (['ArrowUp', 'KeyW', 'w', 'W'].includes(e.code) || ['ArrowUp', 'w', 'W'].includes(e.key)) {
+        this.keys.up = false;
+      }
+      if (['ArrowDown', 'KeyS', 's', 'S'].includes(e.code) || ['ArrowDown', 's', 'S'].includes(e.key)) {
+        this.keys.down = false;
+      }
+      if (['Space', 'KeyJ', 'KeyZ'].includes(e.code) || e.key === ' ' || e.code === 'Space') {
         this.keys.shoot = false;
       }
     });
 
     // Touch & Mouse Drag on Canvas
     let isTouching = false;
-    const handlePointerMove = (clientX) => {
+    const handlePointerMove = (clientX, clientY) => {
       const rect = this.canvas.getBoundingClientRect();
       const x = clientX - rect.left;
       this.player.x = Math.max(30, Math.min(this.width - 30, x));
+      if (clientY !== undefined) {
+        const y = clientY - rect.top;
+        this.player.y = Math.max(80, Math.min(this.height - 45, y));
+      }
     };
 
     this.canvas.addEventListener('mousedown', (e) => {
       this.sound.init();
       isTouching = true;
-      handlePointerMove(e.clientX);
+      handlePointerMove(e.clientX, e.clientY);
       this.keys.shoot = true;
     });
 
     window.addEventListener('mousemove', (e) => {
       if (isTouching) {
-        handlePointerMove(e.clientX);
+        handlePointerMove(e.clientX, e.clientY);
       }
     });
 
@@ -275,14 +297,14 @@ export class DartRadarShooter {
       this.sound.init();
       if (e.touches.length > 0) {
         isTouching = true;
-        handlePointerMove(e.touches[0].clientX);
+        handlePointerMove(e.touches[0].clientX, e.touches[0].clientY);
         this.keys.shoot = true;
       }
     }, { passive: true });
 
     this.canvas.addEventListener('touchmove', (e) => {
       if (e.touches.length > 0) {
-        handlePointerMove(e.touches[0].clientX);
+        handlePointerMove(e.touches[0].clientX, e.touches[0].clientY);
       }
     }, { passive: true });
 
@@ -435,14 +457,23 @@ export class DartRadarShooter {
   update() {
     if (this.gameState !== 'PLAYING') return;
 
-    // Update Player Movement
+    // Update Player Movement (전후좌우 4방향 자유 기동)
     if (this.keys.left) {
       this.player.x -= this.player.speed;
     }
     if (this.keys.right) {
       this.player.x += this.player.speed;
     }
+    if (this.keys.up) {
+      this.player.y -= this.player.speed;
+    }
+    if (this.keys.down) {
+      this.player.y += this.player.speed;
+    }
+
+    // Canvas Boundaries (상하좌우 이탈 방지)
     this.player.x = Math.max(30, Math.min(this.width - 30, this.player.x));
+    this.player.y = Math.max(80, Math.min(this.height - 45, this.player.y));
 
     // Player shooting
     if (this.keys.shoot) {
