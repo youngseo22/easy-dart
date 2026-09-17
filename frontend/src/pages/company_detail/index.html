@@ -20,7 +20,7 @@
   <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <div class="flex items-center space-x-8">
-        <a href="/company-list" class="flex items-center space-x-2.5 group">
+        <a href="../company_list/index.html" class="flex items-center space-x-2.5 group">
           <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-black text-xl shadow-md group-hover:scale-105 transition-transform">📈</div>
           <div>
             <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Easy-DART</span>
@@ -29,16 +29,16 @@
         </a>
 
         <nav class="flex items-center space-x-2">
-          <a href="/company-list" class="px-4 py-2 rounded-xl text-sm font-bold bg-slate-900 text-white shadow-sm flex items-center gap-1.5 transition-all">
+          <a href="../company_list/index.html" class="px-4 py-2 rounded-xl text-sm font-bold bg-slate-900 text-white shadow-sm flex items-center gap-1.5 transition-all">
             <i data-lucide="sparkles" class="w-4 h-4 text-emerald-400"></i> 기업 파헤치기
           </a>
-          <a href="/quiz" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors flex items-center gap-1.5">
+          <a href="../quiz_terms/index.html" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors flex items-center gap-1.5">
             <i data-lucide="help-circle" class="w-4 h-4"></i> 주식 용어 퀴즈
           </a>
         </nav>
       </div>
 
-      <a href="/company-list" class="flex items-center gap-1 text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-full transition-all">
+      <a href="../company_list/index.html" class="flex items-center gap-1 text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-full transition-all">
         <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> 기업 목록으로
       </a>
     </div>
@@ -63,8 +63,16 @@
         </div>
       </div>
 
-      <!-- Quick Metaphor Badge -->
+      <!-- Quick Metaphor Badge & Company Switcher -->
       <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto shrink-0">
+        <div class="relative">
+          <select id="detailCompanySwitcher" class="w-full sm:w-auto px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-2xl border border-slate-200 outline-none cursor-pointer pr-8 appearance-none">
+            <option value="olive">🧴 CJ올리브영</option>
+            <option value="hyundai">🚗 현대자동차</option>
+            <option value="musinsa">👕 무신사</option>
+          </select>
+          <i data-lucide="chevron-down" class="w-4 h-4 text-slate-500 absolute right-2.5 top-1/2 transform -translate-y-1/2 pointer-events-none"></i>
+        </div>
         <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200/80 text-left md:text-right">
           <p class="text-[10px] text-emerald-700 font-bold uppercase tracking-wider">체감 한눈에 보기</p>
           <p id="compMetaphorHead" class="text-base sm:text-lg font-black text-emerald-900 mt-0.5">
@@ -74,24 +82,29 @@
       </div>
     </div>
 
-    <!-- 2. [페르소나 1 맞춤] 실시간 일상 소비 ➡️ 기업 이익 환산기 위젯 -->
-    <section class="gradient-hero rounded-3xl p-6 sm:p-7 border border-emerald-100 shadow-sm space-y-4">
+    <!-- 2. [페르소나 1 맞춤] 실시간 일상 소비 ➡️ 기업 이익 환산기 & 소비 기여도 인덱스 위젯 -->
+    <section class="gradient-hero rounded-3xl p-5 sm:p-7 border border-emerald-100 shadow-sm space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-emerald-200/60">
         <div class="flex items-center gap-2">
           <span class="text-xl">🧮</span>
           <div>
-            <h2 class="text-base sm:text-lg font-black text-slate-900">
-              내가 <span id="widgetCompName" class="text-emerald-700">이 기업</span>에서 쓴 돈은 기업에 얼마를 남겼을까?
+            <h2 class="text-base sm:text-lg font-black text-slate-900 break-keep">
+              내가 <span id="widgetCompName" class="text-emerald-700">이 기업</span>에서 쓴 돈은 얼마를 남겼을까?
             </h2>
-            <p class="text-xs text-slate-500">평소 결제하는 금액을 입력하면, 실질 이익과 대표 제품 개수로 즉시 환산해 드려요.</p>
+            <p class="text-xs text-slate-500 break-keep">평소 결제하는 금액을 입력하면, 실질 이익과 기업 매출 기여도를 즉시 계산해 드려요.</p>
           </div>
         </div>
-        <span class="text-xs font-bold text-emerald-800 bg-white/80 px-3 py-1 rounded-full border border-emerald-200 self-start sm:self-auto">
-          영업이익률 <span id="widgetMarginPct">-%</span> 적용
-        </span>
+        <div class="flex items-center gap-1.5 self-start sm:self-auto flex-wrap">
+          <span class="text-[11px] font-bold text-emerald-800 bg-white/90 px-2.5 py-1 rounded-full border border-emerald-200 shadow-xs">
+            영업이익률 <span id="widgetMarginPct">-%</span>
+          </span>
+          <span class="text-[11px] font-extrabold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-200 shadow-xs">
+            ✨ 체감 환산 뷰
+          </span>
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-4 items-center">
         <!-- Input Box -->
         <div class="md:col-span-5 bg-white p-3 rounded-2xl border border-emerald-200 shadow-sm flex items-center gap-2">
           <input 
@@ -110,8 +123,8 @@
           <i data-lucide="arrow-right" class="w-6 h-6"></i>
         </div>
 
-        <!-- Result Box -->
-        <div class="md:col-span-6 p-4 rounded-2xl bg-white/95 border border-emerald-300 shadow-sm flex items-center justify-between">
+        <!-- Result Box 1: 순이익 환산 -->
+        <div class="md:col-span-6 p-3.5 sm:p-4 rounded-2xl bg-white/95 border border-emerald-300 shadow-sm flex items-center justify-between gap-2">
           <div class="space-y-0.5">
             <p class="text-[11px] text-slate-500 font-semibold">순수 기업 이익금 환산액</p>
             <p class="text-base sm:text-lg font-black text-emerald-800">
@@ -122,109 +135,326 @@
           <span class="text-2xl" id="detailItemIcon">🎁</span>
         </div>
       </div>
-    </section>
 
-    <!-- 💡 [주린이 필수 지식] 3대 재무제표 1분 정복 가이드 -->
-    <section class="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl space-y-6">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-700/80 pb-4">
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="px-2.5 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 text-xs font-extrabold border border-emerald-500/30">
-              💡 주린이 실전 꿀팁
-            </span>
-            <span class="text-xs text-slate-400 font-medium">재무제표, 대체 뭘 봐야 주식 투자를 잘할 수 있을까요?</span>
-          </div>
-          <h2 class="text-lg sm:text-xl font-black text-white mt-1.5 flex items-center gap-2">
-            <span>📚</span> 투자의 나침반, 3대 공시 서류 완전 정복
-          </h2>
-        </div>
-        <span class="text-[11px] text-slate-400 font-mono bg-slate-800/80 px-3 py-1.5 rounded-xl border border-slate-700 shrink-0">
-          사람 건강검진과 100% 똑같아요!
-        </span>
-      </div>
-
-      <!-- 3대 제표 카드 3열 그리드 -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- 1. 손익계산서 -->
-        <div class="p-5 rounded-2xl bg-white/5 border border-white/10 hover:border-emerald-400/50 transition-all space-y-2.5">
-          <div class="flex items-center justify-between">
-            <span class="text-2xl">⚔️</span>
-            <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-              수익성 (공격력)
-            </span>
-          </div>
-          <div>
-            <h3 class="text-sm font-black text-white flex items-center gap-1.5">
-              1. 손익계산서 (IS)
-            </h3>
-            <p class="text-xs font-bold text-emerald-400 mt-0.5">"이 회사, 1년 동안 돈 잘 벌었나?"</p>
-          </div>
-          <p class="text-[11px] text-slate-300 leading-relaxed font-normal">
-            한 달 월급 성적표예요. 손님이 낸 매출에서 원가와 비용을 빼고 진짜 내 주머니에 <strong>얼마의 이익이 남았는지</strong>를 확인해요.
-          </p>
-          <div class="pt-2 border-t border-white/10 text-[10px] text-emerald-300 font-semibold flex items-center gap-1">
-            <span>👉</span> <span>핵심 체크: 영업이익률, 전년 대비 성장률</span>
+      <!-- [페르소나 1 김지은 특화] 소비 기여도 & 스케일 인덱스 서브 카드 -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1 text-xs">
+        <div class="p-3 rounded-2xl bg-white/70 border border-emerald-100/80 flex items-center gap-2.5">
+          <span class="text-lg">🎯</span>
+          <div class="space-y-0.5">
+            <p class="text-[10px] text-slate-500 font-bold">내 결제액의 기업 매출 기여 지분</p>
+            <p id="spendContributionText" class="font-extrabold text-slate-800 text-xs">
+              이 기업 연 매출의 <span class="text-emerald-600">0.0000009%</span>를 기여했어요!
+            </p>
           </div>
         </div>
-
-        <!-- 2. 재무상태표 -->
-        <div class="p-5 rounded-2xl bg-white/5 border border-white/10 hover:border-blue-400/50 transition-all space-y-2.5">
-          <div class="flex items-center justify-between">
-            <span class="text-2xl">🛡️</span>
-            <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">
-              안전성 (방어력)
-            </span>
-          </div>
-          <div>
-            <h3 class="text-sm font-black text-white flex items-center gap-1.5">
-              2. 재무상태표 (BS)
-            </h3>
-            <p class="text-xs font-bold text-blue-400 mt-0.5">"빚이 너무 많아서 망하진 않을까?"</p>
-          </div>
-          <p class="text-[11px] text-slate-300 leading-relaxed font-normal">
-            현재 통장 잔고와 대출 장부예요. 회사가 가진 <strong>자산(총재산) = 부채(빚) + 자본(순수한 내 밑천)</strong> 구조를 보며 기초체력을 측정해요.
-          </p>
-          <div class="pt-2 border-t border-white/10 text-[10px] text-blue-300 font-semibold flex items-center gap-1">
-            <span>👉</span> <span>핵심 체크: 부채비율(100% 이하 안전), 순자산</span>
-          </div>
-        </div>
-
-        <!-- 3. 현금흐름표 -->
-        <div class="p-5 rounded-2xl bg-white/5 border border-white/10 hover:border-purple-400/50 transition-all space-y-2.5">
-          <div class="flex items-center justify-between">
-            <span class="text-2xl">🩸</span>
-            <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">
-              진실성 (사기 검증)
-            </span>
-          </div>
-          <div>
-            <h3 class="text-sm font-black text-white flex items-center gap-1.5">
-              3. 현금흐름표 (CF)
-            </h3>
-            <p class="text-xs font-bold text-purple-400 mt-0.5">"장부상 이익 말고 진짜 현금이 들어왔나?"</p>
-          </div>
-          <p class="text-[11px] text-slate-300 leading-relaxed font-normal">
-            몸속에 피가 잘 도는지 보는 혈액순환 검사예요. 외상만 잔뜩 깔아두고 흑자도산하지 않도록 <strong>실제 입출금된 현금</strong>만 추적해요.
-          </p>
-          <div class="pt-2 border-t border-white/10 text-[10px] text-purple-300 font-semibold flex items-center gap-1">
-            <span>👉</span> <span>핵심 체크: 영업활동현금흐름이 무조건 플러스(+)인가?</span>
+        <div class="p-3 rounded-2xl bg-white/70 border border-emerald-100/80 flex items-center gap-2.5">
+          <span class="text-lg">🌍</span>
+          <div class="space-y-0.5">
+            <p class="text-[10px] text-slate-500 font-bold">전국 20대 소비 스케일 체감</p>
+            <p id="spendNationalScaleText" class="font-extrabold text-slate-800 text-xs">
+              "전국 20대 청년 1,300만 명이 함께 채워준 매출 규모!"
+            </p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 3. [페르소나 2 맞춤] 손익계산서 섹션 (주린이 쉬운 해설 vs DART 원본 공시표 토글) -->
-    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
-      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-100 pb-4">
-        <div>
-          <h2 class="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
-            <span>📊</span> 손익계산서 완전 정복
-          </h2>
-          <p class="text-xs text-slate-500 mt-0.5">손님이 낸 돈(매출)에서 얼마가 나가고 진짜 내 주머니에 얼마가 남았을까요?</p>
+    <!-- 메인 단계별 Sticky 마스터 탭 바 (1단계: 공시서류나침반 ➔ 2단계: 세부서류 & 수치 & 자가진단 ➔ 3단계: 매수원칙 & 최종판단) -->
+    <div id="mainStickyTabBar" class="sticky top-[72px] sm:top-[76px] z-40 bg-white/95 backdrop-blur-md rounded-3xl p-2.5 border border-slate-200 shadow-md flex flex-wrap sm:flex-nowrap items-center gap-2 transition-all">
+      <button id="tabBtnStep1" onclick="scrollToSection(1)" class="step-tab-btn active flex-1 py-3 px-3 rounded-2xl text-xs sm:text-sm font-extrabold flex items-center justify-center gap-2 cursor-pointer transition-all">
+        <span class="step-num-badge w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-black shadow-xs">1</span>
+        <span>1단계: 공시서류 나침반</span>
+      </button>
+      <button id="tabBtnStep2" onclick="scrollToSection(2)" class="step-tab-btn flex-1 py-3 px-3 rounded-2xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center justify-center gap-2 cursor-pointer transition-all">
+        <span class="step-num-badge w-6 h-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-xs font-black shadow-xs">2</span>
+        <span>2단계: 세부서류·수치·자가진단</span>
+      </button>
+      <button id="tabBtnStep3" onclick="scrollToSection(3)" class="step-tab-btn flex-1 py-3 px-3 rounded-2xl text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center justify-center gap-2 cursor-pointer transition-all">
+        <span class="step-num-badge w-6 h-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-xs font-black shadow-xs">3</span>
+        <span>3단계: 매수원칙 & 최종판단</span>
+      </button>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- 📍 1단계 섹션: 공시서류 나침반 (3대 공시 서류 완전 정복) -->
+    <!-- ========================================================================= -->
+    <section id="stepSection1" class="step-section scroll-mt-36 space-y-6">
+      
+      <!-- 💡 투자의 나침반, 3대 공시 서류 완전 정복 (좌측: 서류 선택 / 우측: 실시간 DART 서류 예시 뷰) -->
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-xs font-extrabold border border-emerald-200">
+                🧭 1단계: 공시서류 나침반
+              </span>
+            </div>
+            <h2 class="text-lg sm:text-xl font-black text-slate-900 mt-1.5 flex items-center gap-2">
+              <span>📚</span> 3대 공시 서류 완전 정복
+            </h2>
+            <p class="text-xs text-slate-500 mt-1">서류를 클릭하면 우측에서 실제 DART 공시 서류 예시와 핵심 독해법을 확인할 수 있어요.</p>
+          </div>
+          <span class="text-xs font-bold text-slate-500 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200 self-start sm:self-auto">
+            💡 서류를 클릭해보세요
+          </span>
         </div>
 
-        <!-- 우측 컨트롤: 📅 결산 연도 선택 + 📑 모드 전환 토글 -->
-        <div class="flex flex-wrap items-center gap-2.5">
+        <!-- 좌우 2단 그리드 레이아웃 -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          
+          <!-- [좌측 5칸] 3대 공시 서류 선택 카드 -->
+          <div class="lg:col-span-5 space-y-3">
+            
+            <!-- 1. 손익계산서 (IS) -->
+            <div id="docCardIS" onclick="selectDocType('IS')" class="doc-card selected cursor-pointer p-4 sm:p-5 rounded-2xl bg-emerald-50 border-2 border-emerald-500 shadow-xs space-y-2 transition-all">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="text-xl">⚔️</span>
+                  <h3 class="text-sm font-black text-slate-900">1. 손익계산서 (IS)</h3>
+                </div>
+                <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                  수익성 (공격력)
+                </span>
+              </div>
+              <p class="text-xs font-bold text-emerald-800">"1년 동안 장사로 돈 얼마나 남겼나?"</p>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                월급 성적표예요. 손님이 낸 <strong>매출액</strong>에서 원가와 비용을 빼고 진짜 남은 <strong>영업이익/순이익</strong>을 봐요.
+              </p>
+            </div>
+
+            <!-- 2. 재무상태표 (BS) -->
+            <div id="docCardBS" onclick="selectDocType('BS')" class="doc-card cursor-pointer p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-blue-300 hover:bg-blue-50/40 space-y-2 transition-all">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="text-xl">🛡️</span>
+                  <h3 class="text-sm font-black text-slate-900">2. 재무상태표 (BS)</h3>
+                </div>
+                <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-200">
+                  안전성 (방어력)
+                </span>
+              </div>
+              <p class="text-xs font-bold text-blue-800">"빚이 너무 많아 망하지 않을까?"</p>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                통장 잔고와 대출 장부예요. <strong>자산 = 부채(빚) + 자본(순수 내 돈)</strong> 비율로 튼튼함을 측정해요.
+              </p>
+            </div>
+
+            <!-- 3. 현금흐름표 (CF) -->
+            <div id="docCardCF" onclick="selectDocType('CF')" class="doc-card cursor-pointer p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-purple-300 hover:bg-purple-50/40 space-y-2 transition-all">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="text-xl">🩸</span>
+                  <h3 class="text-sm font-black text-slate-900">3. 현금흐름표 (CF)</h3>
+                </div>
+                <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 border border-purple-200">
+                  진실성 (현금 흐름)
+                </span>
+              </div>
+              <p class="text-xs font-bold text-purple-800">"장부 말고 통장에 진짜 돈 들어왔나?"</p>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                외상만 깔고 흑자도산하지 않도록, 통장에 실제로 <strong>오고 간 현금 흐름</strong>만 추적해요.
+              </p>
+            </div>
+
+          </div>
+
+          <!-- [우측 7칸] 선택된 공시 서류의 실제 DART 양식 예시 뷰어 -->
+          <div class="lg:col-span-7 bg-slate-50/80 rounded-2xl p-5 sm:p-6 border border-slate-200 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+              <div class="flex items-center gap-2">
+                <span id="docPreviewBadge" class="px-2.5 py-1 bg-emerald-600 text-white text-[11px] font-black rounded-lg shadow-2xs">
+                  손익계산서 (IS)
+                </span>
+                <span class="text-xs font-bold text-slate-700">DART 공시 서류 실제 양식 예시</span>
+              </div>
+              <span class="text-[10px] font-bold text-slate-400 bg-white px-2 py-0.5 rounded border border-slate-200">
+                (단위: 백만원/원)
+              </span>
+            </div>
+
+            <!-- DART 양식 모의 페이퍼 컨테이너 -->
+            <div id="docPreviewContent" class="bg-white rounded-xl border border-slate-300 p-4 shadow-sm space-y-3 font-sans text-xs">
+              <!-- Dynamically populated via renderDocTypePreview() -->
+            </div>
+
+            <!-- 핵심 독해 팁 박스 -->
+            <div id="docPreviewTip" class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-950 font-medium leading-relaxed flex items-start gap-2.5">
+              <span class="text-base shrink-0">💡</span>
+              <div id="docPreviewTipText">
+                <strong>손익계산서 핵심 포인트:</strong> 매출이 늘어나는 것도 중요하지만, 본업의 실력인 <strong>'영업이익'</strong>과 최종 알짜 이익인 <strong>'당기순이익'</strong>이 매년 우상향하는지 확인하는 것이 가장 중요해요!
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="pt-2 flex justify-end">
+          <button onclick="scrollToSection(2)" class="px-5 py-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs shadow-md transition-all flex items-center gap-2 cursor-pointer">
+            <span>다음: 2단계 세부 서류 & 수치 & 자가진단</span>
+            <i data-lucide="arrow-down" class="w-4 h-4 text-emerald-400"></i>
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- 📍 2단계 섹션: (1) 세부 서류 완전 정복 ➔ (2) DART 공시 원본표 & 수치 독해 ➔ (3) 기업의 자가진단표 -->
+    <!-- ========================================================================= -->
+    <section id="stepSection2" class="step-section scroll-mt-36 space-y-8">
+      
+      <!-- [2-1] 📊 세부 서류 완전 정복 (손익계산서 4대 핵심 지표 카드 & 실시간 클릭 인터랙션) -->
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-xs font-extrabold border border-emerald-200">
+                2-1. 세부 서류 완전 정복
+              </span>
+            </div>
+            <h2 class="text-base sm:text-lg font-black text-slate-900 mt-1 flex items-center gap-2">
+              <span>📊</span> 손익계산서 4대 핵심 지표 파헤치기
+            </h2>
+            <p class="text-xs text-slate-500 mt-0.5">카드를 클릭하면 각 지표의 상세 의미와 분석 팁을 확인하실 수 있어요.</p>
+          </div>
+          <span class="text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 self-start sm:self-auto">
+            💡 클릭하여 상세 보기
+          </span>
+        </div>
+
+        <!-- 4개 인터랙티브 카드 그리드 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+          
+          <!-- 1. 매출액 카드 -->
+          <div id="statCard1" onclick="selectStatCard(1)" class="stat-card p-4 rounded-2xl bg-sky-50/70 border border-sky-200 space-y-2 cursor-pointer">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-1.5">
+                <span class="text-xs font-bold text-sky-800">1. 매출액</span>
+                <div class="smart-tooltip-trigger" onmouseleave="this.classList.remove('active')">
+                  <span class="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-sky-200 text-sky-900 text-[9px] font-bold">💡</span>
+                  <div class="tooltip-bubble w-56 p-2.5 bg-slate-900 text-white text-[11px] rounded-xl shadow-xl">
+                    <p class="font-bold text-sky-300 mb-0.5">매출액이란?</p>
+                    <p class="text-slate-200 text-[10px]">고객들이 결제한 총 금액으로 장사의 전체 몸집을 뜻해요.</p>
+                  </div>
+                </div>
+              </div>
+              <span class="text-xs font-extrabold text-sky-900 bg-white px-2 py-0.5 rounded border border-sky-200">100%</span>
+            </div>
+            <div>
+              <p class="text-[10px] text-sky-700 font-semibold">💡 손님이 낸 총 결제액</p>
+              <p id="statRevenue" class="text-lg font-black text-slate-900 mt-0.5">-</p>
+              <p id="statRevenueYoy" class="text-[10px] font-bold text-sky-600 mt-0.5"></p>
+            </div>
+            <div class="w-full bg-sky-200 h-1.5 rounded-full overflow-hidden">
+              <div class="bg-sky-600 h-full w-full"></div>
+            </div>
+            <p class="text-[10px] text-slate-500">장사의 전체적인 몸집 크기</p>
+          </div>
+
+          <!-- 2. 빠져나간 비용 카드 -->
+          <div id="statCard2" onclick="selectStatCard(2)" class="stat-card p-4 rounded-2xl bg-rose-50/70 border border-rose-200 space-y-2 cursor-pointer">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-1.5">
+                <span class="text-xs font-bold text-rose-700">2. 빠져나간 비용</span>
+                <div class="smart-tooltip-trigger" onmouseleave="this.classList.remove('active')">
+                  <span class="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-rose-200 text-rose-900 text-[9px] font-bold">💡</span>
+                  <div class="tooltip-bubble w-56 p-2.5 bg-slate-900 text-white text-[11px] rounded-xl shadow-xl">
+                    <p class="font-bold text-rose-300 mb-0.5">비용(원가+판관비)이란?</p>
+                    <p class="text-slate-200 text-[10px]">상품 원가 + 알바비, 임대료, 배송비 등 운영비 합계예요.</p>
+                  </div>
+                </div>
+              </div>
+              <span id="statCostPct" class="text-xs font-extrabold text-rose-800 bg-white px-2 py-0.5 rounded border border-rose-200">-</span>
+            </div>
+            <div>
+              <p class="text-[10px] text-rose-700 font-semibold">📦 원가 밑천 + 매장 운영비</p>
+              <p id="statCost" class="text-lg font-black text-rose-900 mt-0.5">-</p>
+              <p class="text-[10px] font-bold text-rose-500 mt-0.5">제품 원가 + 알바비/임대료</p>
+            </div>
+            <div class="w-full bg-rose-200 h-1.5 rounded-full overflow-hidden">
+              <div id="statCostBar" class="bg-rose-500 h-full w-[85%]"></div>
+            </div>
+            <p class="text-[10px] text-slate-500">낮을수록 원가 통제력 우수</p>
+          </div>
+
+          <!-- 3. 영업이익 카드 -->
+          <div id="statCard3" onclick="selectStatCard(3)" class="stat-card p-4 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-2 cursor-pointer">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-1.5">
+                <span class="text-xs font-bold text-amber-800">3. 영업이익</span>
+                <div class="smart-tooltip-trigger" onmouseleave="this.classList.remove('active')">
+                  <span class="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-amber-200 text-amber-900 text-[9px] font-bold">💡</span>
+                  <div class="tooltip-bubble w-56 p-2.5 bg-slate-900 text-white text-[11px] rounded-xl shadow-xl">
+                    <p class="font-bold text-amber-300 mb-0.5">영업이익이란?</p>
+                    <p class="text-slate-200 text-[10px]">순수 본업으로 남긴 알짜배기 이익으로 주가에 직결돼요.</p>
+                  </div>
+                </div>
+              </div>
+              <span id="statOpProfitPct" class="text-xs font-extrabold text-amber-900 bg-white px-2 py-0.5 rounded border border-amber-200">-</span>
+            </div>
+            <div>
+              <p class="text-[10px] text-amber-800 font-semibold">🎯 본업 장사로 남긴 돈</p>
+              <p id="statOpProfit" class="text-lg font-black text-amber-950 mt-0.5">-</p>
+              <p id="statOpYoy" class="text-[10px] font-bold text-emerald-600 mt-0.5"></p>
+            </div>
+            <div class="w-full bg-amber-200 h-1.5 rounded-full overflow-hidden">
+              <div id="statOpBar" class="bg-amber-500 h-full w-[15%]"></div>
+            </div>
+            <p class="text-[10px] text-slate-500">주가에 직결되는 핵심 지표</p>
+          </div>
+
+          <!-- 4. 당기순이익 카드 -->
+          <div id="statCard4" onclick="selectStatCard(4)" class="stat-card selected selected-4 p-4 rounded-2xl bg-emerald-50 border border-emerald-300 space-y-2 cursor-pointer">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-1.5">
+                <span class="text-xs font-bold text-emerald-800">4. 당기순이익</span>
+                <div class="smart-tooltip-trigger" onmouseleave="this.classList.remove('active')">
+                  <span class="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-emerald-200 text-emerald-900 text-[9px] font-bold">💡</span>
+                  <div class="tooltip-bubble w-56 p-2.5 bg-slate-900 text-white text-[11px] rounded-xl shadow-xl">
+                    <p class="font-bold text-emerald-300 mb-0.5">당기순이익이란?</p>
+                    <p class="text-slate-200 text-[10px]">세금까지 털고 주주와 회사의 최종 금고에 남은 순수한 돈이에요.</p>
+                  </div>
+                </div>
+              </div>
+              <span id="statNetProfitPct" class="text-xs font-extrabold text-emerald-900 bg-white px-2 py-0.5 rounded border border-emerald-300">-</span>
+            </div>
+            <div>
+              <p class="text-[10px] text-emerald-700 font-semibold">👑 진짜 내 금고에 남은 돈</p>
+              <p id="statNetProfit" class="text-lg font-black text-emerald-700 mt-0.5">-</p>
+              <p id="statNetYoy" class="text-[10px] font-bold text-emerald-600 mt-0.5"></p>
+            </div>
+            <div class="w-full bg-emerald-200 h-1.5 rounded-full overflow-hidden">
+              <div id="statNetBar" class="bg-emerald-600 h-full w-[10%]"></div>
+            </div>
+            <p class="text-[10px] text-slate-500">주주에게 귀속되는 최종 이익</p>
+          </div>
+        </div>
+
+        <!-- 실시간 선택 항목 해석 팁 박스 -->
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+          <div class="flex items-center gap-2.5">
+            <span class="text-lg">💡</span>
+            <span class="text-slate-800"><strong>선택 항목 해석:</strong> <span id="compOpInsightText" class="text-slate-700">매출보다 영업이익이 더 빠르게 늘어나는 기업은 '수익성 개선 궤도'에 올라탄 상태예요!</span></span>
+          </div>
+          <span id="compTipHighlight" class="font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200 shrink-0">4. 당기순이익 집중 분석</span>
+        </div>
+      </div>
+
+      <!-- [2-2] 📑 기존 2단계: DART 공시 원본표 & 수치 변화 읽기 -->
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-md bg-blue-50 text-blue-700 text-xs font-extrabold border border-blue-200">
+                2-2. DART 원본 공시표
+              </span>
+            </div>
+            <h2 class="text-lg sm:text-xl font-black text-slate-900 mt-1 flex items-center gap-2">
+              <span>📑</span> 금융감독원 DART 공시 원본표 (손익계산서)
+            </h2>
+            <p class="text-xs text-slate-500 mt-0.5">과목명 옆 <strong>💡 전구 아이콘</strong>에 마우스를 올리면 쉬운 일상 해설이 나옵니다.</p>
+          </div>
+
           <!-- 📅 공시 결산 연도 선택 버튼 그룹 -->
           <div class="flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200 text-xs font-bold shrink-0">
             <button id="btnYear2025" onclick="changeFinancialYear('2025')" class="px-3 py-1.5 rounded-xl bg-slate-900 text-white shadow-sm transition-all cursor-pointer">
@@ -237,163 +467,22 @@
               2023년
             </button>
           </div>
-
-          <!-- 뷰 모드 토글 탭 -->
-          <div class="flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200 text-xs font-bold shrink-0">
-            <button id="btnEasyMode" onclick="setFinancialMode('easy')" class="px-3.5 py-1.5 rounded-xl bg-white text-emerald-700 shadow-sm flex items-center gap-1.5 transition-all cursor-pointer">
-              <span>✨</span> 쉬운 해설
-            </button>
-            <button id="btnDartMode" onclick="setFinancialMode('dart')" class="px-3.5 py-1.5 rounded-xl text-slate-500 hover:text-slate-800 flex items-center gap-1.5 transition-all cursor-pointer">
-              <span>📑</span> DART 원본표
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 🧭 주린이 3단계 마스터 네비게이션 가이드 -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-200 text-xs">
-        <div class="flex items-center gap-2.5 p-2 rounded-xl bg-white border border-slate-200 shadow-xs">
-          <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 font-black flex items-center justify-center text-[11px] shrink-0">1</span>
-          <div>
-            <p class="font-black text-slate-800">1단계: 용어 뜻 알기</p>
-            <p class="text-[10px] text-slate-500">회계 용어를 친절한 일상 언어로 번역</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-2.5 p-2 rounded-xl bg-white border border-slate-200 shadow-xs">
-          <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-800 font-black flex items-center justify-center text-[11px] shrink-0">2</span>
-          <div>
-            <p class="font-black text-slate-800">2단계: 수치 변화 읽기</p>
-            <p class="text-[10px] text-slate-500">매출·비용·영업이익 흐름과 YoY 증감</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-2.5 p-2 rounded-xl bg-white border border-slate-200 shadow-xs">
-          <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-800 font-black flex items-center justify-center text-[11px] shrink-0">3</span>
-          <div>
-            <p class="font-black text-slate-800">3단계: 투자 해석 (사? 말아?)</p>
-            <p class="text-[10px] text-slate-500">이 숫자가 내 주식 투자에 주는 시그널</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- [모드 1] 주린이 쉬운 해설 파이프라인 (기본 활성) -->
-      <div id="easyViewContainer" class="space-y-4">
-        <div class="flex items-center gap-2 pt-1 pb-1 text-xs font-bold text-slate-700">
-          <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[11px]">1~2단계 연계</span>
-          <span>손님이 낸 돈(매출)에서 회사가 실제로 얼마를 남겼을까요?</span>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <!-- 1. 매출액 -->
-          <div class="stat-card p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-slate-600">1. 매출액</span>
-              <span class="text-xs font-extrabold text-slate-900 bg-white px-2 py-0.5 rounded border border-slate-200">100%</span>
-            </div>
-            <div>
-              <p class="text-[11px] text-emerald-700 font-semibold flex items-center gap-1">
-                <span>💡</span> <span>손님이 낸 총 결제액</span>
-              </p>
-              <p id="statRevenue" class="text-xl font-black text-slate-900 mt-0.5">-</p>
-              <p id="statRevenueYoy" class="text-[11px] font-bold text-emerald-600 mt-0.5"></p>
-            </div>
-            <div class="w-full bg-slate-200 h-1.5 rounded-full mt-2 overflow-hidden">
-              <div class="bg-slate-800 h-full w-full"></div>
-            </div>
-            <p class="text-[10px] text-slate-400">장사의 전체적인 몸집 크기를 뜻해요.</p>
-          </div>
-
-          <!-- 2. 비용 -->
-          <div class="stat-card p-5 rounded-2xl bg-rose-50/60 border border-rose-100 space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-rose-600">2. 빠져나간 비용</span>
-              <span id="statCostPct" class="text-xs font-extrabold text-rose-700 bg-white px-2 py-0.5 rounded border border-rose-200">-</span>
-            </div>
-            <div>
-              <p class="text-[11px] text-rose-700 font-semibold flex items-center gap-1">
-                <span>📦</span> <span>원가 밑천 + 매장 운영비</span>
-              </p>
-              <p id="statCost" class="text-xl font-black text-rose-800 mt-0.5">-</p>
-              <p class="text-[11px] font-bold text-rose-500 mt-0.5">제품 원가 + 알바비/임대료</p>
-            </div>
-            <div class="w-full bg-rose-200 h-1.5 rounded-full mt-2 overflow-hidden">
-              <div id="statCostBar" class="bg-rose-500 h-full w-[85%]"></div>
-            </div>
-            <p class="text-[10px] text-rose-400">이 비율이 낮을수록 원가 통제를 잘한 거예요.</p>
-          </div>
-
-          <!-- 3. 영업이익 -->
-          <div class="stat-card p-5 rounded-2xl bg-yellow-50/60 border border-yellow-200 space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-yellow-700">3. 영업이익</span>
-              <span id="statOpProfitPct" class="text-xs font-extrabold text-yellow-800 bg-white px-2 py-0.5 rounded border border-yellow-300">-</span>
-            </div>
-            <div>
-              <p class="text-[11px] text-yellow-800 font-semibold flex items-center gap-1">
-                <span>🎯</span> <span>본업 장사로 남긴 돈</span>
-              </p>
-              <p id="statOpProfit" class="text-xl font-black text-yellow-900 mt-0.5">-</p>
-              <p id="statOpYoy" class="text-[11px] font-bold text-emerald-600 mt-0.5"></p>
-            </div>
-            <div class="w-full bg-yellow-200 h-1.5 rounded-full mt-2 overflow-hidden">
-              <div id="statOpBar" class="bg-yellow-500 h-full w-[15%]"></div>
-            </div>
-            <p class="text-[10px] text-yellow-600">주가에 가장 직접적인 영향을 주는 핵심 지표!</p>
-          </div>
-
-          <!-- 4. 당기순이익 -->
-          <div class="stat-card p-5 rounded-2xl bg-emerald-50 border-2 border-emerald-500/80 shadow-sm space-y-2">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-emerald-800">4. 당기순이익</span>
-              <span id="statNetProfitPct" class="text-xs font-extrabold text-emerald-800 bg-white px-2 py-0.5 rounded border border-emerald-300">-</span>
-            </div>
-            <div>
-              <p class="text-[11px] text-emerald-700 font-semibold flex items-center gap-1">
-                <span>👑</span> <span>진짜 내 금고에 남은 돈</span>
-              </p>
-              <p id="statNetProfit" class="text-xl font-black text-emerald-700 mt-0.5">-</p>
-              <p id="statNetYoy" class="text-[11px] font-bold text-emerald-600 mt-0.5"></p>
-            </div>
-            <div class="w-full bg-emerald-200 h-1.5 rounded-full mt-2 overflow-hidden">
-              <div id="statNetBar" class="bg-emerald-600 h-full w-[10%]"></div>
-            </div>
-            <p class="text-[10px] text-emerald-600">세금까지 털고 주주에게 남은 최종 순이익</p>
-          </div>
-        </div>
-
-        <div class="p-4 rounded-2xl bg-slate-900 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
-          <div class="flex items-center gap-2.5">
-            <span class="text-lg">💡</span>
-            <span><strong>2단계 변화 해석 팁:</strong> <span id="compOpInsightText">매출보다 영업이익이 더 빠르게 늘어나는 기업은 '수익성 개선 궤도'에 올라탄 상태예요!</span></span>
-          </div>
-          <span id="compTipHighlight" class="font-bold text-emerald-400">알짜 수익성 분석</span>
-        </div>
-      </div>
-
-      <!-- [모드 2] DART 공시 원본 표 (기본 숨김) -->
-      <div id="dartViewContainer" class="hidden space-y-4">
-        <!-- 상단 가이드 배너 -->
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-600">
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 bg-blue-700 text-white font-bold rounded text-[11px] tracking-wide">DART 실무 규격</span>
-            <span>과목명 옆 <strong>💡 전구 아이콘</strong>에 마우스를 올리면 쉬운 일상 해설이 나와요!</span>
-          </div>
-          <span class="text-[11px] text-slate-400 font-medium">※ 실제 전자공시(DART) 양식과 동일한 서식입니다.</span>
         </div>
 
         <!-- 실제 DART 전자문서 뷰어 페이퍼 프레임 -->
-        <div class="dart-viewer-paper rounded-2xl border border-slate-300 p-6 sm:p-8 space-y-6">
-          <!-- DART 문서 헤더 (실제 공시 문서 헤더 양식) -->
+        <div class="dart-viewer-paper rounded-2xl border border-slate-300 p-5 sm:p-7 space-y-5">
+          <!-- DART 문서 헤더 -->
           <div class="dart-doc-header flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-3 border-b-2 border-slate-800">
             <div>
               <div class="flex items-center gap-2 mb-1">
                 <span class="px-1.5 py-0.5 bg-slate-800 text-white text-[10px] font-bold rounded">공시원문</span>
                 <span id="dartCorpNameHeader" class="text-xs font-bold text-slate-600">씨제이올리브영 주식회사</span>
               </div>
-              <h3 id="dartDocTitle" class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight font-serif">
-                제 25 기 연결재무제표 (손익계산서)
+              <h3 id="dartDocTitle" class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight font-serif">
+                연결재무제표 (손익계산서)
               </h3>
-              <p id="dartDocPeriod" class="text-xs text-slate-500 mt-1">
-                당기 : 2023년 1월 1일부터 2023년 12월 31일까지 | 전기 : 2022년 1월 1일부터 2022년 12월 31일까지
+              <p id="dartDocPeriod" class="text-xs text-slate-500 mt-0.5">
+                당기 및 전기 결산 실적 비교 공시
               </p>
             </div>
             <div class="text-right sm:self-end">
@@ -409,8 +498,8 @@
               <thead>
                 <tr>
                   <th class="w-1/2 text-left pl-4">과 목 (계정과목명)</th>
-                  <th class="w-1/4 text-right pr-4" id="dartThstrmColHeader">제 25 기 (당기 2023년)</th>
-                  <th class="w-1/4 text-right pr-4" id="dartFrmtrmColHeader">제 24 기 (전기 2022년)</th>
+                  <th class="w-1/4 text-right pr-4" id="dartThstrmColHeader">당기 실적</th>
+                  <th class="w-1/4 text-right pr-4" id="dartFrmtrmColHeader">전기 실적</th>
                   <th class="w-24 text-right pr-3">증감률 (YoY)</th>
                 </tr>
               </thead>
@@ -420,154 +509,331 @@
             </table>
           </div>
 
-          <!-- 🗣️ [실전 수치 독해] 이 수치가 찍혔다면 지금 이 회사는 이런 상황으로 읽혀요! (동적 데이터 분석 바인딩) -->
-          <div class="mt-4 p-4 sm:p-5 rounded-xl bg-slate-50 border border-slate-200/90 space-y-3">
-            <div class="flex items-center justify-between flex-wrap gap-2">
-              <div class="flex items-center gap-2">
-                <span class="text-base sm:text-lg">🗣️</span>
-                <h4 class="text-xs sm:text-sm font-black text-slate-800 tracking-tight">
-                  이 수치가 찍혔다면? <span id="readingTargetCorpName" class="text-blue-700 font-extrabold">CJ올리브영</span>의 실제 재무제표는 이렇게 읽혀요!
-                </h4>
-              </div>
-              <div class="flex items-center gap-2">
-                <span id="readingYearBadge" class="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-200 text-slate-700">
-                  2024년 결산 실데이터 분석
-                </span>
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-800 border border-blue-200">
-                  실전 숫자 속마음 번역
-                </span>
-              </div>
-            </div>
-
-            <!-- 동적으로 DART 수치 분석 결과가 렌더링되는 컨테이너 -->
-            <div id="dynamicSituationalCards" class="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-xs">
-              <!-- Dynamically populated via renderDynamicSituationalAnalysis(dartRows, comp, year) -->
-            </div>
-          </div>
-
-          <!-- DART 문서 하단 주석 및 공식 푸터 -->
-          <div class="pt-3 border-t border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-[11px] text-slate-500">
-            <div class="space-y-0.5">
-              <p>* 괄호 ( ) 안의 숫자는 음수(비용, 손실 또는 차감 항목)를 의미합니다.</p>
-              <p>* 본 자료는 금융감독원 전자공시시스템(DART) OpenAPI를 통해 수신한 공시 원본 수치입니다.</p>
-            </div>
-            <div class="text-right text-slate-400">
-              출처: 금융감독원 전자공시시스템 (dart.fss.or.kr)
-            </div>
-          </div>
-        </div>
-
-        <!-- 💡 [주린이 핵심 깨달음] DART 공시표 3초 독해 시크릿 -->
-        <div class="p-5 rounded-2xl bg-gradient-to-r from-blue-900 to-indigo-950 text-white border border-blue-800 shadow-md space-y-3">
-          <div class="flex items-center justify-between flex-wrap gap-2">
+          <!-- 🗣️ [실전 수치 독해 3대 팩트 체크] -->
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 text-slate-900 space-y-3">
             <div class="flex items-center gap-2">
-              <span class="text-xl">💡</span>
-              <h4 class="text-sm font-black text-white">
-                그래서 이 복잡한 DART 표를 보고 무엇을 깨달아야 할까요?
-              </h4>
-            </div>
-            <span class="px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 text-[10px] font-extrabold border border-blue-400/30">
-              실전 재무제표 3초 독해법
-            </span>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1 text-xs">
-            <div class="p-3 rounded-xl bg-white/5 border border-white/10 space-y-1">
-              <p class="font-bold text-emerald-300 flex items-center gap-1.5">
-                <span>1️⃣</span> <span>매출과 영업이익 성장률 비교</span>
-              </p>
-              <p class="text-[11px] text-slate-300 leading-relaxed">
-                매출 증가율보다 <strong>영업이익 증가율</strong>이 더 높다면, 회사가 가격 결정권을 쥐고 마진을 훌륭하게 남겼다는 뜻이에요!
-              </p>
+              <span class="text-base">💡</span>
+              <h4 class="text-sm font-black text-slate-900">DART 실데이터 수치 독해 3대 팩트 체크</h4>
             </div>
 
-            <div class="p-3 rounded-xl bg-white/5 border border-white/10 space-y-1">
-              <p class="font-bold text-yellow-300 flex items-center gap-1.5">
-                <span>2️⃣</span> <span>괄호 ( ) 비용의 통제력</span>
-              </p>
-              <p class="text-[11px] text-slate-300 leading-relaxed">
-                매출원가와 판관비 괄호 안 숫자가 매출보다 더 빨리 불어나지 않는지 보세요. <strong>비용 통제력</strong>이 회사의 진짜 실력입니다.
-              </p>
-            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1 text-xs">
+              <div class="p-3.5 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1">
+                <p class="font-bold text-emerald-700 flex items-center gap-1.5">
+                  <span>1️⃣</span> <span>매출과 영업이익 성장률 비교</span>
+                </p>
+                <p class="text-[11px] text-slate-600 leading-relaxed">
+                  매출 증가율보다 <strong>영업이익 증가율</strong>이 더 높다면, 회사가 가격 결정권을 쥐고 마진을 훌륭하게 남겼다는 뜻이에요!
+                </p>
+              </div>
 
-            <div class="p-3 rounded-xl bg-white/5 border border-white/10 space-y-1">
-              <p class="font-bold text-blue-300 flex items-center gap-1.5">
-                <span>3️⃣</span> <span>자본 vs 부채의 비율</span>
-              </p>
-              <p class="text-[11px] text-slate-300 leading-relaxed">
-                하단 자산총계에서 <strong>자본(내 돈)</strong>이 <strong>부채(남의 돈)</strong>보다 크거나 부채비율이 안정적인지 체크하면 부도 위험을 완벽히 피할 수 있어요.
-              </p>
+              <div class="p-3.5 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1">
+                <p class="font-bold text-amber-700 flex items-center gap-1.5">
+                  <span>2️⃣</span> <span>비용(원가/판관비) 통제력</span>
+                </p>
+                <p class="text-[11px] text-slate-600 leading-relaxed">
+                  매출원가와 판관비 숫자가 매출보다 더 빨리 불어나지 않는지 보세요. <strong>비용 통제력</strong>이 회사의 진짜 실력입니다.
+                </p>
+              </div>
+
+              <div class="p-3.5 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1">
+                <p class="font-bold text-blue-700 flex items-center gap-1.5">
+                  <span>3️⃣</span> <span>자본 vs 부채의 비율</span>
+                </p>
+                <p class="text-[11px] text-slate-600 leading-relaxed">
+                  하단 자산총계에서 <strong>자본(내 돈)</strong>이 <strong>부채(남의 돈)</strong>보다 크거나 부채비율이 안정적인지 체크하면 상폐 위험을 피할 수 있어요.
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- 4. [3단계: 그래서 사? 팔아? (투자 해석)] 실전 투자 판단 & AI 핵심 시그널 -->
-    <section class="grid grid-cols-1 md:grid-cols-12 gap-6">
-      <div class="md:col-span-12 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
-          <div class="flex items-center gap-2.5">
-            <span class="w-7 h-7 rounded-full bg-indigo-600 text-white font-black flex items-center justify-center text-xs shrink-0 shadow-sm">3</span>
-            <div>
-              <div class="flex items-center gap-2">
-                <h2 class="text-lg font-black text-slate-900">
-                  그래서 사? 팔아? — 주린이 실전 투자 해석
-                </h2>
-                <span class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 text-[10px] font-extrabold">3단계 최종 판단</span>
-              </div>
-              <p class="text-xs text-slate-500 mt-0.5">DART 공시 수치 변화가 내 실제 주식 투자에 던지는 신호를 AI가 요약했어요.</p>
+      <!-- [2-3] ⚡ 기업의 자가진단표: 5분 DART 스스로 진단 프레임워크 -->
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2.5 py-0.5 rounded-md bg-indigo-50 text-indigo-700 text-xs font-extrabold border border-indigo-200">
+                2-3. 기업의 자가진단표
+              </span>
+            </div>
+            <h2 class="text-base sm:text-lg font-black text-slate-900 mt-1 flex items-center gap-2">
+              <span>🔍</span> <span id="diagCorpName">이 기업</span>의 3대 자가진단표
+            </h2>
+            <p class="text-xs text-slate-500 mt-0.5">DART 공시 숫자를 바탕으로 성장성, 수익성, 안전성을 직접 검증해보세요.</p>
+          </div>
+
+          <!-- 실시간 적합도 점수 뱃지 -->
+          <div class="flex items-center gap-2.5 bg-slate-50 p-2 rounded-2xl border border-slate-200 self-start sm:self-auto shrink-0">
+            <div class="text-right">
+              <p class="text-[9px] text-slate-400 font-bold uppercase">내 진단 적합도</p>
+              <p class="text-base font-black text-indigo-900 leading-tight"><span id="diagScoreText">100</span><span class="text-[10px] text-slate-400">/100점</span></p>
+            </div>
+            <div class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-black text-sm shadow-sm">
+              <span id="diagGradeIcon">🎯</span>
             </div>
           </div>
-          <span class="text-xs font-bold text-slate-500 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200 self-start sm:self-auto">
-            ⏱️ 퇴근 후 3분 투자 분석
+        </div>
+
+        <!-- 3대 자가진단 질문 카드 3열 그리드 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          
+          <!-- 1. 성장성 카드 -->
+          <div id="cardGrowth" class="diag-card passed p-4 rounded-2xl border border-slate-200 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black text-slate-800 flex items-center gap-1.5">
+                <span>📈</span> <span>1. 성장성 (매출 성장)</span>
+              </span>
+              <span id="badgeGrowth" class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                통과 🟢
+              </span>
+            </div>
+            <p class="text-xs text-slate-600 leading-snug break-keep">
+              "작년보다 본업 매출이 늘어나서 장사 규모가 커지고 있는가?"
+            </p>
+            <div class="p-2.5 rounded-xl bg-white/80 border border-slate-200/80 flex items-center justify-between">
+              <span class="text-[10.5px] text-slate-500 font-medium">DART 실데이터:</span>
+              <span id="diagGrowthValue" class="text-xs font-black text-emerald-700">+24.1% YoY 매출 성장</span>
+            </div>
+            <label class="flex items-center justify-between pt-1 cursor-pointer select-none">
+              <span class="text-xs font-bold text-slate-700">성장성 합격 기준 충족</span>
+              <input type="checkbox" id="chkGrowth" checked class="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500 cursor-pointer">
+            </label>
+          </div>
+
+          <!-- 2. 수익성 카드 -->
+          <div id="cardProfit" class="diag-card passed p-4 rounded-2xl border border-slate-200 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black text-slate-800 flex items-center gap-1.5">
+                <span>💰</span> <span>2. 수익성 (영업이익률)</span>
+              </span>
+              <span id="badgeProfit" class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                통과 🟢
+              </span>
+            </div>
+            <p class="text-xs text-slate-600 leading-snug break-keep">
+              "물건/서비스를 팔고 뗀 본업 마진율이 10% 이상으로 알짜인가?"
+            </p>
+            <div class="p-2.5 rounded-xl bg-white/80 border border-slate-200/80 flex items-center justify-between">
+              <span class="text-[10.5px] text-slate-500 font-medium">DART 실데이터:</span>
+              <span id="diagProfitValue" class="text-xs font-black text-emerald-700">영업이익률 12.2% (유통 1위)</span>
+            </div>
+            <label class="flex items-center justify-between pt-1 cursor-pointer select-none">
+              <span class="text-xs font-bold text-slate-700">수익성 합격 기준 충족</span>
+              <input type="checkbox" id="chkProfit" checked class="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500 cursor-pointer">
+            </label>
+          </div>
+
+          <!-- 3. 안전성 카드 -->
+          <div id="cardSafety" class="diag-card passed p-4 rounded-2xl border border-slate-200 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black text-slate-800 flex items-center gap-1.5">
+                <span>🛡️</span> <span>3. 안전성 (부채비율)</span>
+              </span>
+              <span id="badgeSafety" class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                안전 🟢
+              </span>
+            </div>
+            <p class="text-xs text-slate-600 leading-snug break-keep">
+              "갚아야 할 빚(부채)이 내 자본 대비 과도하지 않아 안전한가?"
+            </p>
+            <div class="p-2.5 rounded-xl bg-white/80 border border-slate-200/80 flex items-center justify-between">
+              <span class="text-[10.5px] text-slate-500 font-medium">DART 실데이터:</span>
+              <span id="diagSafetyValue" class="text-xs font-black text-emerald-700">부채비율 126% (200% 이하 양호)</span>
+            </div>
+            <label class="flex items-center justify-between pt-1 cursor-pointer select-none">
+              <span class="text-xs font-bold text-slate-700">재무 건전성 충족</span>
+              <input type="checkbox" id="chkSafety" checked class="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500 cursor-pointer">
+            </label>
+          </div>
+        </div>
+
+        <!-- 실시간 진단 코멘트 & 리셋 -->
+        <div class="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+          <div class="flex items-center gap-2">
+            <span class="text-lg">💡</span>
+            <p id="diagSummaryComment" class="font-bold text-indigo-950 text-xs">
+              3개 핵심 지표를 모두 충족했습니다! 실전에서도 안정적인 실적 기반 투자 대상에 속해요.
+            </p>
+          </div>
+          <button id="btnResetDiag" class="text-[11px] font-bold text-indigo-700 hover:text-indigo-900 bg-white px-3 py-1.5 rounded-xl border border-indigo-200 shadow-xs shrink-0 cursor-pointer">
+            기본값 복원 ↺
+          </button>
+        </div>
+
+        <div class="pt-2 flex justify-end">
+          <button onclick="scrollToSection(3)" class="px-5 py-2.5 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs shadow-md transition-all flex items-center gap-2 cursor-pointer">
+            <span>다음: 3단계 나의 매수원칙 & 최종판단</span>
+            <i data-lucide="arrow-down" class="w-4 h-4 text-emerald-400"></i>
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- 📍 3단계 섹션: (1) 나의 매수원칙 노트 ➔ (2) 기존 4단계 실전 투자 판단 & 퀴즈 -->
+    <!-- ========================================================================= -->
+    <section id="stepSection3" class="step-section scroll-mt-36 space-y-8">
+      
+      <!-- [3-1] 📝 나의 매수원칙 노트 (3단 판단 스위치 & 판단 근거 기록) -->
+      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-xs font-extrabold border border-emerald-200">
+                3-1. 나의 매수원칙 노트
+              </span>
+            </div>
+            <h2 class="text-base sm:text-lg font-black text-slate-900 mt-1 flex items-center gap-2">
+              <span>🎯</span> <span id="noteCorpName">이 기업</span>에 대한 나의 매수 원칙 노트
+            </h2>
+            <p class="text-xs text-slate-500 mt-0.5">내가 직접 내린 투자 결론과 판단 근거를 기록해두면 다음 분기 실적 때 복기할 수 있어요.</p>
+          </div>
+          <span class="text-[10px] text-slate-500 font-medium bg-slate-100 px-2.5 py-1 rounded-xl border border-slate-200 shrink-0 self-start sm:self-auto">
+            💾 브라우저 자동 보존
           </span>
         </div>
 
-        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-100">
-          <ul id="summaryList" class="space-y-2.5 text-xs sm:text-sm text-slate-700 font-medium"></ul>
-        </div>
-      </div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <!-- 1️⃣ 3단 판단 스위치 버튼 그룹 (BUY / HOLD / WATCH) -->
+          <div class="lg:col-span-5 space-y-3">
+            <p class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+              <span>1️⃣</span> <span>오늘의 내 투자 포지션 선택</span>
+            </p>
+            <div class="grid grid-cols-3 gap-2 bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
+              <button id="btnDecisionBuy" onclick="setUserDecision('BUY')" class="decision-btn active-buy py-3 px-2 rounded-xl text-xs font-extrabold flex flex-col items-center gap-1 cursor-pointer">
+                <span class="text-lg">🟢</span>
+                <span>적극 매수</span>
+              </button>
+              <button id="btnDecisionHold" onclick="setUserDecision('HOLD')" class="decision-btn py-3 px-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 flex flex-col items-center gap-1 cursor-pointer">
+                <span class="text-lg">🟡</span>
+                <span>관망 / 홀딩</span>
+              </button>
+              <button id="btnDecisionWatch" onclick="setUserDecision('WATCH')" class="decision-btn py-3 px-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 flex flex-col items-center gap-1 cursor-pointer">
+                <span class="text-lg">🔴</span>
+                <span>매수 보류</span>
+              </button>
+            </div>
+            <p id="decisionStatusText" class="text-xs text-emerald-700 font-semibold pt-0.5">
+              현재 상태: [적극 매수] — DART 실적 지표가 탄탄하여 분할 매수 고려
+            </p>
+          </div>
 
-      <div class="md:col-span-6 bg-emerald-50/60 rounded-3xl p-6 sm:p-7 border border-emerald-100 space-y-3">
-        <div class="flex items-center justify-between">
-          <h3 class="text-sm font-extrabold text-emerald-900 flex items-center gap-1.5">
-            <span>🟢</span> <span>[매수 긍정 요인] 회사의 자랑거리 (초록불)</span>
-          </h3>
-          <span class="text-[10px] font-bold text-emerald-700 bg-white px-2 py-0.5 rounded border border-emerald-200">성장 모멘텀</span>
-        </div>
-        <ul id="goodList" class="space-y-2 text-xs sm:text-sm text-slate-700 font-medium"></ul>
-      </div>
-
-      <div class="md:col-span-6 bg-rose-50/60 rounded-3xl p-6 sm:p-7 border border-rose-100 space-y-3">
-        <div class="flex items-center justify-between">
-          <h3 class="text-sm font-extrabold text-rose-900 flex items-center gap-1.5">
-            <span>🔴</span> <span>[투자 주의 요인] 주린이 경계 리스크 (빨간불)</span>
-          </h3>
-          <span class="text-[10px] font-bold text-rose-700 bg-white px-2 py-0.5 rounded border border-rose-200">체크 포인트</span>
-        </div>
-        <ul id="riskList" class="space-y-2 text-xs sm:text-sm text-slate-700 font-medium"></ul>
-      </div>
-
-      <!-- 소액 투자자 체감 카드 -->
-      <div class="md:col-span-12 bg-indigo-50/60 rounded-3xl p-6 sm:p-7 border border-indigo-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-xl shrink-0">🌱</div>
-          <div>
-            <h4 class="text-sm font-extrabold text-indigo-950">5만 원 소액 주주 시선에서 본다면?</h4>
-            <p id="microInvestText" class="text-xs text-indigo-800 mt-0.5">소액 투자 시 지분 환산</p>
+          <!-- 2️⃣ 나만의 매수 근거 메모 & 저장 버튼 -->
+          <div class="lg:col-span-7 space-y-3">
+            <p class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+              <span>2️⃣</span> <span>나만의 매수/보류 판단 근거 기록</span>
+            </p>
+            <div class="space-y-2.5">
+              <textarea 
+                id="userInvestmentNote" 
+                rows="4" 
+                class="w-full bg-slate-50 text-slate-900 rounded-2xl p-3.5 text-xs sm:text-sm border border-slate-200 focus:border-emerald-500 focus:bg-white focus:outline-none placeholder-slate-400 leading-relaxed transition-all"
+                placeholder="예: 2024년 영업이익률 12.2%로 탄탄하며, 외국인 관광객 매출 성장세가 뚜렷해 35,000원 선에서 1차 분할 매수 고려."
+              ></textarea>
+              <div class="flex items-center justify-between gap-2">
+                <span id="noteSavedStatus" class="text-[11px] text-slate-400">
+                  마지막 저장: 없음
+                </span>
+                <button id="btnSaveNote" onclick="saveUserInvestmentNote()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-xl shadow-md transition-all flex items-center gap-1.5 cursor-pointer">
+                  <i data-lucide="check" class="w-3.5 h-3.5"></i>
+                  <span>매수 노트 저장</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-        <a href="../company_list/index.html" class="px-5 py-2.5 rounded-xl bg-indigo-900 text-white font-bold text-xs hover:bg-indigo-800 transition-colors shrink-0">
-          다른 기업도 비교하기
-        </a>
       </div>
+
+      <!-- [3-2] 🎯 기존 4단계: 그래서 사? 팔아? — 주린이 실전 투자 해석 -->
+      <div class="space-y-6">
+        <section class="grid grid-cols-1 md:grid-cols-12 gap-6">
+          <div class="md:col-span-12 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+              <div class="flex items-center gap-2.5">
+                <span class="w-7 h-7 rounded-full bg-indigo-600 text-white font-black flex items-center justify-center text-xs shrink-0 shadow-sm">3-2</span>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <h2 class="text-lg font-black text-slate-900">
+                      그래서 사? 팔아? — 주린이 실전 투자 해석
+                    </h2>
+                    <span class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 text-[10px] font-extrabold">최종 투자 판정</span>
+                  </div>
+                  <p class="text-xs text-slate-500 mt-0.5">DART 공시 수치 변화가 내 실제 주식 투자에 던지는 신호를 AI가 요약했어요.</p>
+                </div>
+              </div>
+              <span class="text-xs font-bold text-slate-500 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200 self-start sm:self-auto">
+                ⏱️ 퇴근 후 3분 투자 분석
+              </span>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-slate-50 border border-slate-100">
+              <ul id="summaryList" class="space-y-2.5 text-xs sm:text-sm text-slate-700 font-medium"></ul>
+            </div>
+          </div>
+
+          <div class="md:col-span-6 bg-emerald-50/60 rounded-3xl p-6 sm:p-7 border border-emerald-100 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-extrabold text-emerald-900 flex items-center gap-1.5">
+                <span>🟢</span> <span>[매수 긍정 요인] 회사의 자랑거리 (초록불)</span>
+              </h3>
+              <span class="text-[10px] font-bold text-emerald-700 bg-white px-2 py-0.5 rounded border border-emerald-200">성장 모멘텀</span>
+            </div>
+            <ul id="goodList" class="space-y-2 text-xs sm:text-sm text-slate-700 font-medium"></ul>
+          </div>
+
+          <div class="md:col-span-6 bg-rose-50/60 rounded-3xl p-6 sm:p-7 border border-rose-100 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-extrabold text-rose-900 flex items-center gap-1.5">
+                <span>🔴</span> <span>[투자 주의 요인] 주린이 경계 리스크 (빨간불)</span>
+              </h3>
+              <span class="text-[10px] font-bold text-rose-700 bg-white px-2 py-0.5 rounded border border-rose-200">체크 포인트</span>
+            </div>
+            <ul id="riskList" class="space-y-2 text-xs sm:text-sm text-slate-700 font-medium"></ul>
+          </div>
+
+          <!-- 소액 투자자 체감 카드 -->
+          <div class="md:col-span-12 bg-indigo-50/60 rounded-3xl p-6 sm:p-7 border border-indigo-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-xl shrink-0">🌱</div>
+              <div>
+                <h4 class="text-sm font-extrabold text-indigo-950">5만 원 소액 주주 시선에서 본다면?</h4>
+                <p id="microInvestText" class="text-xs text-indigo-800 mt-0.5">소액 투자 시 지분 환산</p>
+              </div>
+            </div>
+            <a href="../company_list/index.html" class="px-5 py-2.5 rounded-xl bg-indigo-900 text-white font-bold text-xs hover:bg-indigo-800 transition-colors shrink-0">
+              다른 기업도 비교하기
+            </a>
+          </div>
+        </section>
+
+        <!-- 🎯 하단 기업 퀴즈 컨테이너 -->
+        <section id="companyQuizContainer"></section>
+
+        <!-- 최하단 네비게이션 & 액션 -->
+        <div class="pt-4 border-t border-slate-200/80 flex flex-col sm:flex-row justify-between items-center gap-3">
+          <button onclick="scrollToSection(1)" class="w-full sm:w-auto px-4 py-2.5 rounded-2xl bg-white border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-50 transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+            <span>↺ 1단계 공시서류 나침반으로 맨 위로 이동</span>
+          </button>
+          <div class="flex items-center gap-2.5 w-full sm:w-auto">
+            <a href="../company_list/index.html" class="flex-1 sm:flex-none px-5 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs shadow-md transition-all flex items-center justify-center gap-1.5">
+              <span>다른 기업 분석하기</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
     </section>
 
-    <!-- 5. 🎯 하단 기업 퀴즈 컨테이너 (팀원 C 컴포넌트 렌더링 영역) -->
-    <section id="companyQuizContainer"></section>
-
   </main>
+
+  <!-- 반응형 저장 완료 토스트 알림 -->
+  <div id="toastNotification" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-2 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-2xl border border-slate-700 text-xs sm:text-sm font-bold">
+    <span class="text-emerald-400 text-base">✅</span>
+    <span id="toastMessage">매수 원칙 노트가 저장되었습니다.</span>
+  </div>
 
   <footer class="bg-white border-t border-slate-200/80 py-6 mt-12 text-center text-xs text-slate-400">
     <p class="font-semibold text-slate-600">📈 Easy-DART — 20대 일상 기업 전자공시 해설 플랫폼</p>

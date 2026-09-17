@@ -6,27 +6,30 @@ export function renderCompanyQuizSection(containerId, quizData, onAnswerCallback
   if (!container || !quizData) return;
 
   container.innerHTML = `
-    <div class="bg-gradient-to-br from-indigo-900 to-slate-900 rounded-3xl p-6 sm:p-8 text-white space-y-6">
-      <div class="flex items-center justify-between pb-4 border-b border-indigo-700/60">
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-5">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100">
         <div class="flex items-center gap-2.5">
-          <span class="text-2xl">🎯</span>
+          <span class="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center text-base shadow-sm">🎯</span>
           <div>
-            <h3 class="text-base sm:text-lg font-black text-white">방금 배운 공시 내용 팩트체크 퀴즈</h3>
-            <p class="text-xs text-indigo-200 mt-0.5">문서를 제대로 이해했는지 바로 확인해보세요!</p>
+            <h3 class="text-base sm:text-lg font-black text-slate-900">실전 공시 팩트체크 복습 퀴즈</h3>
+            <p class="text-xs text-slate-500 mt-0.5">방금 살펴본 DART 핵심 내용을 제대로 이해했는지 확인해보세요!</p>
           </div>
         </div>
-        <span class="px-2.5 py-0.5 bg-indigo-800 text-indigo-200 text-xs font-bold rounded-full">복습 퀴즈</span>
+        <span class="px-2.5 py-1 bg-amber-50 text-amber-800 text-xs font-extrabold rounded-xl border border-amber-200">
+          실전 복습
+        </span>
       </div>
 
-      <div class="p-4 rounded-2xl bg-indigo-950/60 border border-indigo-700/80">
-        <p class="text-sm sm:text-base font-extrabold text-white">${quizData.question}</p>
+      <div class="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200/80">
+        <p class="text-xs font-bold text-slate-400 mb-1">Q. 문제</p>
+        <p class="text-sm sm:text-base font-extrabold text-slate-900 leading-snug">${quizData.question}</p>
       </div>
 
       <div id="quizOptionsList" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         ${quizData.options.map((opt, idx) => `
-          <button data-index="${idx}" class="quiz-opt-item p-4 rounded-2xl bg-indigo-950/80 border border-indigo-700 hover:border-yellow-400 font-bold text-xs sm:text-sm text-left text-white transition-all flex items-center justify-between">
-            <span>${opt.text}</span>
-            <span class="text-indigo-400 text-xs">선택</span>
+          <button data-index="${idx}" class="quiz-opt-item p-4 rounded-2xl bg-white border-2 border-slate-200 hover:border-indigo-500 hover:bg-indigo-50/30 font-bold text-xs sm:text-sm text-left text-slate-800 transition-all flex items-center justify-between cursor-pointer group">
+            <span class="group-hover:text-indigo-900">${opt.text}</span>
+            <span class="text-slate-400 group-hover:text-indigo-600 text-xs shrink-0 ml-2">선택 →</span>
           </button>
         `).join('')}
       </div>
@@ -37,18 +40,32 @@ export function renderCompanyQuizSection(containerId, quizData, onAnswerCallback
 
   // 옵션 클릭 이벤트 바인딩
   container.querySelectorAll('.quiz-opt-item').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+    btn.addEventListener('click', () => {
       const idx = Number(btn.getAttribute('data-index'));
       const opt = quizData.options[idx];
       const fb = container.querySelector('#quizFeedbackBox');
       
-      fb.classList.remove('hidden');
-      if (opt.is_correct) {
-        fb.className = 'p-4 rounded-2xl bg-emerald-900/60 border border-emerald-500/80 text-white space-y-1';
-        fb.innerHTML = `<strong>🎉 정답입니다!</strong><p>${quizData.explanation}</p>`;
-      } else {
-        fb.className = 'p-4 rounded-2xl bg-rose-900/60 border border-rose-500/80 text-white space-y-1';
-        fb.innerHTML = `<strong>💡 오답이에요!</strong><p>${quizData.explanation}</p>`;
+      // 모든 버튼 비활성화 및 정답 표시
+      container.querySelectorAll('.quiz-opt-item').forEach((b, i) => {
+        b.classList.remove('border-indigo-500', 'hover:border-indigo-500');
+        if (quizData.options[i].is_correct) {
+          b.className = 'quiz-opt-item p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-500 font-bold text-xs sm:text-sm text-left text-emerald-900 flex items-center justify-between';
+          b.innerHTML = `<span>${quizData.options[i].text}</span><span class="text-emerald-700 font-black text-xs">✓ 정답</span>`;
+        } else if (i === idx && !opt.is_correct) {
+          b.className = 'quiz-opt-item p-4 rounded-2xl bg-rose-50 border-2 border-rose-400 font-bold text-xs sm:text-sm text-left text-rose-900 flex items-center justify-between';
+          b.innerHTML = `<span>${quizData.options[i].text}</span><span class="text-rose-700 font-black text-xs">✕ 오답</span>`;
+        }
+      });
+      
+      if (fb) {
+        fb.classList.remove('hidden');
+        if (opt.is_correct) {
+          fb.className = 'p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-900 space-y-1';
+          fb.innerHTML = `<div class="flex items-center gap-2 font-black text-emerald-800"><span class="text-base">🎉</span><span>정답입니다!</span></div><p class="text-xs text-emerald-800 leading-relaxed font-medium">${quizData.explanation}</p>`;
+        } else {
+          fb.className = 'p-4 rounded-2xl bg-rose-50 border border-rose-300 text-rose-900 space-y-1';
+          fb.innerHTML = `<div class="flex items-center gap-2 font-black text-rose-800"><span class="text-base">💡</span><span>아쉽네요, 다시 확인해보세요!</span></div><p class="text-xs text-rose-800 leading-relaxed font-medium">${quizData.explanation}</p>`;
+        }
       }
 
       if (onAnswerCallback) onAnswerCallback(opt.is_correct);
