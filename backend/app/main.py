@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api import companies, quiz
 
+from app.config import HOST, PORT
+
 app = FastAPI(
     title="Easy-DART API",
     description="주린이를 위한 20대 일상 기업 DART 공시 해설 & 퀴즈 API",
@@ -30,5 +32,11 @@ def root():
         "version": "1.0.0",
         "docs_url": "/docs"
     }
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("app.main:app", host=HOST, port=PORT, reload=True)
+
 
 
