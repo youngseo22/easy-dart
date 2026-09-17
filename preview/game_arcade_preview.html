@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Easy-DART | 🕹️ 핑거다트 레트로 아케이드 (Game Zone)</title>
+  <!-- Google Fonts: Pretendard, Outfit, Chakra Petch -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,600;0,700;1,700;1,800&family=Outfit:wght@500;700;900&family=Pretendard:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Pretendard', 'Outfit', 'sans-serif'],
+            arcade: ['"Chakra Petch"', 'Outfit', 'sans-serif'],
+          },
+          colors: {
+            arcade: {
+              bg: '#070B14',
+              surface: '#0F172A',
+              card: '#131D35',
+              border: '#1E293B',
+              pink: '#F43F5E',
+              cyan: '#38BDF8',
+              emerald: '#10B981',
+              amber: '#F59E0B',
+              purple: '#A855F7'
+            }
+          },
+          boxShadow: {
+            'neon-pink': '0 0 25px rgba(244, 63, 94, 0.45)',
+            'neon-cyan': '0 0 25px rgba(56, 189, 248, 0.45)',
+            'neon-emerald': '0 0 25px rgba(16, 185, 129, 0.45)',
+            'neon-amber': '0 0 25px rgba(245, 158, 11, 0.45)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #070B14;
+      color: #F8FAFC;
+      overflow-x: hidden;
+    }
+
+    /* Retro Grid Floor Background */
+    .retro-grid {
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(56, 189, 248, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(56, 189, 248, 0.08) 1px, transparent 1px);
+    }
+
+    /* Glow text */
+    .text-glow-pink {
+      text-shadow: 0 0 16px rgba(244, 63, 94, 0.8), 0 0 30px rgba(244, 63, 94, 0.4);
+    }
+    .text-glow-cyan {
+      text-shadow: 0 0 16px rgba(56, 189, 248, 0.8), 0 0 30px rgba(56, 189, 248, 0.4);
+    }
+    .text-glow-amber {
+      text-shadow: 0 0 16px rgba(245, 158, 11, 0.8), 0 0 30px rgba(245, 158, 11, 0.4);
+    }
+
+    /* Cabinet hover pulse */
+    .arcade-cabinet {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .arcade-cabinet:hover {
+      transform: translateY(-8px) scale(1.015);
+    }
+
+    /* Pulsing neon border */
+    @keyframes neonPulse {
+      0%, 100% { border-color: rgba(56, 189, 248, 0.6); box-shadow: 0 0 20px rgba(56, 189, 248, 0.3); }
+      50% { border-color: rgba(244, 63, 94, 0.8); box-shadow: 0 0 25px rgba(244, 63, 94, 0.4); }
+    }
+    .neon-pulse-border {
+      animation: neonPulse 3s infinite;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-rose-500 selection:text-white retro-grid relative">
+
+  <!-- GNB Header -->
+  <header class="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Brand -->
+      <div class="flex items-center space-x-8">
+        <a href="company_preview.html" class="flex items-center space-x-2.5 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 to-amber-500 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-rose-500/25 group-hover:scale-105 transition-transform">
+            🕹️
+          </div>
+          <div>
+            <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-rose-400 via-amber-300 to-cyan-400 bg-clip-text text-transparent">Easy-DART</span>
+            <span class="hidden sm:inline-block ml-2 text-xs font-bold px-2 py-0.5 bg-rose-950/80 text-rose-300 rounded-full border border-rose-800">ARCADE</span>
+          </div>
+        </a>
+
+        <!-- Navigation -->
+        <nav class="flex items-center space-x-2">
+          <a href="company_preview.html" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors flex items-center gap-1.5">
+            <i data-lucide="building-2" class="w-4 h-4"></i> 기업 파헤치기
+          </a>
+          <a href="game_arcade_preview.html" class="px-4 py-2 rounded-xl text-sm font-bold bg-gradient-to-r from-rose-600 via-purple-600 to-cyan-600 text-white shadow-md shadow-rose-500/20 flex items-center gap-1.5">
+            <i data-lucide="gamepad-2" class="w-4 h-4 text-amber-300 animate-bounce"></i> DART 오락실
+          </a>
+          <a href="quiz_preview.html" class="px-3.5 py-2 rounded-xl text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors flex items-center gap-1.5">
+            <i data-lucide="help-circle" class="w-4 h-4"></i> 1분 퀴즈
+          </a>
+        </nav>
+      </div>
+
+      <!-- Right Tokens & Sound HUD -->
+      <div class="flex items-center space-x-3">
+        <!-- Interactive Coin Button -->
+        <button id="insertCoinBtn" class="flex items-center gap-1.5 px-3.5 py-1.5 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 hover:from-amber-500/30 hover:to-yellow-500/30 text-amber-300 rounded-full text-xs font-black border border-amber-500/40 shadow-sm transition-all transform active:scale-95 group">
+          <span class="group-hover:rotate-12 transition-transform">🪙</span>
+          <span id="coinCountText">INSERT COIN (3 TOKENS)</span>
+        </button>
+
+        <a href="company_preview.html" class="hidden md:flex items-center gap-1 text-xs text-slate-400 hover:text-cyan-300 font-medium transition-colors">
+          <span>나가기</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Hero Section -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10 flex-1 w-full z-10">
+    
+    <!-- Hero Header Banner -->
+    <div class="relative rounded-3xl p-6 sm:p-10 bg-gradient-to-br from-slate-900/95 via-slate-950/95 to-slate-900/95 border border-slate-800 shadow-2xl overflow-hidden text-center space-y-4">
+      
+      <!-- Background Neon Orbs -->
+      <div class="absolute -top-24 -left-24 w-72 h-72 bg-rose-600/15 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -right-24 w-72 h-72 bg-cyan-600/15 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-900/90 border border-slate-700 text-xs font-black text-rose-400 uppercase tracking-widest shadow-inner">
+        <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+        FINGER-DART ARCADE ZONE
+      </div>
+
+      <h1 class="text-3xl sm:text-5xl font-arcade font-extrabold tracking-tight text-white leading-tight">
+        "딱딱한 공시 문서는 잊어라!<br>
+        <span class="bg-gradient-to-r from-rose-400 via-amber-300 to-cyan-400 bg-clip-text text-transparent text-glow-pink">
+          손끝으로 때려잡는 DART 실전 오락실
+        </span>"
+      </h1>
+
+      <p class="text-xs sm:text-sm text-slate-400 max-w-2xl mx-auto leading-relaxed">
+        골치 아픈 재무제표와 상장폐지 지뢰 공시, 아직도 외우고 계신가요?<br class="hidden sm:inline">
+        클래식 아케이드 게임을 플레이하며 회계 원리와 위험 공시 감별법을 본능적으로 체득하세요!
+      </p>
+
+      <!-- Player HUD Stats Ribbon -->
+      <div class="pt-4 flex flex-wrap items-center justify-center gap-4 text-xs font-bold">
+        <div class="px-4 py-2 rounded-2xl bg-slate-950/80 border border-slate-800 flex items-center gap-2">
+          <span class="text-base">🐣</span>
+          <span class="text-slate-400">내 주린이 등급:</span>
+          <span class="text-cyan-300 font-extrabold">새싹 주린이 (LV.1)</span>
+        </div>
+        <div class="px-4 py-2 rounded-2xl bg-slate-950/80 border border-slate-800 flex items-center gap-2">
+          <span class="text-base">🏆</span>
+          <span class="text-slate-400">아케이드 최고점:</span>
+          <span class="text-amber-400 font-extrabold">1,420 PTS</span>
+        </div>
+        <div class="px-4 py-2 rounded-2xl bg-slate-950/80 border border-slate-800 flex items-center gap-2">
+          <span class="text-base">🛡️</span>
+          <span class="text-slate-400">격퇴한 상폐 공시:</span>
+          <span class="text-rose-400 font-extrabold">18건</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 4 Arcade Cabinets Section -->
+    <div class="space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
+            <span>🕹️</span> 3대 금융 아케이드 캐비닛 선택 (SELECT GAME)
+          </h2>
+          <p class="text-xs text-slate-400">직접 읽고 판단해야만 클리어 가능한 3대 실전 금융 게임을 플레이해보세요.</p>
+        </div>
+        <span class="text-xs font-bold text-emerald-400 px-2.5 py-1 rounded-full bg-emerald-950/60 border border-emerald-800">
+          ● 3종 전 게임 가동 중 (100% PLAYABLE)
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- Cabinet 1: Financial Terms Quiz Arena -->
+        <div class="arcade-cabinet group rounded-3xl bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-indigo-500/50 hover:border-indigo-400 p-5 flex flex-col justify-between space-y-4 shadow-xl hover:shadow-neon-cyan relative overflow-hidden">
+          
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-black bg-gradient-to-r from-indigo-500 to-purple-600 text-white uppercase tracking-wider flex items-center gap-1 shadow-sm">
+              🧠 문해력 배틀
+            </span>
+            <span class="text-xs font-black text-indigo-400">MACHINE 01</span>
+          </div>
+
+          <div class="h-36 rounded-2xl bg-slate-950/90 border border-slate-800/80 flex flex-col items-center justify-center relative overflow-hidden p-4 group-hover:scale-[1.02] transition-transform">
+            <div class="absolute inset-0 bg-gradient-to-t from-indigo-950/30 to-transparent"></div>
+            <div class="text-4xl mb-2 animate-bounce">📚</div>
+            <div class="text-xs font-bold text-cyan-300 bg-cyan-950/80 px-2.5 py-0.5 rounded border border-cyan-800">
+              [60+ 실전 금융 퀴즈 뱅크]
+            </div>
+            <div class="text-[10px] text-slate-400 mt-1">20대 주린이 무한 퀴즈 아레나</div>
+          </div>
+
+          <div class="space-y-1.5">
+            <h3 class="text-base font-black text-white group-hover:text-cyan-300 transition-colors">
+              주식 & 회계 기초 퀴즈 아레나
+            </h3>
+            <p class="text-xs text-slate-400 leading-relaxed line-clamp-2">
+              월급 지키는 <span class="text-cyan-400 font-bold">손익·재무상태표</span>부터 CB·감사의견 상폐 지뢰까지! 60+ 문항 무한 스트리밍 퀴즈!
+            </p>
+            <div class="flex flex-wrap gap-1 pt-1">
+              <span class="px-2 py-0.5 rounded-md bg-slate-800 text-indigo-300 text-[10px] font-semibold">장르: 지식 퀴즈</span>
+              <span class="px-2 py-0.5 rounded-md bg-slate-800 text-amber-300 text-[10px] font-semibold">난이도: ★★☆☆☆</span>
+            </div>
+          </div>
+
+          <a href="quiz_preview.html" class="w-full py-3 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white font-black text-xs shadow-lg shadow-indigo-500/25 transition-all flex items-center justify-center gap-1.5 transform active:scale-95">
+            <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+            퀴즈 아레나 입장 (PLAY NOW)
+          </a>
+        </div>
+
+        <!-- Cabinet 2: DART Judge (BUY or SELL) -->
+        <div class="arcade-cabinet group rounded-3xl bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-amber-500/50 hover:border-amber-400 p-5 flex flex-col justify-between space-y-4 shadow-xl hover:shadow-neon-amber relative overflow-hidden">
+          
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-black bg-amber-500 text-slate-950 uppercase tracking-wider flex items-center gap-1 shadow-sm font-bold">
+              ⚡ 3초 뇌지컬
+            </span>
+            <span class="text-xs font-black text-amber-400">MACHINE 02</span>
+          </div>
+
+          <div class="h-36 rounded-2xl bg-slate-950/90 border border-slate-800/80 flex flex-col items-center justify-center relative overflow-hidden p-4 group-hover:scale-[1.02] transition-transform">
+            <div class="absolute inset-0 bg-gradient-to-t from-amber-950/30 to-transparent"></div>
+            <div class="text-4xl mb-2">⚖️</div>
+            <div class="text-xs font-bold text-amber-400 bg-amber-950/80 px-2 py-0.5 rounded border border-amber-800 flex items-center gap-1">
+              <span>실전 공시 카드 심사</span>
+            </div>
+            <div class="text-[10px] text-slate-500 mt-1">카드 스와이프 심사관</div>
+          </div>
+
+          <div class="space-y-1.5">
+            <h3 class="text-base font-black text-white group-hover:text-amber-300 transition-colors">
+              DART 실전 투자 심사관 (BUY/SELL)
+            </h3>
+            <p class="text-xs text-slate-400 leading-relaxed line-clamp-2">
+              올리브영·다이소 실제 공시를 정독하고 <span class="text-rose-400 font-bold">좌(손절)</span> vs <span class="text-emerald-400 font-bold">우(매수)</span>로 판정하세요! 3초 내 판단 시 번개 보너스!
+            </p>
+            <div class="flex flex-wrap gap-1 pt-1">
+              <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 text-[10px] font-semibold">장르: 스와이프</span>
+              <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 text-[10px] font-semibold">시간: 선택 가능(5~10s)</span>
+            </div>
+          </div>
+
+          <a href="judge_preview.html" class="w-full py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/25 transition-all flex items-center justify-center gap-1.5 transform active:scale-95">
+            <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+            게임 시작 (PLAY NOW)
+          </a>
+        </div>
+
+        <!-- Cabinet 3: Lane Runner -->
+        <div class="arcade-cabinet group rounded-3xl bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-emerald-500/50 hover:border-emerald-400 p-5 flex flex-col justify-between space-y-4 shadow-xl hover:shadow-neon-emerald relative overflow-hidden">
+          
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-black bg-emerald-600 text-white uppercase tracking-wider flex items-center gap-1 shadow-sm">
+              🕹️ 반사신경
+            </span>
+            <span class="text-xs font-black text-emerald-400">MACHINE 03</span>
+          </div>
+
+          <div class="h-36 rounded-2xl bg-slate-950/90 border border-slate-800/80 flex flex-col items-center justify-center relative overflow-hidden p-4 group-hover:scale-[1.02] transition-transform">
+            <div class="absolute inset-0 bg-gradient-to-t from-emerald-950/30 to-transparent"></div>
+            <div class="text-4xl mb-2">🏎️</div>
+            <div class="text-xs font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800">
+              호재 수집 & 지뢰 회피
+            </div>
+            <div class="text-[10px] text-slate-500 mt-1">3차선 고속 질주 러너</div>
+          </div>
+
+          <div class="space-y-1.5">
+            <h3 class="text-base font-black text-white group-hover:text-emerald-300 transition-colors">
+              DART 급행 레인 러너
+            </h3>
+            <p class="text-xs text-slate-400 leading-relaxed line-clamp-2">
+              고속도로 차선을 변경하며 <span class="text-emerald-400 font-bold">영업흑자·배당확대</span>는 먹고, 상폐 지뢰는 피하세요!
+            </p>
+            <div class="flex flex-wrap gap-1 pt-1">
+              <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 text-[10px] font-semibold">장르: 3레인 러너</span>
+              <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 text-[10px] font-semibold">난이도: ★★★☆☆</span>
+            </div>
+          </div>
+
+          <a href="runner_preview.html" class="w-full py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-black text-xs shadow-lg shadow-emerald-500/25 transition-all flex items-center justify-center gap-1.5 transform active:scale-95">
+            <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+            게임 시작 (PLAY NOW)
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Bottom Secondary Section: Hall of Fame & Quick Quiz -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-4">
+      
+      <!-- High Scores Hall of Fame (2 cols) -->
+      <div class="lg:col-span-2 rounded-3xl bg-slate-900/80 border border-slate-800 p-6 space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-xl">🏆</span>
+            <h3 class="text-base font-black text-white">주린이 명예의 전당 (HIGH SCORE TOP 3)</h3>
+          </div>
+          <span class="text-[11px] text-slate-500">실시간 랭킹 순위</span>
+        </div>
+
+        <div class="space-y-2.5">
+          <div class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-950/70 border border-amber-500/30">
+            <div class="flex items-center gap-3">
+              <span class="w-7 h-7 rounded-xl bg-amber-500/20 text-amber-400 font-black text-xs flex items-center justify-center border border-amber-500/40">1위</span>
+              <div>
+                <span class="text-xs font-bold text-white">워뇨뜨의환생 (공시마스터)</span>
+                <div class="text-[10px] text-slate-400">DART 공시 미사일 슈팅</div>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-sm font-black text-amber-400">3,420 PTS</div>
+              <div class="text-[10px] text-emerald-400 font-semibold">24콤보 달성</div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800">
+            <div class="flex items-center gap-3">
+              <span class="w-7 h-7 rounded-xl bg-slate-800 text-slate-300 font-black text-xs flex items-center justify-center">2위</span>
+              <div>
+                <span class="text-xs font-bold text-white">올영독도토너매니아</span>
+                <div class="text-[10px] text-slate-400">DART 공시 미사일 슈팅</div>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-sm font-black text-cyan-400">2,850 PTS</div>
+              <div class="text-[10px] text-slate-400 font-semibold">17콤보 달성</div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800">
+            <div class="flex items-center gap-3">
+              <span class="w-7 h-7 rounded-xl bg-slate-800 text-slate-400 font-black text-xs flex items-center justify-center">3위</span>
+              <div>
+                <span class="text-xs font-bold text-white">다이소천원단골</span>
+                <div class="text-[10px] text-slate-400">DART 공시 미사일 슈팅</div>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-sm font-black text-slate-300">2,110 PTS</div>
+              <div class="text-[10px] text-slate-400 font-semibold">12콤보 달성</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trendy 20s Quick Quiz Box (1 col) -->
+      <div class="rounded-3xl bg-gradient-to-b from-slate-900/90 via-slate-950/90 to-slate-900/90 border-2 border-indigo-500/40 hover:border-cyan-400 p-6 flex flex-col justify-between space-y-4 shadow-xl hover:shadow-neon-cyan transition-all relative overflow-hidden group">
+        <div class="absolute -top-16 -right-16 w-36 h-36 bg-indigo-600/20 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform"></div>
+
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-black bg-gradient-to-r from-indigo-500 to-purple-600 text-white uppercase tracking-wider flex items-center gap-1 shadow-sm">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-300 animate-ping"></span> FQ 1분 컷
+            </span>
+            <span class="text-xs font-black text-indigo-400">초년생 생존 필수</span>
+          </div>
+
+          <div class="space-y-1.5">
+            <h3 class="text-lg font-black text-white group-hover:text-cyan-300 transition-colors flex items-center gap-2">
+              <span>☕</span> 커피 1잔 마실 시간에 끝내는 기초 퀴즈
+            </h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              "월급은 통장을 스칠 뿐...💸 내 돈 지키려면 <b>영업이익</b>과 <b>당기순이익</b> 차이는 알아야죠!" 숏폼 보듯 가볍게 30초 테스트!
+            </p>
+          </div>
+
+          <div class="bg-slate-950/90 p-3.5 rounded-2xl border border-slate-800/90 space-y-1.5 text-xs">
+            <div class="flex items-center justify-between">
+              <span class="text-amber-400 font-extrabold text-[10px] flex items-center gap-1">
+                <span>🔥</span> 오늘의 직장인 미스터리
+              </span>
+              <span class="text-[10px] text-slate-500 font-mono">Q. 손익 상식</span>
+            </div>
+            <p class="text-slate-200 font-bold leading-snug">
+              "매출 1,000억인데 성과급 0원?! 회사가 적자라는데 대체 왜 그럴까요?"
+            </p>
+            <div class="text-[10px] text-indigo-300/80 pt-1 flex items-center gap-1">
+              <span>💡</span> 힌트: 매출액 뜯어먹는 원가와 판관비의 비밀
+            </div>
+          </div>
+        </div>
+
+        <a href="quiz_preview.html" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white font-black text-xs shadow-lg shadow-indigo-600/30 transition-all flex items-center justify-center gap-2 transform active:scale-95 group-hover:brightness-110">
+          <span>🎯 1분 만에 흑우 탈출하러 가기</span>
+          <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+        </a>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="bg-slate-950 border-t border-slate-900 py-6 mt-12 text-center text-xs text-slate-500 z-10">
+    <p class="font-semibold text-slate-400">📈 Easy-DART — 20대 주린이를 위한 체감형 DART 게이미피케이션 플랫폼</p>
+  </footer>
+
+  <!-- Retro Coin Sound Synthesizer Script -->
+  <script>
+    lucide.createIcons();
+
+    let tokens = 3;
+    const coinBtn = document.getElementById('insertCoinBtn');
+    const coinText = document.getElementById('coinCountText');
+
+    let audioCtx = null;
+    function playCoinChime() {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!audioCtx && AudioContext) audioCtx = new AudioContext();
+        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+
+        // 8-bit coin sound: B5 to E6
+        osc.frequency.setValueAtTime(987.77, now); // B5
+        osc.frequency.setValueAtTime(1318.51, now + 0.08); // E6
+
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.35);
+      } catch (e) {}
+    }
+
+    coinBtn.addEventListener('click', () => {
+      tokens++;
+      playCoinChime();
+      coinText.textContent = `COIN INSERTED! (${tokens} TOKENS)`;
+      coinBtn.classList.add('scale-105');
+      setTimeout(() => {
+        coinBtn.classList.remove('scale-105');
+      }, 200);
+    });
+  </script>
+</body>
+</html>
