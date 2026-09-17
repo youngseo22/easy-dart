@@ -18,7 +18,7 @@
   <!-- GNB Header -->
   <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <div class="flex items-center space-x-8">
+      <div class="flex items-center space-x-6 sm:space-x-8">
         <a href="../company_list/index.html" class="flex items-center space-x-2.5 group">
           <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-black text-xl shadow-md group-hover:scale-105 transition-transform">📈</div>
           <div>
@@ -28,35 +28,40 @@
         </a>
 
         <nav class="flex items-center space-x-2">
-          <a href="../company_list/index.html" class="px-4 py-2 rounded-xl text-sm font-bold bg-slate-900 text-white shadow-sm flex items-center gap-1.5 transition-all">
+          <a href="../company_list/index.html" class="px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-900 text-white shadow-sm flex items-center gap-1.5 transition-all">
             <i data-lucide="sparkles" class="w-4 h-4 text-emerald-400"></i> 기업 파헤치기
           </a>
-          <a href="../quiz_terms/index.html" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors flex items-center gap-1.5">
+          <a href="../quiz_terms/index.html" class="px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors flex items-center gap-1.5">
             <i data-lucide="help-circle" class="w-4 h-4"></i> 주식 용어 퀴즈
           </a>
         </nav>
       </div>
 
-      <a href="../company_list/index.html" class="flex items-center gap-1 text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-full transition-all">
-        <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> 기업 목록으로
-      </a>
+      <div class="flex items-center gap-2">
+        <button id="btnSharePage" class="hidden sm:flex items-center gap-1 text-xs font-bold text-slate-600 hover:text-slate-900 bg-white hover:bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-full transition-all shadow-sm">
+          <i data-lucide="share-2" class="w-3.5 h-3.5"></i> 공유
+        </button>
+        <a href="../company_list/index.html" class="flex items-center gap-1 text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-full transition-all">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> 기업 목록
+        </a>
+      </div>
     </div>
   </header>
 
   <!-- Main Container -->
-  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10 flex-1 w-full">
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8 sm:space-y-10 flex-1 w-full">
     
     <!-- 1. Company Header Hero -->
-    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6 animate-fade-in">
       <div class="flex items-center gap-4">
-        <div id="compIcon" class="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-3xl shadow-inner shrink-0">🧴</div>
+        <div id="compIcon" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-3xl sm:text-4xl shadow-inner shrink-0">🧴</div>
         <div>
           <div class="flex items-center gap-2 flex-wrap">
             <h1 id="compName" class="text-2xl sm:text-3xl font-black text-slate-900">기업명</h1>
             <span id="compBadge" class="text-xs font-bold px-2.5 py-0.5 bg-emerald-50 text-emerald-700 rounded-md border border-emerald-100">카테고리</span>
             <span id="compHighlightBadge" class="text-xs font-extrabold px-2.5 py-0.5 bg-yellow-100 text-yellow-800 rounded-md">핵심 요약</span>
           </div>
-          <p id="compDoc" class="text-xs text-slate-400 mt-1.5 flex items-center gap-1">
+          <p id="compDoc" class="text-xs text-slate-400 mt-1.5 flex items-center gap-1 font-medium">
             <i data-lucide="file-text" class="w-3.5 h-3.5"></i> 금융감독원 전자공시(DART) 정기 보고서 기반
           </p>
         </div>
@@ -64,15 +69,15 @@
 
       <!-- Quick Metaphor Badge & Company Switcher -->
       <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto shrink-0">
-        <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200/80 text-left md:text-right">
+        <div class="p-4 rounded-2xl bg-emerald-50/90 border border-emerald-200/80 text-left md:text-right">
           <p class="text-[10px] text-emerald-700 font-bold uppercase tracking-wider">체감 한눈에 보기</p>
-          <p id="compMetaphorHead" class="text-base sm:text-lg font-black text-emerald-900 mt-0.5">
+          <p id="compMetaphorHead" class="text-sm sm:text-base font-black text-emerald-950 mt-0.5">
             "연간 순이익 체감 환산"
           </p>
         </div>
 
         <select id="detailCompanySwitcher" class="bg-slate-50 border border-slate-200 rounded-2xl px-3 py-2.5 text-xs font-bold text-slate-700 outline-none focus:border-emerald-500 cursor-pointer shadow-sm">
-          <option value="" disabled selected>🔍 다른 기업 보기</option>
+          <option value="" disabled selected>🔍 다른 기업 바로가기</option>
           <optgroup label="💄 뷰티 & 패션">
             <option value="olive">🧴 CJ올리브영</option>
             <option value="musinsa">👕 무신사</option>
@@ -82,7 +87,7 @@
           </optgroup>
           <optgroup label="💻 IT & 콘텐츠">
             <option value="naver">🟢 네이버</option>
-            <option value="kakao">🎁 카카오</option>
+            <option value="kakao">💬 카카오</option>
             <option value="daangn">🥕 당근</option>
             <option value="hybe">🎤 하이브</option>
             <option value="krafton">🎮 크래프톤</option>
@@ -91,7 +96,7 @@
             <option value="starbucks">☕ 스타벅스</option>
             <option value="baemin">🛵 배달의민족</option>
             <option value="cj_food">🥟 CJ제일제당</option>
-            <option value="bgf">🏪 BGF리테일</option>
+            <option value="bgf">🏪 BGF리테일 (CU)</option>
             <option value="ottogi">🍜 오뚜기</option>
           </optgroup>
           <optgroup label="🚗 라이프 & 모빌리티">
@@ -105,35 +110,73 @@
       </div>
     </div>
 
+    <!-- 1-1. 인기 관심 기업 퀵 네비게이션 칩 -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs font-bold">
+      <span class="text-slate-400 shrink-0 flex items-center gap-1">
+        <i data-lucide="flame" class="w-3.5 h-3.5 text-orange-500"></i> 인기 탐색:
+      </span>
+      <button onclick="switchCompanyById('olive')" class="quick-chip-btn px-3 py-1 rounded-full bg-white hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 border border-slate-200 hover:border-emerald-300 transition-all shrink-0">🧴 CJ올리브영</button>
+      <button onclick="switchCompanyById('hyundai')" class="quick-chip-btn px-3 py-1 rounded-full bg-white hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 border border-slate-200 hover:border-emerald-300 transition-all shrink-0">🚗 현대자동차</button>
+      <button onclick="switchCompanyById('baemin')" class="quick-chip-btn px-3 py-1 rounded-full bg-white hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 border border-slate-200 hover:border-emerald-300 transition-all shrink-0">🛵 배달의민족</button>
+      <button onclick="switchCompanyById('naver')" class="quick-chip-btn px-3 py-1 rounded-full bg-white hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 border border-slate-200 hover:border-emerald-300 transition-all shrink-0">🟢 네이버</button>
+      <button onclick="switchCompanyById('musinsa')" class="quick-chip-btn px-3 py-1 rounded-full bg-white hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 border border-slate-200 hover:border-emerald-300 transition-all shrink-0">👕 무신사</button>
+      <button onclick="switchCompanyById('starbucks')" class="quick-chip-btn px-3 py-1 rounded-full bg-white hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 border border-slate-200 hover:border-emerald-300 transition-all shrink-0">☕ 스타벅스</button>
+      <button onclick="switchCompanyById('daangn')" class="quick-chip-btn px-3 py-1 rounded-full bg-white hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 border border-slate-200 hover:border-emerald-300 transition-all shrink-0">🥕 당근</button>
+      <button onclick="switchCompanyById('krafton')" class="quick-chip-btn px-3 py-1 rounded-full bg-white hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 border border-slate-200 hover:border-emerald-300 transition-all shrink-0">🎮 크래프톤</button>
+    </div>
+
     <!-- 2. [페르소나 1 맞춤] 실시간 일상 소비 ➡️ 기업 이익 환산기 위젯 -->
-    <section class="gradient-hero rounded-3xl p-6 sm:p-7 border border-emerald-100 shadow-sm space-y-4">
+    <section class="gradient-hero rounded-3xl p-6 sm:p-8 border border-emerald-100 shadow-sm space-y-5">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-emerald-200/60">
-        <div class="flex items-center gap-2">
-          <span class="text-xl">🧮</span>
+        <div class="flex items-center gap-2.5">
+          <span class="text-2xl">🧮</span>
           <div>
             <h2 class="text-base sm:text-lg font-black text-slate-900">
               내가 <span id="widgetCompName" class="text-emerald-700">이 기업</span>에서 쓴 돈은 기업에 얼마를 남겼을까?
             </h2>
-            <p class="text-xs text-slate-500">평소 결제하는 금액을 입력하면, 실질 이익과 대표 제품 개수로 즉시 환산해 드려요.</p>
+            <p class="text-xs text-slate-500 font-medium mt-0.5">평소 결제하는 금액을 입력하면, 실질 이익과 대표 제품 개수로 즉시 환산해 드려요.</p>
           </div>
         </div>
-        <span class="text-xs font-bold text-emerald-800 bg-white/80 px-3 py-1 rounded-full border border-emerald-200 self-start sm:self-auto">
+        <span class="text-xs font-bold text-emerald-800 bg-white/90 px-3 py-1 rounded-full border border-emerald-200 self-start sm:self-auto shadow-xs">
           영업이익률 <span id="widgetMarginPct">-%</span> 적용
         </span>
       </div>
 
+      <!-- Quick Preset Chips -->
+      <div class="flex items-center gap-2 flex-wrap">
+        <span class="text-xs font-bold text-slate-500">빠른 금액 선택:</span>
+        <button type="button" class="spend-chip chip-btn text-xs font-bold px-3 py-1 rounded-full bg-white border border-emerald-200 hover:bg-emerald-600 hover:text-white text-emerald-800 shadow-xs" data-amount="10000">1만 원</button>
+        <button type="button" class="spend-chip chip-btn text-xs font-bold px-3 py-1 rounded-full bg-white border border-emerald-200 hover:bg-emerald-600 hover:text-white text-emerald-800 shadow-xs" data-amount="30000">3만 원</button>
+        <button type="button" class="spend-chip chip-btn text-xs font-bold px-3 py-1 rounded-full bg-white border border-emerald-200 hover:bg-emerald-600 hover:text-white text-emerald-800 shadow-xs" data-amount="50000">5만 원</button>
+        <button type="button" class="spend-chip chip-btn text-xs font-bold px-3 py-1 rounded-full bg-white border border-emerald-200 hover:bg-emerald-600 hover:text-white text-emerald-800 shadow-xs" data-amount="100000">10만 원</button>
+        <button type="button" class="spend-chip chip-btn text-xs font-bold px-3 py-1 rounded-full bg-white border border-emerald-200 hover:bg-emerald-600 hover:text-white text-emerald-800 shadow-xs" data-amount="200000">20만 원</button>
+      </div>
+
       <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
         <!-- Input Box -->
-        <div class="md:col-span-5 bg-white p-3 rounded-2xl border border-emerald-200 shadow-sm flex items-center gap-2">
+        <div class="md:col-span-5 bg-white p-3.5 rounded-2xl border border-emerald-200 shadow-xs space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-slate-400 shrink-0">결제액:</span>
+            <input 
+              id="detailSpendInput" 
+              type="number" 
+              value="35000" 
+              step="1000"
+              class="flex-1 bg-transparent font-black text-lg text-slate-800 px-2 py-0.5 outline-none text-right focus:text-emerald-600"
+              placeholder="금액 입력"
+            />
+            <span class="text-xs font-bold text-slate-600 shrink-0">원 결제 시</span>
+          </div>
+          <!-- Range Slider -->
           <input 
-            id="detailSpendInput" 
-            type="number" 
-            value="35000" 
-            step="1000"
-            class="flex-1 bg-transparent font-black text-base text-slate-800 px-2 py-1 outline-none text-right"
-            placeholder="결제 금액 입력"
+            id="detailSpendSlider" 
+            type="range" 
+            min="1000" 
+            max="300000" 
+            step="1000" 
+            value="35000"
+            class="w-full h-1.5 bg-slate-100 rounded-lg cursor-pointer"
           />
-          <span class="text-xs font-bold text-slate-500 shrink-0">원 결제 시</span>
         </div>
 
         <!-- Arrow Icon -->
@@ -142,129 +185,219 @@
         </div>
 
         <!-- Result Box -->
-        <div class="md:col-span-6 p-4 rounded-2xl bg-white/95 border border-emerald-300 shadow-sm flex items-center justify-between">
-          <div class="space-y-0.5">
-            <p class="text-[11px] text-slate-500 font-semibold">순수 기업 이익금 환산액</p>
-            <p class="text-base sm:text-lg font-black text-emerald-800">
-              <span id="detailMarginEarned" class="text-emerald-600">-</span>
-              <span class="text-xs font-bold text-slate-600"> (<span id="detailItemCountText">-</span> 마진)</span>
+        <div class="md:col-span-6 p-4 sm:p-5 rounded-2xl bg-white/95 border border-emerald-300 shadow-sm flex items-center justify-between gap-3">
+          <div class="space-y-1">
+            <p class="text-[11px] text-slate-500 font-bold flex items-center gap-1">
+              <span>💰</span> 순수 기업 이익금 환산액
+            </p>
+            <p class="text-base sm:text-lg font-black text-emerald-900">
+              <span id="detailMarginEarned" class="text-emerald-600 text-lg sm:text-xl">-</span>
+              <span class="text-xs font-extrabold text-slate-600"> (<span id="detailItemCountText">-</span> 마진)</span>
+            </p>
+            <p id="detailFriendlyMessage" class="text-[11px] text-emerald-800/80 font-medium">
+              환산 결과를 계산 중입니다.
             </p>
           </div>
-          <span class="text-2xl" id="detailItemIcon">🎁</span>
+          <span class="text-3xl sm:text-4xl shrink-0 p-2 bg-emerald-50 rounded-2xl" id="detailItemIcon">🧴</span>
         </div>
       </div>
     </section>
 
-    <!-- 3. [페르소나 2 맞춤] 쉬운 손익계산서 해체쇼 -->
+    <!-- 3. [페르소나 2 맞춤] 쉬운 손익계산서 해체쇼 (Visual Money Pipeline) -->
     <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
         <div>
           <h2 class="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
             <span>📊</span> 초간단 손익계산서 해체쇼
           </h2>
-          <p class="text-xs text-slate-500 mt-0.5">손님이 낸 돈(매출)에서 얼마가 나가고 진짜 내 주머니에 얼마가 남았을까요?</p>
+          <p class="text-xs text-slate-500 mt-0.5 font-medium">
+            손님이 낸 돈(매출)에서 얼마가 나가고 진짜 내 주머니에 얼마가 남았을까요?
+          </p>
         </div>
-        <span class="text-xs font-bold text-slate-400 bg-slate-50 px-3 py-1 rounded-full border border-slate-200 self-start sm:self-auto">
+        <span class="text-xs font-bold text-slate-500 bg-slate-50 px-3 py-1 rounded-full border border-slate-200 self-start sm:self-auto">
           단위: 2023 연간 실적
         </span>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div class="stat-card p-5 rounded-2xl bg-slate-50 border border-slate-200">
+      <!-- 4단계 머니 파이프라인 카드 -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        
+        <!-- Step 1: 매출액 -->
+        <div class="stat-card p-5 rounded-2xl bg-slate-50 border border-slate-200 relative">
           <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-bold text-slate-500">1. 매출액 (총 결제액)</span>
+            <span class="text-xs font-bold text-slate-600 flex items-center gap-1 tooltip-trigger">
+              1. 매출액
+              <i data-lucide="help-circle" class="w-3.5 h-3.5 text-slate-400"></i>
+              <span class="tooltip-bubble bg-slate-900 text-white text-[11px] font-normal px-2.5 py-1.5 rounded-lg shadow-lg whitespace-nowrap">
+                손님들이 1년 동안 결제한 총 금액
+              </span>
+            </span>
             <span class="text-xs font-extrabold text-slate-900 bg-white px-2 py-0.5 rounded border border-slate-200">100%</span>
           </div>
           <p id="statRevenue" class="text-xl font-black text-slate-900 mt-1">-</p>
-          <div class="w-full bg-slate-200 h-1.5 rounded-full mt-3 overflow-hidden">
+          <p class="text-[11px] text-slate-500 mt-1 font-medium">손님이 결제한 총 금액</p>
+          <div class="w-full bg-slate-200 h-2 rounded-full mt-3 overflow-hidden">
             <div class="bg-slate-800 h-full w-full"></div>
           </div>
         </div>
 
-        <div class="stat-card p-5 rounded-2xl bg-rose-50/60 border border-rose-100">
+        <!-- Step 2: 빠져나간 비용 -->
+        <div class="stat-card p-5 rounded-2xl bg-rose-50/60 border border-rose-100 relative">
           <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-bold text-rose-600">2. 빠져나간 비용</span>
+            <span class="text-xs font-bold text-rose-700 flex items-center gap-1 tooltip-trigger">
+              2. 빠져나간 비용
+              <i data-lucide="help-circle" class="w-3.5 h-3.5 text-rose-400"></i>
+              <span class="tooltip-bubble bg-slate-900 text-white text-[11px] font-normal px-2.5 py-1.5 rounded-lg shadow-lg whitespace-nowrap">
+                물건 떼온 원가 + 알바비 + 매장 월세 등
+              </span>
+            </span>
             <span id="statCostPct" class="text-xs font-extrabold text-rose-700 bg-white px-2 py-0.5 rounded border border-rose-200">-</span>
           </div>
           <p id="statCost" class="text-xl font-black text-rose-800 mt-1">-</p>
-          <div class="w-full bg-rose-200 h-1.5 rounded-full mt-3 overflow-hidden">
-            <div id="statCostBar" class="bg-rose-500 h-full w-[85%]"></div>
+          <p class="text-[11px] text-rose-600/80 mt-1 font-medium">원가, 인건비, 매장 임차료 등</p>
+          <div class="w-full bg-rose-200 h-2 rounded-full mt-3 overflow-hidden">
+            <div id="statCostBar" class="bg-rose-500 h-full w-[85%] flow-bar"></div>
           </div>
         </div>
 
-        <div class="stat-card p-5 rounded-2xl bg-yellow-50/60 border border-yellow-200">
+        <!-- Step 3: 영업이익 -->
+        <div class="stat-card p-5 rounded-2xl bg-yellow-50/60 border border-yellow-200 relative">
           <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-bold text-yellow-700">3. 영업이익 (본업 몫)</span>
+            <span class="text-xs font-bold text-yellow-800 flex items-center gap-1 tooltip-trigger">
+              3. 영업이익 (본업 몫)
+              <i data-lucide="help-circle" class="w-3.5 h-3.5 text-yellow-600"></i>
+              <span class="tooltip-bubble bg-slate-900 text-white text-[11px] font-normal px-2.5 py-1.5 rounded-lg shadow-lg whitespace-nowrap">
+                본업 장사로 순수하게 남긴 알짜 이익
+              </span>
+            </span>
             <span id="statOpProfitPct" class="text-xs font-extrabold text-yellow-800 bg-white px-2 py-0.5 rounded border border-yellow-300">-</span>
           </div>
           <p id="statOpProfit" class="text-xl font-black text-yellow-900 mt-1">-</p>
-          <div class="w-full bg-yellow-200 h-1.5 rounded-full mt-3 overflow-hidden">
-            <div id="statOpBar" class="bg-yellow-500 h-full w-[15%]"></div>
+          <p class="text-[11px] text-yellow-800/80 mt-1 font-medium">본업으로 순수하게 남긴 실질 이익</p>
+          <div class="w-full bg-yellow-200 h-2 rounded-full mt-3 overflow-hidden">
+            <div id="statOpBar" class="bg-yellow-500 h-full w-[15%] flow-bar"></div>
           </div>
         </div>
 
-        <div class="stat-card p-5 rounded-2xl bg-emerald-50 border-2 border-emerald-500/80">
+        <!-- Step 4: 당기순이익 -->
+        <div class="stat-card p-5 rounded-2xl bg-emerald-50 border-2 border-emerald-500/80 relative shadow-sm">
           <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-bold text-emerald-800">4. 당기순이익 (진짜 내 돈)</span>
+            <span class="text-xs font-bold text-emerald-800 flex items-center gap-1 tooltip-trigger">
+              4. 당기순이익 (진짜 내 돈)
+              <i data-lucide="help-circle" class="w-3.5 h-3.5 text-emerald-600"></i>
+              <span class="tooltip-bubble bg-slate-900 text-white text-[11px] font-normal px-2.5 py-1.5 rounded-lg shadow-lg whitespace-nowrap">
+                세금·이자까지 다 털고 최종 금고에 남은 돈
+              </span>
+            </span>
             <span id="statNetProfitPct" class="text-xs font-extrabold text-emerald-800 bg-white px-2 py-0.5 rounded border border-emerald-300">-</span>
           </div>
           <p id="statNetProfit" class="text-xl font-black text-emerald-700 mt-1">-</p>
-          <div class="w-full bg-emerald-200 h-1.5 rounded-full mt-3 overflow-hidden">
-            <div id="statNetBar" class="bg-emerald-600 h-full w-[10%]"></div>
+          <p class="text-[11px] text-emerald-700 mt-1 font-medium">세금까지 모두 내고 금고에 남은 알짜 돈</p>
+          <div class="w-full bg-emerald-200 h-2 rounded-full mt-3 overflow-hidden">
+            <div id="statNetBar" class="bg-emerald-600 h-full w-[10%] flow-bar"></div>
           </div>
         </div>
+
       </div>
 
+      <!-- 주린이 필수 팁 배너 -->
       <div class="p-4 rounded-2xl bg-slate-900 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
         <div class="flex items-center gap-2.5">
           <span class="text-lg">💡</span>
           <span><strong>주린이 필수 팁:</strong> 매출이 아무리 커도 <strong>'영업이익률'</strong>이 높아야 알짜 기업이에요!</span>
         </div>
-        <span id="compTipHighlight" class="font-bold text-emerald-400">알짜 수익성 분석</span>
+        <span id="compTipHighlight" class="font-bold text-emerald-400 self-start sm:self-auto">알짜 수익성 분석</span>
       </div>
     </section>
 
-    <!-- 4. [페르소나 2 맞춤] AI 3줄 요약 & 자랑거리 vs 리스크 -->
+    <!-- 4. [페르소나 2 맞춤] AI 3줄 요약 & 자랑거리 vs 리스크 (신호등 분석) -->
     <section class="grid grid-cols-1 md:grid-cols-12 gap-6">
+      
+      <!-- AI 3줄 요약 (12 cols) -->
       <div class="md:col-span-12 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
-        <h2 class="text-lg font-black text-slate-900 flex items-center gap-2"><span>🤖</span> 퇴근 후 5분 만에 끝내는 AI 공시 3줄 핵심 요약</h2>
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold text-sm">🤖</div>
+            <h2 class="text-lg font-black text-slate-900">퇴근 후 5분 만에 끝내는 AI 공시 3줄 핵심 요약</h2>
+          </div>
+          <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full">핵심 브리핑</span>
+        </div>
+
         <div class="p-5 rounded-2xl bg-slate-50 border border-slate-100">
-          <ul id="summaryList" class="space-y-2.5 text-xs sm:text-sm text-slate-700 font-medium"></ul>
+          <ul id="summaryList" class="space-y-2.5 text-xs sm:text-sm text-slate-700 font-medium">
+            <!-- Dynamically populated -->
+          </ul>
         </div>
       </div>
 
+      <!-- 올해의 자랑거리 (6 cols) -->
       <div class="md:col-span-6 bg-emerald-50/60 rounded-3xl p-6 sm:p-7 border border-emerald-100 space-y-3">
-        <h3 class="text-sm font-extrabold text-emerald-900">🟢 이 회사의 올해 자랑거리 (초록불)</h3>
-        <ul id="goodList" class="space-y-2 text-xs sm:text-sm text-slate-700 font-medium"></ul>
+        <h3 class="text-sm font-extrabold text-emerald-900 flex items-center gap-1.5">
+          <span>🟢</span> 이 회사의 올해 자랑거리 (초록불)
+        </h3>
+        <ul id="goodList" class="space-y-2 text-xs sm:text-sm text-slate-700 font-medium">
+          <!-- Dynamically populated -->
+        </ul>
       </div>
 
+      <!-- 조심해야 할 리스크 (6 cols) -->
       <div class="md:col-span-6 bg-rose-50/60 rounded-3xl p-6 sm:p-7 border border-rose-100 space-y-3">
-        <h3 class="text-sm font-extrabold text-rose-900">🔴 주린이가 조심해야 할 리스크 (빨간불)</h3>
-        <ul id="riskList" class="space-y-2 text-xs sm:text-sm text-slate-700 font-medium"></ul>
+        <h3 class="text-sm font-extrabold text-rose-900 flex items-center gap-1.5">
+          <span>🔴</span> 주린이가 조심해야 할 리스크 (빨간불)
+        </h3>
+        <ul id="riskList" class="space-y-2 text-xs sm:text-sm text-slate-700 font-medium">
+          <!-- Dynamically populated -->
+        </ul>
       </div>
 
-      <!-- 소액 투자자 체감 카드 -->
-      <div class="md:col-span-12 bg-indigo-50/60 rounded-3xl p-6 sm:p-7 border border-indigo-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-xl shrink-0">🌱</div>
-          <div>
-            <h4 class="text-sm font-extrabold text-indigo-950">5만 원 소액 주주 시선에서 본다면?</h4>
-            <p id="microInvestText" class="text-xs text-indigo-800 mt-0.5">소액 투자 시 지분 환산</p>
+      <!-- 소액 투자자 체감 시뮬레이터 카드 (12 cols) -->
+      <div class="md:col-span-12 bg-indigo-50/70 rounded-3xl p-6 sm:p-7 border border-indigo-100 space-y-4">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-xl shrink-0 shadow-md">🌱</div>
+            <div>
+              <h4 class="text-sm sm:text-base font-extrabold text-indigo-950">소액(1~5만 원) 주주 시선에서 본다면?</h4>
+              <p class="text-xs text-indigo-700 mt-0.5">적금 대신 커피값으로 주식을 샀을 때 내가 갖는 실물 지분 체감!</p>
+            </div>
+          </div>
+          
+          <!-- Micro Invest Presets -->
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <button type="button" class="micro-chip chip-btn text-xs font-bold px-3 py-1 rounded-full bg-white border border-indigo-200 text-indigo-900 hover:bg-indigo-600 hover:text-white" data-invest="10000">1만 원</button>
+            <button type="button" class="micro-chip chip-btn text-xs font-bold px-3 py-1 rounded-full bg-white border border-indigo-200 text-indigo-900 hover:bg-indigo-600 hover:text-white" data-invest="30000">3만 원</button>
+            <button type="button" class="micro-chip chip-btn text-xs font-bold px-3 py-1 rounded-full bg-indigo-600 text-white border border-indigo-600" data-invest="50000">5만 원</button>
+            <button type="button" class="micro-chip chip-btn text-xs font-bold px-3 py-1 rounded-full bg-white border border-indigo-200 text-indigo-900 hover:bg-indigo-600 hover:text-white" data-invest="100000">10만 원</button>
           </div>
         </div>
-        <a href="../company_list/index.html" class="px-5 py-2.5 rounded-xl bg-indigo-900 text-white font-bold text-xs hover:bg-indigo-800 transition-colors shrink-0">
-          다른 기업도 비교하기
-        </a>
+
+        <div class="p-4 rounded-2xl bg-white border border-indigo-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <p id="microInvestText" class="text-xs sm:text-sm text-indigo-950 font-semibold leading-relaxed">
+            소액 투자 시 지분을 계산 중입니다...
+          </p>
+          <a href="../company_list/index.html" class="px-4 py-2 rounded-xl bg-indigo-900 text-white font-bold text-xs hover:bg-indigo-800 transition-colors shrink-0 text-center">
+            다른 기업과 비교하기
+          </a>
+        </div>
       </div>
+
     </section>
 
     <!-- 5. 🎯 하단 기업 퀴즈 컨테이너 (팀원 C 컴포넌트 렌더링 영역) -->
-    <section id="companyQuizContainer"></section>
+    <section id="companyQuizContainer" class="space-y-4"></section>
 
   </main>
 
-  <footer class="bg-white border-t border-slate-200/80 py-6 mt-12 text-center text-xs text-slate-400">
-    <p class="font-semibold text-slate-600">📈 Easy-DART — 20대 일상 기업 전자공시 해설 플랫폼</p>
+  <!-- Toast Notification -->
+  <div id="toastNotification" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 pointer-events-none bg-slate-900 text-white text-xs font-bold px-4 py-3 rounded-2xl shadow-xl flex items-center gap-2">
+    <span id="toastIcon">✨</span>
+    <span id="toastMessage">알림 내용</span>
+  </div>
+
+  <footer class="bg-white border-t border-slate-200/80 py-8 mt-12 text-center text-xs text-slate-400">
+    <div class="max-w-5xl mx-auto px-4 space-y-2">
+      <p class="font-bold text-slate-600">📈 Easy-DART (핑거다트) — 주린이를 위한 20대 일상 기업 전자공시 해설 플랫폼</p>
+      <p>금융감독원 Open DART API 기반 데이터 분석 및 AI 요약 제공 • 투자 권유 목적이 아닌 정보 제공용 서비스입니다.</p>
+    </div>
   </footer>
 
   <script type="module" src="script.js"></script>
