@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Easy-DART | 실전 모의투자: 무지성 풀매수 vs DART 분석</title>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;900&family=Pretendard:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --arcade-bg: #0B0F19;
+    }
+    body {
+      font-family: 'Pretendard', -apple-system, sans-serif;
+      background-color: var(--arcade-bg);
+      color: #F1F5F9;
+      overflow-x: hidden;
+      user-select: none;
+    }
+    .font-arcade {
+      font-family: 'Outfit', sans-serif;
+    }
+    .arcade-panel {
+      background: rgba(19, 27, 46, 0.92);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(56, 189, 248, 0.22);
+      box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.6), 0 0 15px rgba(56, 189, 248, 0.08);
+    }
+    .shadow-neon-red {
+      box-shadow: 0 0 25px rgba(244, 63, 94, 0.35);
+    }
+    .shadow-neon-cyan {
+      box-shadow: 0 0 25px rgba(56, 189, 248, 0.35);
+    }
+    .shadow-neon-amber {
+      box-shadow: 0 0 25px rgba(245, 158, 11, 0.35);
+    }
+    .shadow-neon-emerald {
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.35);
+    }
+    @keyframes pulse-slow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(1.02); }
+    }
+    .animate-pulse-slow {
+      animation: pulse-slow 3s infinite ease-in-out;
+    }
+    @keyframes beggar-shiver {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-2px) rotate(-1deg); }
+      75% { transform: translateY(2px) rotate(1deg); }
+    }
+    .beggar-shivering {
+      animation: beggar-shiver 0.4s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-cyan-500 selection:text-white">
+
+  <!-- Background Gradients -->
+  <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+    <div class="absolute -top-40 -left-40 w-96 h-96 bg-cyan-600/10 rounded-full blur-3xl"></div>
+    <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-rose-600/10 rounded-full blur-3xl"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-blue-600/5 rounded-full blur-3xl"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <div class="flex items-center space-x-6">
+        <a href="index.html" class="flex items-center space-x-2.5 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 via-blue-600 to-indigo-600 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-cyan-500/25 group-hover:scale-105 transition-transform">
+            📈
+          </div>
+          <div>
+            <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent">Easy-DART</span>
+            <span class="hidden sm:inline-block ml-2 text-xs font-bold px-2 py-0.5 bg-cyan-950 text-cyan-300 rounded-full border border-cyan-800">MOCK INVEST</span>
+          </div>
+        </a>
+
+        <nav class="flex items-center space-x-2">
+          <a href="/company-list" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors flex items-center gap-1.5">
+            <i data-lucide="building-2" class="w-4 h-4"></i> 기업 파헤치기
+          </a>
+          <a href="index.html" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors flex items-center gap-1.5">
+            <i data-lucide="gamepad-2" class="w-4 h-4 text-rose-400"></i> DART 오락실
+          </a>
+          <span class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-500/20 flex items-center gap-1.5">
+            <i data-lucide="trending-up" class="w-4 h-4 text-amber-300"></i> 실전 모의투자
+          </span>
+        </nav>
+      </div>
+
+      <!-- Quick Seed Status -->
+      <div class="flex items-center space-x-3">
+        <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-bold">
+          <span class="text-slate-400">내 자산:</span>
+          <span id="headerTotalAsset" class="text-amber-300 font-extrabold">10,000,000원</span>
+          <span id="headerYieldBadge" class="px-1.5 py-0.5 rounded text-[10px] font-black bg-slate-800 text-slate-300">+0.0%</span>
+        </div>
+        <button id="resetGameBtn" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-xs font-bold text-slate-400 hover:text-slate-200 border border-slate-800 transition flex items-center gap-1">
+          <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> 원금 리셋
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 flex-1 w-full z-10">
+
+    <!-- Top Banner: Game Hook -->
+    <div class="relative rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-slate-900/95 via-slate-950/95 to-slate-900/95 border border-slate-800 shadow-2xl overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="space-y-3 text-center md:text-left">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-800 text-xs font-black text-cyan-400 tracking-wider">
+          <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+          REALISTIC DART SIMULATION
+        </div>
+        <h1 class="text-2xl sm:text-4xl font-black text-white leading-tight">
+          "공시 안 보고 무지성 매수하면 <span class="text-rose-400 underline decoration-rose-500 underline-offset-8">90% 깡통</span> 찬다!"
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">
+          유튜브·단타 리딩방만 믿고 풀매수하면 <b>초고층 펜트하우스에 물려서 몇 달 동안 강제 존버(Lock-up)</b>됩니다.<br>
+          <span class="text-cyan-300 font-bold">DART 공시 돋보기</span>로 악재(유상증자·CB발행·감사의견 거절)를 걸러내고 골판지 박스 거지를 탈출하세요!
+        </p>
+      </div>
+
+      <!-- Live Mascot Preview Card -->
+      <div id="mascotCard" class="arcade-panel rounded-3xl p-5 w-full md:w-72 flex flex-col items-center justify-center text-center space-y-2 border-2 border-cyan-500/40 relative">
+        <div class="text-xs font-extrabold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+          <span>내 캐릭터 상태</span>
+        </div>
+        <div id="mascotAvatar" class="text-5xl my-1 transition-transform transform">
+          🐜📊
+        </div>
+        <div id="mascotTitle" class="text-sm font-black text-cyan-300">
+          스마트 개미 핑거
+        </div>
+        <div id="mascotQuote" class="text-[11px] text-slate-400 italic bg-slate-950/80 px-3 py-1.5 rounded-xl border border-slate-800 w-full">
+          "DART 공시를 꼼꼼히 확인하고 투자하세요!"
+        </div>
+      </div>
+    </div>
+
+    <!-- Company Selection Tabs -->
+    <div class="space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">🏢</span>
+          <h2 class="text-base sm:text-lg font-black text-white">투자할 실전 기업 선택</h2>
+          <span class="text-xs text-slate-400 hidden sm:inline">(기업 파헤치기 데이터 연동)</span>
+        </div>
+        <div class="text-xs text-slate-400 flex items-center gap-1">
+          <i data-lucide="clock" class="w-3.5 h-3.5 text-cyan-400"></i>
+          <span>현재 진행: <b id="currentTurnText" class="text-cyan-300">2024년 1월 (1턴)</b></span>
+        </div>
+      </div>
+
+      <!-- Company Cards Grid -->
+      <div id="companyGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+        <!-- Dynamically generated companies -->
+      </div>
+    </div>
+
+    <!-- Main Trading Dashboard (Chart + DART Inspector + Order Console) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- Left 7 Cols: Chart & Price Action -->
+      <div class="lg:col-span-7 arcade-panel rounded-3xl p-5 sm:p-6 space-y-5 flex flex-col justify-between">
+        
+        <!-- Header Info of Selected Company -->
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80 pb-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 id="targetCompanyName" class="text-xl sm:text-2xl font-black text-white">삼성전자</h3>
+              <span id="targetCompanyCode" class="text-xs font-mono font-bold text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">005930</span>
+              <span id="targetCompanyIndustry" class="text-xs font-bold text-cyan-400 bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-800">반도체/IT</span>
+            </div>
+            <p id="targetCompanyDesc" class="text-xs text-slate-400 mt-1">글로벌 메모리 반도체 1위 및 파운드리 대기업</p>
+          </div>
+
+          <div class="text-right">
+            <div id="targetCurrentPrice" class="text-2xl sm:text-3xl font-black text-emerald-400">74,200원</div>
+            <div id="targetPriceDiff" class="text-xs font-bold text-emerald-400 flex items-center justify-end gap-1">
+              <span>▲ +1,800원 (+2.48%)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Candlestick / Line Chart Canvas -->
+        <div class="relative w-full h-64 bg-slate-950/90 rounded-2xl border border-slate-800 p-4 flex flex-col justify-between overflow-hidden">
+          <div class="flex items-center justify-between text-[11px] text-slate-500 font-mono z-10">
+            <span id="chartRangeText">최근 6개월 주가 추이 (월봉 시뮬레이션)</span>
+            <span class="flex items-center gap-2">
+              <span class="inline-block w-2.5 h-2.5 bg-rose-500 rounded-sm"></span> 상승(양봉)
+              <span class="inline-block w-2.5 h-2.5 bg-cyan-500 rounded-sm"></span> 하락(음봉)
+            </span>
+          </div>
+
+          <canvas id="stockChartCanvas" class="w-full h-48 z-10"></canvas>
+
+          <!-- Watermark in chart -->
+          <div class="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none text-6xl font-black">
+            FINGER-DART
+          </div>
+        </div>
+
+        <!-- Lock-up Freeze Alert Box (Hidden until triggered) -->
+        <div id="lockupAlertBox" class="hidden p-4 rounded-2xl bg-rose-950/80 border-2 border-rose-600 shadow-neon-red space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2 text-rose-400 font-black text-sm">
+              <span class="text-xl animate-bounce">🚨</span>
+              <span>대형 물림 경보! [초고층 펜트하우스 조난]</span>
+            </div>
+            <span id="lockupMonthsRemaining" class="text-xs font-extrabold bg-rose-900 text-rose-200 px-2.5 py-1 rounded-full border border-rose-700">
+              강제 존버 3개월 남음
+            </span>
+          </div>
+          <p class="text-xs text-rose-200 leading-relaxed">
+            무지성 풀매수 후 <b>-30% 이상 폭락</b>하여 계좌가 꽁꽁 얼어붙었습니다! <br>
+            자금이 동결되어 일반 매도를 할 수 없습니다. <b>턴을 넘기며 존버</b>하거나, <b>피눈물 나는 손절(-50% 확정)</b>만 가능합니다!
+          </p>
+        </div>
+
+        <!-- Turn Control -->
+        <div class="flex items-center justify-between pt-2">
+          <div class="text-xs text-slate-400 flex items-center gap-1.5">
+            <i data-lucide="info" class="w-4 h-4 text-cyan-400"></i>
+            <span>한 턴을 넘기면 실제 DART 공시가 반영되며 1달 후 주가로 이동합니다.</span>
+          </div>
+          <button id="nextTurnBtn" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 font-black text-xs transition flex items-center gap-2 active:scale-95">
+            <span>다음 턴으로 넘기기 (1개월 후)</span>
+            <i data-lucide="fast-forward" class="w-3.5 h-3.5 text-cyan-400"></i>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Right 5 Cols: Trading Desk & DART Inspector -->
+      <div class="lg:col-span-5 space-y-5">
+        
+        <!-- Account State Summary -->
+        <div class="arcade-panel rounded-3xl p-5 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h4 class="text-sm font-black text-white flex items-center gap-2">
+              <i data-lucide="wallet" class="w-4 h-4 text-amber-400"></i>
+              <span>내 모의투자 계좌</span>
+            </h4>
+            <span id="holdingStatusBadge" class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">
+              보유 주식 없음
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 text-xs">
+            <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800">
+              <span class="text-slate-400 block mb-1">예수금 (현금)</span>
+              <span id="accCash" class="text-base font-black text-white">10,000,000원</span>
+            </div>
+            <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800">
+              <span class="text-slate-400 block mb-1">보유 주식 평가액</span>
+              <span id="accStockVal" class="text-base font-black text-cyan-400">0원</span>
+            </div>
+            <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800">
+              <span class="text-slate-400 block mb-1">총 평가 자산</span>
+              <span id="accTotalVal" class="text-base font-black text-amber-300">10,000,000원</span>
+            </div>
+            <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800">
+              <span class="text-slate-400 block mb-1">누적 수익률</span>
+              <span id="accYield" class="text-base font-black text-slate-300">0.00%</span>
+            </div>
+          </div>
+
+          <div id="holdingDetailBox" class="hidden bg-slate-950/60 p-3 rounded-xl border border-slate-800/80 text-[11px] text-slate-300 space-y-1">
+            <div class="flex justify-between">
+              <span>보유 종목:</span> <b id="holdingName" class="text-white">-</b>
+            </div>
+            <div class="flex justify-between">
+              <span>보유 수량:</span> <b id="holdingQty" class="text-white">0주</b>
+            </div>
+            <div class="flex justify-between">
+              <span>매수 평단가:</span> <b id="holdingAvgPrice" class="text-white">0원</b>
+            </div>
+            <div class="flex justify-between">
+              <span>현재 손익:</span> <b id="holdingProfitLoss" class="text-white">0원 (0.0%)</b>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2 Paths: Mindless Buy vs DART Inspector -->
+        <div class="arcade-panel rounded-3xl p-5 space-y-4 border-2 border-slate-800">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-black uppercase text-amber-400 tracking-wider">투자의 갈림길</span>
+            <span class="text-[10px] text-slate-400">교육용 비교 체험</span>
+          </div>
+
+          <!-- Choice 1: Mindless Buy (90% 폭망 지뢰) -->
+          <div class="p-4 rounded-2xl bg-gradient-to-br from-rose-950/60 to-slate-950 border border-rose-700/60 space-y-3 relative overflow-hidden group hover:border-rose-500 transition-colors">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="text-xl">💣</span>
+                <div>
+                  <h5 class="text-sm font-black text-rose-300">무지성 풀매수 (ALL-IN)</h5>
+                  <span class="text-[10px] text-rose-400 font-semibold">"유튜브·급등 찌라시만 보고 전재산 몰빵!"</span>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded text-[10px] font-black bg-rose-900/80 text-rose-300 border border-rose-700">
+                폭망 확률 90%
+              </span>
+            </div>
+            <p class="text-xs text-slate-400 leading-snug">
+              공시 문서는 쳐다보지도 않고 감으로 매수합니다. 90% 확률로 <b>악재 공시 지뢰(전환사채 폭탄·실적 쇼크)</b>를 밟고 대형 물림 상태에 빠집니다!
+            </p>
+            <button id="mindlessBuyBtn" class="w-full py-3 rounded-xl bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-500 hover:to-red-500 text-white font-black text-xs shadow-lg shadow-rose-600/30 transition transform active:scale-95 flex items-center justify-center gap-2">
+              <span>🎲 무지성 전재산 풀매수 감행하기</span>
+            </button>
+          </div>
+
+          <!-- Choice 2: DART Disclosure Inspector -->
+          <div class="p-4 rounded-2xl bg-gradient-to-br from-cyan-950/60 to-slate-950 border border-cyan-700/60 space-y-3 relative overflow-hidden group hover:border-cyan-400 transition-colors">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="text-xl">🔍</span>
+                <div>
+                  <h5 class="text-sm font-black text-cyan-300">DART 공시 돋보기 열람</h5>
+                  <span class="text-[10px] text-cyan-400 font-semibold">"실제 정기보고서·주요사항보고서 분석"</span>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded text-[10px] font-black bg-cyan-900/80 text-cyan-300 border border-cyan-700">
+                승률 75%
+              </span>
+            </div>
+            <p class="text-xs text-slate-400 leading-snug">
+              해당 기업의 <b>최신 DART 핵심 공시(영업이익 추이, CB 발행 여부, 감사의견)</b>를 무료로 열람하고 안전한 투자 결정을 내립니다.
+            </p>
+            <button id="openDartInspectModalBtn" class="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black text-xs shadow-lg shadow-cyan-600/30 transition transform active:scale-95 flex items-center justify-center gap-2">
+              <i data-lucide="file-search" class="w-4 h-4"></i>
+              <span>DART 공시 돋보기 열람하고 분석 매매하기</span>
+            </button>
+          </div>
+
+          <!-- Sell / Cut-loss Buttons -->
+          <div id="sellControlBox" class="hidden pt-2 border-t border-slate-800 grid grid-cols-2 gap-3">
+            <button id="normalSellBtn" class="py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs transition flex items-center justify-center gap-1.5 active:scale-95">
+              <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
+              <span>전량 익절/매도</span>
+            </button>
+            <button id="cutLossBtn" class="py-2.5 rounded-xl bg-rose-700 hover:bg-rose-600 text-white font-black text-xs transition flex items-center justify-center gap-1.5 active:scale-95">
+              <i data-lucide="scissors" class="w-3.5 h-3.5"></i>
+              <span>피눈물 손절매</span>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- History / News Feed Section -->
+    <div class="arcade-panel rounded-3xl p-6 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-base font-black text-white flex items-center gap-2">
+          <span>📰</span> 실전 시장 속보 & DART 공시 로그
+        </h3>
+        <span class="text-xs text-slate-500">턴이 지날 때마다 실시간 기록됩니다.</span>
+      </div>
+
+      <div id="eventLogContainer" class="space-y-2.5 max-h-48 overflow-y-auto pr-2 text-xs">
+        <div class="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-slate-300 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-cyan-400 font-bold">[시스템 안내]</span>
+            <span>2024년 1월 모의투자가 시작되었습니다. 초기 자본금 10,000,000원이 입금되었습니다.</span>
+          </div>
+          <span class="text-[10px] text-slate-500 font-mono">1턴 시작</span>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- DART Inspector Modal -->
+  <div id="dartModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+    <div class="arcade-panel rounded-3xl max-w-2xl w-full p-6 space-y-5 border-2 border-cyan-500/50 shadow-neon-cyan relative max-h-[90vh] overflow-y-auto">
+      
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-cyan-950 text-cyan-400 border border-cyan-800 flex items-center justify-center font-bold">
+            🔍
+          </div>
+          <div>
+            <h4 id="modalCompanyTitle" class="text-lg font-black text-white">삼성전자 DART 공시 돋보기</h4>
+            <span class="text-xs text-slate-400">금융감독원 전자공시시스템(DART) 핵심 지표</span>
+          </div>
+        </div>
+        <button id="closeDartModalBtn" class="w-8 h-8 rounded-full bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center text-sm transition">
+          ✕
+        </button>
+      </div>
+
+      <!-- Key Disclosure Indicators -->
+      <div class="space-y-4">
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+            <span class="text-slate-400 block">영업이익 추이</span>
+            <span id="modalOpProfit" class="text-sm font-black text-emerald-400">흑자 지속 (+15%)</span>
+          </div>
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+            <span class="text-slate-400 block">부채비율</span>
+            <span id="modalDebtRatio" class="text-sm font-black text-cyan-300">28.4% (초안전)</span>
+          </div>
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+            <span class="text-slate-400 block">감사의견</span>
+            <span id="modalAuditOpinion" class="text-sm font-black text-emerald-400">적정 (이상 없음)</span>
+          </div>
+        </div>
+
+        <!-- Recent Disclosures Card -->
+        <div class="bg-slate-950/90 p-4 rounded-2xl border border-slate-800 space-y-2">
+          <div class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+            <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i>
+            <span>최근 주요사항 공시 내역 요약</span>
+          </div>
+          <p id="modalDisclosureContent" class="text-xs text-slate-300 leading-relaxed">
+            [단일판매·공급계약체결] 글로벌 빅테크 기업과 차세대 HBM3E 공급 본계약 체결 완료. 매출액 대비 12.8% 규모.
+          </p>
+          <div id="modalDangerAlert" class="hidden p-2.5 rounded-xl bg-rose-950/70 border border-rose-800 text-[11px] text-rose-300 font-semibold flex items-center gap-2">
+            <span>⚠️ 지뢰 주의: 대규모 전환사채(CB) 물량 폭탄 위험 감지!</span>
+          </div>
+        </div>
+
+        <!-- AI Analyst Verdict -->
+        <div class="p-3.5 rounded-2xl bg-cyan-950/40 border border-cyan-800/50 space-y-1">
+          <div class="text-[11px] font-bold text-cyan-400 flex items-center gap-1">
+            <span>💡 Easy-DART 분석관의 한 줄 코멘트</span>
+          </div>
+          <p id="modalAnalystComment" class="text-xs text-slate-200">
+            "본업의 영업이익이 뚜렷하게 반등하고 있으며 재무 건전성이 매우 우수합니다. 무지성 테마주와 달리 실적으로 뒷받침되는 안전 구간입니다."
+          </p>
+        </div>
+      </div>
+
+      <!-- Action in Modal -->
+      <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+        <button id="modalHoldBtn" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-bold transition">
+          관망하기 (PASS)
+        </button>
+        <button id="modalSmartBuyBtn" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-black text-xs shadow-lg shadow-cyan-500/25 transition flex items-center gap-1.5 active:scale-95">
+          <i data-lucide="check" class="w-3.5 h-3.5"></i>
+          <span>분석 완료! 50% 분할 매수하기</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Beggar Mascot Game Over / Relief Modal (골판지 박스 거지 핑거) -->
+  <div id="beggarModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
+    <div class="arcade-panel rounded-3xl max-w-md w-full p-6 text-center space-y-5 border-2 border-rose-600 shadow-neon-red relative">
+      
+      <div class="text-6xl beggar-shivering my-2">
+        📦🪙
+      </div>
+
+      <div class="space-y-1">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-950 text-rose-400 text-xs font-black border border-rose-800">
+          <span>🚨</span> 잔고 거덜 & 깡통 확정
+        </div>
+        <h3 class="text-2xl font-black text-white">
+          골판지 박스 거지 핑거의 탄생...
+        </h3>
+        <p class="text-xs text-slate-400">
+          "공시도 안 보고 유튜브 말만 믿더니...<br>
+          <span class="text-rose-400 font-bold">-50% 깡통</span> 차고 골판지 박스 덮고 자게 생겼습니다 ㅠㅠ"
+        </p>
+      </div>
+
+      <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2 text-xs text-left">
+        <div class="font-bold text-amber-400 flex items-center gap-1">
+          <span>🧠</span> 주린이 긴급 구호 퀴즈 (회생 미션)
+        </div>
+        <p class="text-slate-200">
+          <b>Q.</b> 기업이 돈이 없어서 주식을 무더기로 새로 찍어내 기존 주주들의 주식 가치를 뚝 떨어뜨리는 공시는?
+        </p>
+        <div class="grid grid-cols-2 gap-2 pt-1">
+          <button id="beggarQuizWrong" class="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 text-[11px] font-bold border border-slate-700 transition">
+            1. 배당금 확대
+          </button>
+          <button id="beggarQuizCorrect" class="p-2 rounded-xl bg-cyan-950/80 hover:bg-cyan-900 text-cyan-300 text-[11px] font-bold border border-cyan-700 transition">
+            2. 주주배정 유상증자
+          </button>
+        </div>
+      </div>
+
+      <div class="pt-2">
+        <button id="closeBeggarModalBtn" class="w-full py-3 rounded-xl bg-gradient-to-r from-slate-800 to-slate-700 hover:from-slate-700 hover:to-slate-600 text-slate-200 text-xs font-black transition">
+          눈물 닦고 처음부터 다시 도전하기 (1,000만원 리셋)
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-slate-950 border-t border-slate-900 py-6 mt-12 text-center text-xs text-slate-500 z-10">
+    <p class="font-semibold text-slate-400">📈 Easy-DART 실전 모의투자 — 무지성 풀매수 방지 & DART 공시 문해력 체감 훈련소</p>
+  </footer>
+
+  <!-- Mock Investment Simulation Logic -->
+  <script>
+    lucide.createIcons();
+
+    // 1. Initial State & Realistic Companies (from 기업 파헤치기)
+    const COMPANIES = [
+      {
+        id: 'samsung',
+        name: '삼성전자',
+        code: '005930',
+        industry: '반도체/IT',
+        basePrice: 72000,
+        currentPrice: 72000,
+        desc: '글로벌 메모리 반도체 1위 및 파운드리 대기업',
+        history: [68000, 70000, 69000, 71500, 70500, 72000],
+        opProfit: '영업이익 6.5조원 (흑자 턴어라운드)',
+        debtRatio: '28.4% (매우 안전)',
+        auditOpinion: '적정 (무흠)',
+        disclosure: '[단일판매 공급계약] 글로벌 빅테크 차세대 HBM3E 공급 본계약 체결 완료 (매출 대비 12.8%).',
+        hasDanger: false,
+        analystComment: '본업 실적 턴어라운드가 공시로 증명되었습니다. 든든한 실적 우량주 구간입니다.'
+      },
+      {
+        id: 'samyang',
+        name: '삼양식품',
+        code: '003230',
+        industry: '식품/수출',
+        basePrice: 580000,
+        currentPrice: 580000,
+        desc: '불닭볶음면 글로벌 수출 신화 & 미국/유럽 점유율 폭발',
+        history: [420000, 460000, 510000, 490000, 550000, 580000],
+        opProfit: '영업이익 전년비 +85% 폭증',
+        debtRatio: '72.1% (양호)',
+        auditOpinion: '적정',
+        disclosure: '[영업(잠정)실적] 해외 수출 비중 78% 돌파. 2분기 영업이익 분기 사상 최대치 갱신.',
+        hasDanger: false,
+        analystComment: 'K-푸드 수출 모멘텀이 숫자로 확인됩니다. 해외 시장 판로 확대가 이어지고 있습니다.'
+      },
+      {
+        id: 'kakao',
+        name: '카카오',
+        code: '035720',
+        industry: '인터넷/플랫폼',
+        basePrice: 42000,
+        currentPrice: 42000,
+        desc: '국민 메신저 카카오톡 기반 플랫폼 & 모빌리티/페이 사업',
+        history: [55000, 51000, 48000, 46000, 43500, 42000],
+        opProfit: '영업이익 -22% 감소 (본업 정체)',
+        debtRatio: '68.5%',
+        auditOpinion: '적정',
+        disclosure: '[주요사항보고] 계열사 중복 상장 논란 및 사법 리스크 관련 공시. 투자심리 위축.',
+        hasDanger: true,
+        analystComment: '계열사 분할 상장 후 본체 매력도가 떨어졌고 지배구조 이슈가 지속 중입니다. 신중한 접근 요망!'
+      },
+      {
+        id: 'oliveyoung',
+        name: 'CJ올리브영',
+        code: '001040',
+        industry: '뷰티/유통',
+        basePrice: 125000,
+        currentPrice: 125000,
+        desc: 'K-뷰티 H&B 스토어 압도적 1위 독점 플랫폼',
+        history: [98000, 105000, 112000, 118000, 122000, 125000],
+        opProfit: '연간 영업이익 4,600억원 사상 최대',
+        debtRatio: '85.2%',
+        auditOpinion: '적정',
+        disclosure: '[정기보고서] 외국인 관광객 매출 300% 폭증 및 온라인 오늘드림 배송 독점 성장세 확인.',
+        hasDanger: false,
+        analystComment: '오프라인 매장 효율화와 온라인 오늘드림의 결합으로 독점적 해자를 구축한 상태입니다.'
+      },
+      {
+        id: 'daiso',
+        name: '아성다이소',
+        code: '054320',
+        industry: '생활용품/초저가',
+        basePrice: 85000,
+        currentPrice: 85000,
+        desc: '고물가 시대 1,000~5,000원 초저가 가성비 혁신',
+        history: [71000, 74000, 78000, 81000, 83000, 85000],
+        opProfit: '매출 3조원 돌파, 영업이익 2,800억원',
+        debtRatio: '45.0% (건전)',
+        auditOpinion: '적정',
+        disclosure: '[감사보고서] 무차입 경영 지속. 뷰티·패션 균일가 카테고리 신규 매출 고속 성장.',
+        hasDanger: false,
+        analystComment: '물가 상승기의 최고 수혜주입니다. 경기 불황일수록 마진과 매출이 방어되는 비즈니스 구조입니다.'
+      }
+    ];
+
+    let currentCompanyIndex = 0;
+    let turn = 1;
+    let cash = 10000000;
+    let initialSeed = 10000000;
+    let holding = null; // { companyId, qty, avgPrice }
+    let lockupRemaining = 0; // Lock-up freeze months remaining
+
+    // DOM Elements
+    const companyGrid = document.getElementById('companyGrid');
+    const targetCompanyName = document.getElementById('targetCompanyName');
+    const targetCompanyCode = document.getElementById('targetCompanyCode');
+    const targetCompanyIndustry = document.getElementById('targetCompanyIndustry');
+    const targetCompanyDesc = document.getElementById('targetCompanyDesc');
+    const targetCurrentPrice = document.getElementById('targetCurrentPrice');
+    const targetPriceDiff = document.getElementById('targetPriceDiff');
+    const currentTurnText = document.getElementById('currentTurnText');
+    const nextTurnBtn = document.getElementById('nextTurnBtn');
+
+    const headerTotalAsset = document.getElementById('headerTotalAsset');
+    const headerYieldBadge = document.getElementById('headerYieldBadge');
+    const accCash = document.getElementById('accCash');
+    const accStockVal = document.getElementById('accStockVal');
+    const accTotalVal = document.getElementById('accTotalVal');
+    const accYield = document.getElementById('accYield');
+    const holdingStatusBadge = document.getElementById('holdingStatusBadge');
+    const holdingDetailBox = document.getElementById('holdingDetailBox');
+    const holdingName = document.getElementById('holdingName');
+    const holdingQty = document.getElementById('holdingQty');
+    const holdingAvgPrice = document.getElementById('holdingAvgPrice');
+    const holdingProfitLoss = document.getElementById('holdingProfitLoss');
+
+    const mindlessBuyBtn = document.getElementById('mindlessBuyBtn');
+    const openDartInspectModalBtn = document.getElementById('openDartInspectModalBtn');
+    const sellControlBox = document.getElementById('sellControlBox');
+    const normalSellBtn = document.getElementById('normalSellBtn');
+    const cutLossBtn = document.getElementById('cutLossBtn');
+    const lockupAlertBox = document.getElementById('lockupAlertBox');
+    const lockupMonthsRemaining = document.getElementById('lockupMonthsRemaining');
+
+    const mascotAvatar = document.getElementById('mascotAvatar');
+    const mascotTitle = document.getElementById('mascotTitle');
+    const mascotQuote = document.getElementById('mascotQuote');
+    const mascotCard = document.getElementById('mascotCard');
+
+    const eventLogContainer = document.getElementById('eventLogContainer');
+
+    // Modal elements
+    const dartModal = document.getElementById('dartModal');
+    const closeDartModalBtn = document.getElementById('closeDartModalBtn');
+    const modalCompanyTitle = document.getElementById('modalCompanyTitle');
+    const modalOpProfit = document.getElementById('modalOpProfit');
+    const modalDebtRatio = document.getElementById('modalDebtRatio');
+    const modalAuditOpinion = document.getElementById('modalAuditOpinion');
+    const modalDisclosureContent = document.getElementById('modalDisclosureContent');
+    const modalDangerAlert = document.getElementById('modalDangerAlert');
+    const modalAnalystComment = document.getElementById('modalAnalystComment');
+    const modalHoldBtn = document.getElementById('modalHoldBtn');
+    const modalSmartBuyBtn = document.getElementById('modalSmartBuyBtn');
+
+    const beggarModal = document.getElementById('beggarModal');
+    const closeBeggarModalBtn = document.getElementById('closeBeggarModalBtn');
+    const beggarQuizCorrect = document.getElementById('beggarQuizCorrect');
+    const beggarQuizWrong = document.getElementById('beggarQuizWrong');
+
+    const resetGameBtn = document.getElementById('resetGameBtn');
+
+    // 2. Render Company Tabs
+    function renderCompanyGrid() {
+      companyGrid.innerHTML = COMPANIES.map((comp, idx) => {
+        const isSelected = idx === currentCompanyIndex;
+        const borderClass = isSelected ? 'border-2 border-cyan-400 bg-cyan-950/40 shadow-neon-cyan' : 'border border-slate-800 bg-slate-900/90 hover:border-slate-700';
+        return `
+          <button onclick="selectCompany(${idx})" class="p-3 rounded-2xl text-left transition-all ${borderClass} flex flex-col justify-between space-y-2 group">
+            <div class="flex items-center justify-between w-full">
+              <span class="text-xs font-black text-white group-hover:text-cyan-300 transition-colors">${comp.name}</span>
+              <span class="text-[10px] font-mono text-slate-500">${comp.code}</span>
+            </div>
+            <div class="text-xs font-black text-slate-200">
+              ${comp.currentPrice.toLocaleString()}원
+            </div>
+            <div class="text-[10px] font-bold text-cyan-400 bg-cyan-950/80 px-1.5 py-0.5 rounded border border-cyan-800/80 w-fit">
+              ${comp.industry}
+            </div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    window.selectCompany = function(idx) {
+      currentCompanyIndex = idx;
+      renderCompanyGrid();
+      updateSelectedCompanyView();
+      drawChart();
+    };
+
+    function updateSelectedCompanyView() {
+      const comp = COMPANIES[currentCompanyIndex];
+      targetCompanyName.textContent = comp.name;
+      targetCompanyCode.textContent = comp.code;
+      targetCompanyIndustry.textContent = comp.industry;
+      targetCompanyDesc.textContent = comp.desc;
+      targetCurrentPrice.textContent = `${comp.currentPrice.toLocaleString()}원`;
+
+      // Price Diff
+      const prevPrice = comp.history[comp.history.length - 2] || comp.basePrice;
+      const diff = comp.currentPrice - prevPrice;
+      const rate = ((diff / prevPrice) * 100).toFixed(2);
+      if (diff >= 0) {
+        targetCurrentPrice.className = 'text-2xl sm:text-3xl font-black text-emerald-400';
+        targetPriceDiff.className = 'text-xs font-bold text-emerald-400 flex items-center justify-end gap-1';
+        targetPriceDiff.innerHTML = `▲ +${diff.toLocaleString()}원 (+${rate}%)`;
+      } else {
+        targetCurrentPrice.className = 'text-2xl sm:text-3xl font-black text-rose-400';
+        targetPriceDiff.className = 'text-xs font-bold text-rose-400 flex items-center justify-end gap-1';
+        targetPriceDiff.innerHTML = `▼ ${diff.toLocaleString()}원 (${rate}%)`;
+      }
+
+      currentTurnText.textContent = `2024년 ${turn}월 (${turn}턴)`;
+    }
+
+    // 3. Canvas Chart Drawing
+    function drawChart() {
+      const canvas = document.getElementById('stockChartCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const comp = COMPANIES[currentCompanyIndex];
+
+      // Resize canvas to display size
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * window.devicePixelRatio;
+      canvas.height = rect.height * window.devicePixelRatio;
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+      const w = rect.width;
+      const h = rect.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      const prices = comp.history;
+      const minP = Math.min(...prices) * 0.95;
+      const maxP = Math.max(...prices) * 1.05;
+
+      const paddingX = 30;
+      const paddingY = 25;
+      const plotW = w - paddingX * 2;
+      const plotH = h - paddingY * 2;
+
+      // Draw Grid Lines
+      ctx.strokeStyle = 'rgba(51, 65, 85, 0.4)';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 3; i++) {
+        const y = paddingY + (plotH / 3) * i;
+        ctx.beginPath();
+        ctx.moveTo(paddingX, y);
+        ctx.lineTo(w - paddingX, y);
+        ctx.stroke();
+      }
+
+      // Draw Candlesticks simulation
+      const stepX = plotW / (prices.length - 1 || 1);
+
+      // Gradient Fill Area under line
+      const grad = ctx.createLinearGradient(0, paddingY, 0, h - paddingY);
+      grad.addColorStop(0, 'rgba(56, 189, 248, 0.3)');
+      grad.addColorStop(1, 'rgba(56, 189, 248, 0.0)');
+
+      ctx.beginPath();
+      prices.forEach((p, i) => {
+        const x = paddingX + i * stepX;
+        const y = h - paddingY - ((p - minP) / (maxP - minP)) * plotH;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.lineTo(paddingX + (prices.length - 1) * stepX, h - paddingY);
+      ctx.lineTo(paddingX, h - paddingY);
+      ctx.closePath();
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Draw Line
+      ctx.beginPath();
+      prices.forEach((p, i) => {
+        const x = paddingX + i * stepX;
+        const y = h - paddingY - ((p - minP) / (maxP - minP)) * plotH;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.strokeStyle = '#38BDF8';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      // Draw Price Points
+      prices.forEach((p, i) => {
+        const x = paddingX + i * stepX;
+        const y = h - paddingY - ((p - minP) / (maxP - minP)) * plotH;
+        const isUp = i > 0 ? p >= prices[i - 1] : true;
+
+        ctx.beginPath();
+        ctx.arc(x, y, 4, 0, Math.PI * 2);
+        ctx.fillStyle = isUp ? '#F43F5E' : '#38BDF8';
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#0F172A';
+        ctx.stroke();
+      });
+    }
+
+    // 4. Update Account Stats & Character Mascot
+    function updateAccount() {
+      let stockVal = 0;
+      if (holding) {
+        const comp = COMPANIES.find(c => c.id === holding.companyId);
+        stockVal = holding.qty * comp.currentPrice;
+      }
+      const totalVal = cash + stockVal;
+      const profitVal = totalVal - initialSeed;
+      const yieldRate = ((profitVal / initialSeed) * 100);
+
+      headerTotalAsset.textContent = `${Math.round(totalVal).toLocaleString()}원`;
+      accCash.textContent = `${Math.round(cash).toLocaleString()}원`;
+      accStockVal.textContent = `${Math.round(stockVal).toLocaleString()}원`;
+      accTotalVal.textContent = `${Math.round(totalVal).toLocaleString()}원`;
+
+      const sign = yieldRate >= 0 ? '+' : '';
+      accYield.textContent = `${sign}${yieldRate.toFixed(2)}%`;
+      headerYieldBadge.textContent = `${sign}${yieldRate.toFixed(1)}%`;
+
+      if (yieldRate > 0) {
+        accYield.className = 'text-base font-black text-emerald-400';
+        headerYieldBadge.className = 'px-1.5 py-0.5 rounded text-[10px] font-black bg-emerald-950 text-emerald-300 border border-emerald-800';
+      } else if (yieldRate < 0) {
+        accYield.className = 'text-base font-black text-rose-400';
+        headerYieldBadge.className = 'px-1.5 py-0.5 rounded text-[10px] font-black bg-rose-950 text-rose-300 border border-rose-800';
+      } else {
+        accYield.className = 'text-base font-black text-slate-300';
+        headerYieldBadge.className = 'px-1.5 py-0.5 rounded text-[10px] font-black bg-slate-800 text-slate-300';
+      }
+
+      // Holding Status UI
+      if (holding) {
+        const comp = COMPANIES.find(c => c.id === holding.companyId);
+        const curProfit = (comp.currentPrice - holding.avgPrice) * holding.qty;
+        const curRate = (((comp.currentPrice - holding.avgPrice) / holding.avgPrice) * 100).toFixed(2);
+
+        holdingStatusBadge.textContent = `${comp.name} 보유 중`;
+        holdingStatusBadge.className = 'text-[11px] font-bold px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-800';
+
+        holdingDetailBox.classList.remove('hidden');
+        holdingName.textContent = comp.name;
+        holdingQty.textContent = `${holding.qty.toLocaleString()}주`;
+        holdingAvgPrice.textContent = `${Math.round(holding.avgPrice).toLocaleString()}원`;
+
+        const curSign = curProfit >= 0 ? '+' : '';
+        holdingProfitLoss.textContent = `${curSign}${Math.round(curProfit).toLocaleString()}원 (${curSign}${curRate}%)`;
+        holdingProfitLoss.className = curProfit >= 0 ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold';
+
+        sellControlBox.classList.remove('hidden');
+      } else {
+        holdingStatusBadge.textContent = '보유 주식 없음';
+        holdingStatusBadge.className = 'text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400';
+        holdingDetailBox.classList.add('hidden');
+        sellControlBox.classList.add('hidden');
+      }
+
+      // Lock-up Freeze Alert Check
+      if (lockupRemaining > 0) {
+        lockupAlertBox.classList.remove('hidden');
+        lockupMonthsRemaining.textContent = `강제 존버 ${lockupRemaining}개월 남음`;
+        normalSellBtn.disabled = true;
+        normalSellBtn.classList.add('opacity-40', 'cursor-not-allowed');
+      } else {
+        lockupAlertBox.classList.add('hidden');
+        normalSellBtn.disabled = false;
+        normalSellBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+      }
+
+      // Update Character Mascot Tier
+      updateMascotTier(yieldRate);
+    }
+
+    function updateMascotTier(rate) {
+      if (rate >= 20) {
+        mascotAvatar.textContent = '👑💸';
+        mascotAvatar.className = 'text-5xl my-1 transition-transform transform scale-110';
+        mascotTitle.textContent = '여의도 빌딩주 핑거';
+        mascotTitle.className = 'text-sm font-black text-amber-300';
+        mascotQuote.textContent = '"한강뷰 펜트하우스 계약금 입금 완료! DART 공시는 신이다!"';
+        mascotCard.className = 'arcade-panel rounded-3xl p-5 w-full md:w-72 flex flex-col items-center justify-center text-center space-y-2 border-2 border-amber-500 shadow-neon-amber';
+      } else if (rate >= 0) {
+        mascotAvatar.textContent = '🐜📊';
+        mascotAvatar.className = 'text-5xl my-1 transition-transform transform';
+        mascotTitle.textContent = '스마트 개미 핑거';
+        mascotTitle.className = 'text-sm font-black text-cyan-300';
+        mascotQuote.textContent = '"원칙 매매와 공시 분석으로 안정적인 수익을 거두는 중!"';
+        mascotCard.className = 'arcade-panel rounded-3xl p-5 w-full md:w-72 flex flex-col items-center justify-center text-center space-y-2 border-2 border-cyan-500/50 shadow-neon-cyan';
+      } else if (rate >= -20) {
+        mascotAvatar.textContent = '🥶📉';
+        mascotAvatar.className = 'text-5xl my-1 transition-transform transform';
+        mascotTitle.textContent = '파랗게 질린 핑거';
+        mascotTitle.className = 'text-sm font-black text-sky-400';
+        mascotQuote.textContent = '"아직 물린 건 아니야... 잠깐의 건전한 조정일 뿐이야..."';
+        mascotCard.className = 'arcade-panel rounded-3xl p-5 w-full md:w-72 flex flex-col items-center justify-center text-center space-y-2 border-2 border-slate-700';
+      } else if (rate >= -49) {
+        mascotAvatar.textContent = '🍜🥲';
+        mascotAvatar.className = 'text-5xl my-1 transition-transform transform';
+        mascotTitle.textContent = '편의점 컵라면 핑거';
+        mascotTitle.className = 'text-sm font-black text-rose-400';
+        mascotQuote.textContent = '"이번 달 식비는 컵라면으로 동결... 탈출 기회만 줘라 제발..."';
+        mascotCard.className = 'arcade-panel rounded-3xl p-5 w-full md:w-72 flex flex-col items-center justify-center text-center space-y-2 border-2 border-rose-500/50 shadow-neon-red';
+      } else {
+        // -50% 이하: 깡통 골판지 박스 거지 핑거
+        mascotAvatar.textContent = '📦🪙';
+        mascotAvatar.className = 'text-5xl my-1 beggar-shivering';
+        mascotTitle.textContent = '골판지 박스 거지 핑거';
+        mascotTitle.className = 'text-sm font-black text-rose-500 animate-pulse';
+        mascotQuote.textContent = '"박스 하나만 주세요... 깡통 찼어요 ㅠㅠ 무지성 매수 금지..."';
+        mascotCard.className = 'arcade-panel rounded-3xl p-5 w-full md:w-72 flex flex-col items-center justify-center text-center space-y-2 border-2 border-rose-600 shadow-neon-red';
+        
+        // Show beggar modal once if not shown this turn
+        if (!window.beggarModalTriggered) {
+          window.beggarModalTriggered = true;
+          beggarModal.classList.remove('hidden');
+        }
+      }
+    }
+
+    // 5. Mindless Buy (90% 폭망 지뢰)
+    mindlessBuyBtn.addEventListener('click', () => {
+      if (cash <= 100000) {
+        alert('예수금이 부족합니다! (10만원 이상 필요)');
+        return;
+      }
+      const comp = COMPANIES[currentCompanyIndex];
+
+      // 90% Probability of Bad Disclosures / Bomb Trap!
+      const isTrap = Math.random() < 0.90;
+
+      const buyAmount = cash;
+      const buyQty = Math.floor(buyAmount / comp.currentPrice);
+      if (buyQty <= 0) {
+        alert('주가가 예수금보다 높아 1주도 살 수 없습니다.');
+        return;
+      }
+
+      cash -= buyQty * comp.currentPrice;
+      if (!holding) {
+        holding = { companyId: comp.id, qty: buyQty, avgPrice: comp.currentPrice };
+      } else if (holding.companyId === comp.id) {
+        const totalCost = (holding.qty * holding.avgPrice) + (buyQty * comp.currentPrice);
+        holding.qty += buyQty;
+        holding.avgPrice = totalCost / holding.qty;
+      } else {
+        alert('이미 다른 종목을 보유 중입니다. 한 종목 집중 모의투자 룰입니다.');
+        cash += buyQty * comp.currentPrice;
+        return;
+      }
+
+      if (isTrap) {
+        // 급락 트랩 발동 (-35% ~ -60%)
+        const crashRate = 0.35 + Math.random() * 0.25;
+        const newPrice = Math.round(comp.currentPrice * (1 - crashRate));
+        comp.currentPrice = newPrice;
+        comp.history.push(newPrice);
+        lockupRemaining = 3; // 3개월 강제 존버!
+
+        logEvent('🚨 [무지성 폭망]', `공시 미확인 매수 직후 숨겨진 '대규모 전환사채(CB) 덤핑 & 분식회계 의혹' 공시 폭탄이 터져 주가가 -${Math.round(crashRate * 100)}% 폭락했습니다! 3개월간 강제 존버(Lock-up)됩니다.`, 'text-rose-400 font-black');
+        alert(`🚨 [악재 공시 지뢰 폭발!]\n공시를 안 보고 풀매수한 대가로 전환사채(CB) 물량 폭탄이 쏟아져 -${Math.round(crashRate * 100)}% 폭락했습니다!\n초고층에 물려 3개월 동안 매도할 수 없습니다 (강제 존버)!`);
+      } else {
+        // 10% 뽀록 상승 (+10% ~ +20%)
+        const popRate = 0.10 + Math.random() * 0.10;
+        const newPrice = Math.round(comp.currentPrice * (1 + popRate));
+        comp.currentPrice = newPrice;
+        comp.history.push(newPrice);
+        logEvent('🍀 [운 좋은 뽀록]', `10% 확률의 기적으로 단타 세력이 유입되어 +${Math.round(popRate * 100)}% 급등했으나 공시 리스크가 여전히 도사리고 있습니다.`, 'text-amber-400 font-bold');
+      }
+
+      updateSelectedCompanyView();
+      drawChart();
+      updateAccount();
+    });
+
+    // 6. DART Inspector Modal Open & Smart Buy
+    openDartInspectModalBtn.addEventListener('click', () => {
+      const comp = COMPANIES[currentCompanyIndex];
+      modalCompanyTitle.textContent = `${comp.name} DART 공시 돋보기`;
+      modalOpProfit.textContent = comp.opProfit;
+      modalDebtRatio.textContent = comp.debtRatio;
+      modalAuditOpinion.textContent = comp.auditOpinion;
+      modalDisclosureContent.textContent = comp.disclosure;
+      modalAnalystComment.textContent = `"${comp.analystComment}"`;
+
+      if (comp.hasDanger) {
+        modalDangerAlert.classList.remove('hidden');
+        modalDangerAlert.textContent = `⚠️ 지뢰 주의: ${comp.name}은(는) 최근 내부 리스크 및 공시 불확실성이 감지되었습니다!`;
+      } else {
+        modalDangerAlert.classList.add('hidden');
+      }
+
+      dartModal.classList.remove('hidden');
+    });
+
+    closeDartModalBtn.addEventListener('click', () => {
+      dartModal.classList.add('hidden');
+    });
+    modalHoldBtn.addEventListener('click', () => {
+      dartModal.classList.add('hidden');
+      logEvent('👀 [신중한 관망]', `${COMPANIES[currentCompanyIndex].name} 공시 분석 후 관망을 선택했습니다. 자금을 안전하게 보존했습니다.`, 'text-slate-400');
+    });
+
+    modalSmartBuyBtn.addEventListener('click', () => {
+      dartModal.classList.add('hidden');
+      const comp = COMPANIES[currentCompanyIndex];
+
+      if (cash <= 100000) {
+        alert('예수금이 부족합니다! (10만원 이상 필요)');
+        return;
+      }
+
+      // 50% 분할 매수
+      const buyAmount = cash * 0.5;
+      const buyQty = Math.floor(buyAmount / comp.currentPrice);
+      if (buyQty <= 0) {
+        alert('주가가 예수금보다 높아 1주도 살 수 없습니다.');
+        return;
+      }
+
+      cash -= buyQty * comp.currentPrice;
+      if (!holding) {
+        holding = { companyId: comp.id, qty: buyQty, avgPrice: comp.currentPrice };
+      } else if (holding.companyId === comp.id) {
+        const totalCost = (holding.qty * holding.avgPrice) + (buyQty * comp.currentPrice);
+        holding.qty += buyQty;
+        holding.avgPrice = totalCost / holding.qty;
+      } else {
+        alert('이미 다른 종목을 보유 중입니다. 보유 종목을 매도 후 진입하세요.');
+        cash += buyQty * comp.currentPrice;
+        return;
+      }
+
+      // DART 분석 매매는 승률 75%
+      const isWin = !comp.hasDanger ? Math.random() < 0.80 : Math.random() < 0.35;
+      if (isWin) {
+        const upRate = 0.08 + Math.random() * 0.15;
+        const newPrice = Math.round(comp.currentPrice * (1 + upRate));
+        comp.currentPrice = newPrice;
+        comp.history.push(newPrice);
+        logEvent('📈 [공시 분석 적중]', `DART 돋보기로 확인한 실적 호조가 주가에 반영되며 +${Math.round(upRate * 100)}% 상승했습니다!`, 'text-emerald-400 font-bold');
+        confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+      } else {
+        const downRate = 0.05 + Math.random() * 0.08;
+        const newPrice = Math.round(comp.currentPrice * (1 - downRate));
+        comp.currentPrice = newPrice;
+        comp.history.push(newPrice);
+        logEvent('📉 [단기 숨고르기]', `우량 공시 확인 후 분할 매수했으나 시장 전반의 조정으로 -${Math.round(downRate * 100)}% 소폭 조정되었습니다. (분할 매수로 리스크 방어)`, 'text-slate-400');
+      }
+
+      updateSelectedCompanyView();
+      drawChart();
+      updateAccount();
+    });
+
+    // 7. Selling & Cut-Loss
+    normalSellBtn.addEventListener('click', () => {
+      if (!holding) return;
+      if (lockupRemaining > 0) {
+        alert('현재 대형 물림으로 강제 존버(동결) 중입니다! 턴을 넘기거나 손절매만 가능합니다.');
+        return;
+      }
+      const comp = COMPANIES.find(c => c.id === holding.companyId);
+      const sellAmount = holding.qty * comp.currentPrice;
+      const profit = sellAmount - (holding.qty * holding.avgPrice);
+      cash += sellAmount;
+
+      logEvent('💰 [익절/매도 완료]', `${comp.name} ${holding.qty}주를 전량 매도하여 ${Math.round(sellAmount).toLocaleString()}원을 현금화했습니다. (손익: ${profit >= 0 ? '+' : ''}${Math.round(profit).toLocaleString()}원)`, profit >= 0 ? 'text-emerald-400 font-bold' : 'text-slate-400');
+      holding = null;
+      updateAccount();
+    });
+
+    cutLossBtn.addEventListener('click', () => {
+      if (!holding) return;
+      if (!confirm('피눈물을 머금고 손실을 확정하시겠습니까? (강제 존버 동결이 즉시 해제됩니다)')) return;
+
+      const comp = COMPANIES.find(c => c.id === holding.companyId);
+      const sellAmount = holding.qty * comp.currentPrice;
+      const loss = sellAmount - (holding.qty * holding.avgPrice);
+      cash += sellAmount;
+      lockupRemaining = 0; // Lock-up 해제
+
+      logEvent('🩸 [눈물의 손절]', `${comp.name}을(를) 손절매하여 손실 ${Math.round(loss).toLocaleString()}원을 확정했습니다. 강제 존버에서 해방되었습니다.`, 'text-rose-400 font-bold');
+      holding = null;
+      updateAccount();
+    });
+
+    // 8. Next Turn (1개월 후로 이동)
+    nextTurnBtn.addEventListener('click', () => {
+      turn++;
+      if (lockupRemaining > 0) {
+        lockupRemaining--;
+        if (lockupRemaining === 0) {
+          logEvent('🔓 [동결 해제]', `강제 존버 기간이 종료되어 드디어 일반 매도가 가능해졌습니다!`, 'text-cyan-400 font-bold');
+        } else {
+          logEvent('⏳ [존버 지속]', `1개월이 흘렀습니다... (남은 강제 존버: ${lockupRemaining}개월)`, 'text-rose-400');
+        }
+      }
+
+      // Random price drift for all companies
+      COMPANIES.forEach(comp => {
+        const drift = (Math.random() - 0.48) * 0.08; // -4% ~ +4%
+        const newPrice = Math.max(1000, Math.round(comp.currentPrice * (1 + drift)));
+        comp.currentPrice = newPrice;
+        comp.history.push(newPrice);
+        if (comp.history.length > 10) comp.history.shift();
+      });
+
+      logEvent('🗓️ [턴 경과]', `2024년 ${turn}월로 시간이 흘렀습니다. DART 시장 환경이 갱신되었습니다.`, 'text-cyan-300');
+      renderCompanyGrid();
+      updateSelectedCompanyView();
+      drawChart();
+      updateAccount();
+    });
+
+    // 9. Reset Game
+    resetGameBtn.addEventListener('click', () => {
+      if (confirm('원금을 10,000,000원으로 초기화하고 처음부터 다시 시작하시겠습니까?')) {
+        turn = 1;
+        cash = 10000000;
+        holding = null;
+        lockupRemaining = 0;
+        window.beggarModalTriggered = false;
+        COMPANIES.forEach(c => {
+          c.currentPrice = c.basePrice;
+          c.history = [c.basePrice * 0.95, c.basePrice * 0.98, c.basePrice];
+        });
+        logEvent('🔄 [초기화]', '시드머니 1,000만원으로 모의투자가 리셋되었습니다.', 'text-amber-300 font-bold');
+        renderCompanyGrid();
+        updateSelectedCompanyView();
+        drawChart();
+        updateAccount();
+      }
+    });
+
+    // 10. Beggar Quiz Handlers
+    beggarQuizCorrect.addEventListener('click', () => {
+      alert('정답입니다! 💡 유상증자는 주식 수가 늘어나 기존 주주 지분 가치가 희석되는 대표적인 DART 공시입니다!\n\n긴급 구호금 100만원이 계좌에 지급되었습니다.');
+      cash += 1000000;
+      beggarModal.classList.add('hidden');
+      logEvent('🪙 [구호금 지급]', '주린이 긴급 구호 퀴즈 정답 보상으로 회생 지원금 1,000,000원이 입금되었습니다!', 'text-amber-300 font-black');
+      updateAccount();
+    });
+
+    beggarQuizWrong.addEventListener('click', () => {
+      alert('틀렸습니다! ❌ 배당금 확대는 주주 환원 호재입니다. 유상증자가 주식 희석 악재입니다.');
+    });
+
+    closeBeggarModalBtn.addEventListener('click', () => {
+      beggarModal.classList.add('hidden');
+      resetGameBtn.click();
+    });
+
+    function logEvent(tag, msg, tagClass = 'text-cyan-400') {
+      const el = document.createElement('div');
+      el.className = 'p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-slate-300 flex items-center justify-between transition-all animate-fadeIn';
+      el.innerHTML = `
+        <div class="flex items-center gap-2">
+          <span class="${tagClass}">${tag}</span>
+          <span>${msg}</span>
+        </div>
+        <span class="text-[10px] text-slate-500 font-mono">${turn}턴</span>
+      `;
+      eventLogContainer.prepend(el);
+    }
+
+    // Initialize
+    renderCompanyGrid();
+    updateSelectedCompanyView();
+    setTimeout(() => {
+      drawChart();
+    }, 100);
+    updateAccount();
+
+    window.addEventListener('resize', () => {
+      drawChart();
+    });
+  </script>
+</body>
+</html>
