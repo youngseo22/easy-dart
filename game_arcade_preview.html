@@ -184,137 +184,185 @@
 
     </div>
 
-    <!-- 3 Arcade Machines Section -->
+    <!-- 4 Arcade Cabinets Section -->
     <div class="space-y-4">
       <div class="flex items-center justify-between">
         <div>
           <h2 class="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
-            <span>🕹️</span> 게임 캐비닛 선택 (SELECT GAME)
+            <span>🕹️</span> 4대 금융 아케이드 캐비닛 선택 (SELECT GAME)
           </h2>
-          <p class="text-xs text-slate-400">플레이하고 싶은 금융 미니게임을 골라보세요.</p>
+          <p class="text-xs text-slate-400">직접 읽고 판단해야만 클리어 가능한 4대 실전 금융 게임을 플레이해보세요.</p>
         </div>
-        <span class="text-xs font-bold text-slate-500 hidden sm:inline-block">총 3종 미니게임 라인업</span>
+        <span class="text-xs font-bold text-emerald-400 px-2.5 py-1 rounded-full bg-emerald-950/60 border border-emerald-800">
+          ● 4종 전 게임 가동 중 (100% PLAYABLE)
+        </span>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-        <!-- Cabinet 1: DART Radar Shooter (HOT / LIVE NOW) -->
-        <div class="arcade-cabinet group rounded-3xl bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-cyan-500/50 hover:border-cyan-400 p-6 flex flex-col justify-between space-y-6 shadow-xl hover:shadow-neon-cyan relative overflow-hidden">
+        <!-- Cabinet 1: DART Radar Shooter -->
+        <div class="arcade-cabinet group rounded-3xl bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-cyan-500/50 hover:border-cyan-400 p-5 flex flex-col justify-between space-y-4 shadow-xl hover:shadow-neon-cyan relative overflow-hidden">
           
-          <!-- Top Tag -->
           <div class="flex items-center justify-between">
             <span class="px-2.5 py-1 rounded-full text-[10px] font-black bg-rose-600 text-white uppercase tracking-wider flex items-center gap-1 shadow-sm">
-              <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span> HOT • 즉시 플레이
+              <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span> 인기도 1위
             </span>
             <span class="text-xs font-black text-cyan-400">MACHINE 01</span>
           </div>
 
-          <!-- Graphic Hero Area -->
-          <div class="h-40 rounded-2xl bg-slate-950/90 border border-slate-800/80 flex flex-col items-center justify-center relative overflow-hidden p-4 group-hover:scale-[1.02] transition-transform">
+          <div class="h-36 rounded-2xl bg-slate-950/90 border border-slate-800/80 flex flex-col items-center justify-center relative overflow-hidden p-4 group-hover:scale-[1.02] transition-transform">
             <div class="absolute inset-0 bg-gradient-to-t from-cyan-950/30 to-transparent"></div>
-            <div class="text-4xl mb-2 animate-pulse">🚀</div>
+            <div class="text-4xl mb-2">🚀</div>
             <div class="text-xs font-bold text-rose-400 bg-rose-950/80 px-2 py-0.5 rounded border border-rose-800">
-              [감사의견 거절 요격!]
+              [지뢰 공시 조준 요격]
             </div>
-            <div class="text-[10px] text-slate-500 mt-1">HTML5 60fps 슈팅 캔버스</div>
+            <div class="text-[10px] text-slate-500 mt-1">종스크롤 미사일 슈팅</div>
           </div>
 
-          <!-- Description -->
-          <div class="space-y-2">
-            <h3 class="text-lg font-black text-white group-hover:text-cyan-300 transition-colors">
+          <div class="space-y-1.5">
+            <h3 class="text-base font-black text-white group-hover:text-cyan-300 transition-colors">
               DART 공시 레이더 미사일
             </h3>
-            <p class="text-xs text-slate-400 leading-relaxed">
-              위에서 쏟아지는 공시 중 <span class="text-rose-400 font-bold">감사의견 거절, 완전자본잠식, 횡령</span> 등 상장폐지 지뢰 공시만 조준 요격하세요!
+            <p class="text-xs text-slate-400 leading-relaxed line-clamp-2">
+              쏟아지는 공시 중 <span class="text-rose-400 font-bold">감사의견 거절, 완전자본잠식</span> 등 상폐 지뢰만 조준 요격하세요!
             </p>
-            <div class="flex flex-wrap gap-1.5 pt-1">
-              <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 text-[10px] font-semibold">장르: 스페이스 슈팅</span>
+            <div class="flex flex-wrap gap-1 pt-1">
+              <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 text-[10px] font-semibold">장르: 슈팅</span>
               <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 text-[10px] font-semibold">난이도: ★★★☆☆</span>
             </div>
           </div>
 
-          <!-- Action Button -->
-          <a href="dart_shooter_preview.html" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-black text-sm shadow-lg shadow-cyan-500/25 transition-all flex items-center justify-center gap-2 transform active:scale-95">
-            <i data-lucide="play" class="w-4 h-4 fill-current"></i>
-            게임 시작하기 (PLAY NOW)
+          <a href="dart_shooter_preview.html" class="w-full py-3 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-black text-xs shadow-lg shadow-cyan-500/25 transition-all flex items-center justify-center gap-1.5 transform active:scale-95">
+            <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+            게임 시작 (PLAY NOW)
           </a>
         </div>
 
-        <!-- Cabinet 2: Balance Sheet Tetris (LIVE NOW) -->
-        <div class="arcade-cabinet group rounded-3xl bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-emerald-500/50 hover:border-emerald-400 p-6 flex flex-col justify-between space-y-6 shadow-xl hover:shadow-neon-emerald relative overflow-hidden">
+        <!-- Cabinet 2: 3-Second Judge (BUY or SELL) -->
+        <div class="arcade-cabinet group rounded-3xl bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-amber-500/50 hover:border-amber-400 p-5 flex flex-col justify-between space-y-4 shadow-xl hover:shadow-neon-amber relative overflow-hidden">
           
           <div class="flex items-center justify-between">
-            <span class="px-2.5 py-1 rounded-full text-[10px] font-black bg-emerald-600 text-white uppercase tracking-wider flex items-center gap-1 shadow-sm">
-              <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span> NEW • 즉시 플레이
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-black bg-amber-500 text-slate-950 uppercase tracking-wider flex items-center gap-1 shadow-sm font-bold">
+              <span class="w-1.5 h-1.5 rounded-full bg-slate-950 animate-ping"></span> 신규 출시
             </span>
-            <span class="text-xs font-black text-emerald-400">MACHINE 02</span>
+            <span class="text-xs font-black text-amber-400">MACHINE 02</span>
           </div>
 
-          <div class="h-40 rounded-2xl bg-slate-950/90 border border-slate-800/80 flex flex-col items-center justify-center relative overflow-hidden p-4 group-hover:scale-[1.02] transition-transform">
-            <div class="text-4xl mb-2 animate-bounce">🧱</div>
-            <div class="text-xs font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800">
-              자산 = 부채 + 자본
-            </div>
-            <div class="text-[10px] text-slate-500 mt-1">블록 낙하형 회계 결산 퍼즐</div>
-          </div>
-
-          <div class="space-y-2">
-            <h3 class="text-lg font-black text-white group-hover:text-emerald-300 transition-colors">
-              밸런스 시트 테트리스
-            </h3>
-            <p class="text-xs text-slate-400 leading-relaxed">
-              자산 블록과 (부채+자본) 블록의 균형을 맞춰 라인을 클리어하세요! 과도한 단기차입금 부채 폭탄을 막아내는 두뇌 회계 퍼즐.
-            </p>
-            <div class="flex flex-wrap gap-1.5 pt-1">
-              <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 text-[10px] font-semibold">장르: 블록 퍼즐</span>
-              <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 text-[10px] font-semibold">난이도: ★★★★☆</span>
-            </div>
-          </div>
-
-          <!-- Open Tetris Game -->
-          <a href="tetris_preview.html" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-600 to-cyan-600 hover:from-emerald-400 hover:to-cyan-500 text-white font-black text-sm shadow-lg shadow-emerald-500/25 transition-all flex items-center justify-center gap-2 transform active:scale-95">
-            <i data-lucide="play" class="w-4 h-4 fill-current"></i>
-            게임 시작하기 (PLAY NOW)
-          </a>
-        </div>
-
-        <!-- Cabinet 3: Margin Defense Pong -->
-        <div class="arcade-cabinet group rounded-3xl bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800 hover:border-amber-500/60 p-6 flex flex-col justify-between space-y-6 shadow-xl hover:shadow-neon-amber relative overflow-hidden">
-          
-          <div class="flex items-center justify-between">
-            <span class="px-2.5 py-1 rounded-full text-[10px] font-black bg-amber-950 text-amber-300 border border-amber-700 uppercase tracking-wider">
-              🏓 손익계산서 디펜스
-            </span>
-            <span class="text-xs font-black text-amber-400">MACHINE 03</span>
-          </div>
-
-          <div class="h-40 rounded-2xl bg-slate-950/90 border border-slate-800/80 flex flex-col items-center justify-center relative overflow-hidden p-4 group-hover:scale-[1.02] transition-transform">
-            <div class="text-4xl mb-2">🛡️</div>
+          <div class="h-36 rounded-2xl bg-slate-950/90 border border-slate-800/80 flex flex-col items-center justify-center relative overflow-hidden p-4 group-hover:scale-[1.02] transition-transform">
+            <div class="absolute inset-0 bg-gradient-to-t from-amber-950/30 to-transparent"></div>
+            <div class="text-4xl mb-2">⚖️</div>
             <div class="text-xs font-bold text-amber-400 bg-amber-950/80 px-2 py-0.5 rounded border border-amber-800">
-              비용 방어 ➡️ 영업이익 달성!
+              3.5초 실전 공시 심사
             </div>
-            <div class="text-[10px] text-slate-500 mt-1">벽돌깨기 & 패들 바운스</div>
+            <div class="text-[10px] text-slate-500 mt-1">카드 스와이프 심사관</div>
           </div>
 
-          <div class="space-y-2">
-            <h3 class="text-lg font-black text-white group-hover:text-amber-300 transition-colors">
-              마진 디펜스 핑퐁
+          <div class="space-y-1.5">
+            <h3 class="text-base font-black text-white group-hover:text-amber-300 transition-colors">
+              3초 투자 심사관 (BUY/SELL)
             </h3>
-            <p class="text-xs text-slate-400 leading-relaxed">
-              치솟는 원가·임대료·판관비 탄환을 마진 방패로 튕겨내며 올리브영 독도토너와 스벅 커피를 판매해 영업이익을 수호하세요!
+            <p class="text-xs text-slate-400 leading-relaxed line-clamp-2">
+              올리브영·다이소 실제 공시를 3.5초 안에 읽고 <span class="text-rose-400 font-bold">좌(손절)</span> vs <span class="text-emerald-400 font-bold">우(매수)</span>로 판정하세요!
             </p>
-            <div class="flex flex-wrap gap-1.5 pt-1">
-              <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 text-[10px] font-semibold">장르: 패들 바운스</span>
+            <div class="flex flex-wrap gap-1 pt-1">
+              <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 text-[10px] font-semibold">장르: 스와이프</span>
               <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 text-[10px] font-semibold">난이도: ★★☆☆☆</span>
             </div>
           </div>
 
-          <button onclick="alert('마진 디펜스 핑퐁은 Phase 2 구현 중입니다! 먼저 MACHINE 01 미사일 슈팅을 즐겨보세요 🚀');" class="w-full py-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/30 hover:border-amber-400 font-black text-sm transition-all flex items-center justify-center gap-2">
-            <i data-lucide="sparkles" class="w-4 h-4"></i>
-            준비 중 (체험 신청)
-          </button>
+          <a href="judge_preview.html" class="w-full py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-400 hover:to-rose-400 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/25 transition-all flex items-center justify-center gap-1.5 transform active:scale-95">
+            <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+            게임 시작 (PLAY NOW)
+          </a>
         </div>
 
+        <!-- Cabinet 3: Lane Runner -->
+        <div class="arcade-cabinet group rounded-3xl bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-emerald-500/50 hover:border-emerald-400 p-5 flex flex-col justify-between space-y-4 shadow-xl hover:shadow-neon-emerald relative overflow-hidden">
+          
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-black bg-emerald-600 text-white uppercase tracking-wider flex items-center gap-1 shadow-sm">
+              <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span> 신규 출시
+            </span>
+            <span class="text-xs font-black text-emerald-400">MACHINE 03</span>
+          </div>
+
+          <div class="h-36 rounded-2xl bg-slate-950/90 border border-slate-800/80 flex flex-col items-center justify-center relative overflow-hidden p-4 group-hover:scale-[1.02] transition-transform">
+            <div class="absolute inset-0 bg-gradient-to-t from-emerald-950/30 to-transparent"></div>
+            <div class="text-4xl mb-2">🏎️</div>
+            <div class="text-xs font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800">
+              호재 수집 & 지뢰 회피
+            </div>
+            <div class="text-[10px] text-slate-500 mt-1">3차선 고속 질주 러너</div>
+          </div>
+
+          <div class="space-y-1.5">
+            <h3 class="text-base font-black text-white group-hover:text-emerald-300 transition-colors">
+              DART 급행 레인 러너
+            </h3>
+            <p class="text-xs text-slate-400 leading-relaxed line-clamp-2">
+              고속도로 차선을 변경하며 <span class="text-emerald-400 font-bold">영업흑자·배당확대</span>는 먹고, 상폐 지뢰는 피하세요!
+            </p>
+            <div class="flex flex-wrap gap-1 pt-1">
+              <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 text-[10px] font-semibold">장르: 3레인 러너</span>
+              <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 text-[10px] font-semibold">난이도: ★★★☆☆</span>
+            </div>
+          </div>
+
+          <a href="runner_preview.html" class="w-full py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-black text-xs shadow-lg shadow-emerald-500/25 transition-all flex items-center justify-center gap-1.5 transform active:scale-95">
+            <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+            게임 시작 (PLAY NOW)
+          </a>
+        </div>
+
+        <!-- Cabinet 4: DART Blade Slicer -->
+        <div class="arcade-cabinet group rounded-3xl bg-gradient-to-b from-slate-900 to-slate-950 border-2 border-rose-500/50 hover:border-rose-400 p-5 flex flex-col justify-between space-y-4 shadow-xl hover:shadow-neon-rose relative overflow-hidden">
+          
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-black bg-rose-500 text-white uppercase tracking-wider flex items-center gap-1 shadow-sm">
+              <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span> 신규 출시
+            </span>
+            <span class="text-xs font-black text-rose-400">MACHINE 04</span>
+          </div>
+
+          <div class="h-36 rounded-2xl bg-slate-950/90 border border-slate-800/80 flex flex-col items-center justify-center relative overflow-hidden p-4 group-hover:scale-[1.02] transition-transform">
+            <div class="absolute inset-0 bg-gradient-to-t from-rose-950/30 to-transparent"></div>
+            <div class="text-4xl mb-2">⚔️</div>
+            <div class="text-xs font-bold text-rose-400 bg-rose-950/80 px-2 py-0.5 rounded border border-rose-800">
+              네온 칼날로 지뢰 양단!
+            </div>
+            <div class="text-[10px] text-slate-500 mt-1">칼날 드래그 슬라이서</div>
+          </div>
+
+          <div class="space-y-1.5">
+            <h3 class="text-base font-black text-white group-hover:text-rose-300 transition-colors">
+              DART 블레이드 슬라이서
+            </h3>
+            <p class="text-xs text-slate-400 leading-relaxed line-clamp-2">
+              솟아오르는 공시 중 <span class="text-rose-400 font-bold">악재만 칼날로 절단</span>하세요! 호재를 베면 폭발합니다.
+            </p>
+            <div class="flex flex-wrap gap-1 pt-1">
+              <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 text-[10px] font-semibold">장르: 슬라이서</span>
+              <span class="px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 text-[10px] font-semibold">난이도: ★★★★☆</span>
+            </div>
+          </div>
+
+          <a href="slicer_preview.html" class="w-full py-3 rounded-2xl bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-400 hover:to-amber-400 text-slate-950 font-black text-xs shadow-lg shadow-rose-500/25 transition-all flex items-center justify-center gap-1.5 transform active:scale-95">
+            <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+            게임 시작 (PLAY NOW)
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Historical / Prototype Archive Link -->
+      <div class="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800 flex items-center justify-between text-xs text-slate-400 mt-2">
+        <div class="flex items-center gap-2">
+          <span class="text-base">🧱</span>
+          <span>이전 프로토타입 아카이브: 공간 지각 기반 <strong>[밸런스 시트 테트리스]</strong>도 둘러보실 수 있습니다.</span>
+        </div>
+        <a href="tetris_preview.html" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold transition">
+          테트리스 열기 →
+        </a>
       </div>
     </div>
 

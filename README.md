@@ -13,9 +13,12 @@ easy-dart/
 ├── 📄 company_preview.html        # [프리뷰] 기업 파헤치기 메인 화면
 ├── 📄 company_detail_preview.html # [프리뷰] 기업 공시 상세 해설 & 하단 퀴즈
 ├── 📄 quiz_preview.html           # [프리뷰] 주식 & 회계 기초 용어 퀴즈
-├── 📄 game_arcade_preview.html     # [프리뷰/팀원 C] 🕹️ 핑거다트 레트로 오락실 메인 로비
-├── 📄 dart_shooter_preview.html   # [프리뷰/팀원 C] 🚀 DART 공시 레이더 미사일 슈팅
-├── 📄 tetris_preview.html         # [프리뷰/팀원 C] 🧱 밸런스 시트 테트리스
+├── 📄 game_arcade_preview.html     # [프리뷰/팀원 C] 🕹️ 핑거다트 레트로 오락실 메인 로비 (4대 게임)
+├── 📄 dart_shooter_preview.html   # [프리뷰/팀원 C] 🚀 Machine 01: DART 공시 레이더 미사일
+├── 📄 judge_preview.html          # [프리뷰/팀원 C] ⚖️ Machine 02: 3초 투자 심사관 (BUY or SELL)
+├── 📄 runner_preview.html         # [프리뷰/팀원 C] 🏎️ Machine 03: DART 급행 레인 러너
+├── 📄 slicer_preview.html         # [프리뷰/팀원 C] ⚔️ Machine 04: DART 블레이드 슬라이서
+├── 📄 tetris_preview.html         # [프리뷰/팀원 C] 🧱 [아카이브] 밸런스 시트 테트리스
 │
 ├── 📁 backend/                    # FastAPI 백엔드
 │   ├── requirements.txt
@@ -94,4 +97,4 @@ bash run.sh
 ---
 
 - 🌐 **API Swagger 문서**: `http://localhost:8000/docs`
-- 🖥️ **웹 화면 미리보기**: `company_preview.html`, `company_detail_preview.html`, `game_arcade_preview.html`, `dart_shooter_preview.html`, `tetris_preview.html`, `quiz_preview.html` 파일을 브라우저로 직접 열어 확인하실 수 있습니다.
+- 🖥️ **웹 화면 미리보기**: `game_arcade_preview.html`(4대 게임 오락실), `dart_shooter_preview.html`(슈팅), `judge_preview.html`(3초 심사관), `runner_preview.html`(레인 러너), `slicer_preview.html`(슬라이서), `company_preview.html`, `quiz_preview.html` 파일을 더블클릭하여 브라우저에서 바로 즐기실 수 있습니다.
