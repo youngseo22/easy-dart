@@ -1,0 +1,1708 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Easy-DART (핑거다트) | 공식 발표 자료</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              400: '#34d399',
+              500: '#10b981',
+              600: '#059669',
+              900: '#064e3b',
+            },
+            arcade: {
+              purple: '#8b5cf6',
+              cyan: '#06b6d4',
+              pink: '#ec4899',
+              yellow: '#eab308',
+              dark: '#0f172a',
+              card: '#1e293b'
+            }
+          },
+          fontFamily: {
+            sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+    
+    body {
+      font-family: 'Pretendard', sans-serif;
+      overflow-x: hidden;
+      user-select: none;
+    }
+
+    .slide {
+      display: none;
+      opacity: 0;
+      transform: translateY(12px) scale(0.995);
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .slide.active {
+      display: flex;
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .neon-border-green {
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
+    }
+
+    .neon-border-purple {
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.25);
+    }
+
+    .neon-border-cyan {
+      box-shadow: 0 0 20px rgba(6, 182, 212, 0.25);
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(100, 116, 139, 0.5);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(148, 163, 184, 0.8);
+    }
+
+    @media print {
+      body {
+        background: white !important;
+        color: black !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .slide {
+        display: block !important;
+        opacity: 1 !important;
+        transform: none !important;
+        page-break-after: always;
+        height: 100vh !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between select-none">
+
+  <!-- ================= TOP NAVIGATION BAR ================= -->
+  <header class="no-print sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-6 py-3 transition-all">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      
+      <!-- Brand & Title -->
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 to-cyan-500 flex items-center justify-center font-black text-slate-950 text-lg shadow-lg shadow-emerald-500/20">
+          🎯
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold text-lg tracking-tight bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">Easy-DART</span>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-medium">15min Official Deck</span>
+          </div>
+          <p class="text-[11px] text-slate-400">20대 사회초년생의 첫 투자 지갑 지킴이 | 게이미피케이션 공시 러닝</p>
+        </div>
+      </div>
+
+      <!-- Presenter Part Switchers (3 Parts x 5 Mins) -->
+      <nav class="hidden md:flex items-center gap-1 bg-slate-950/80 p-1 rounded-xl border border-slate-800/80">
+        <button onclick="goToSlide(1)" id="partBtn1" class="part-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>[Part 1] 기획 & BM</span>
+          <span class="text-[10px] text-emerald-300/70 font-mono">5분 (발표자 1)</span>
+        </button>
+        <button onclick="goToSlide(6)" id="partBtn2" class="part-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all text-slate-400 hover:text-slate-200">
+          <span class="w-2 h-2 rounded-full bg-slate-600"></span>
+          <span>[Part 2] 3대 핵심 기능</span>
+          <span class="text-[10px] text-slate-500 font-mono">5분 (발표자 2)</span>
+        </button>
+        <button onclick="goToSlide(10)" id="partBtn3" class="part-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all text-slate-400 hover:text-slate-200">
+          <span class="w-2 h-2 rounded-full bg-slate-600"></span>
+          <span>[Part 3] 기술 & 토큰 비용</span>
+          <span class="text-[10px] text-slate-500 font-mono">5분 (발표자 3)</span>
+        </button>
+      </nav>
+
+      <!-- Utility Controls: Timer & Presentation Helper -->
+      <div class="flex items-center gap-3">
+        <!-- 5-Minute Timer Widget -->
+        <div class="flex items-center gap-2 bg-slate-950/80 border border-slate-800 rounded-lg px-3 py-1.5 text-xs font-mono">
+          <i data-lucide="clock" class="w-3.5 h-3.5 text-emerald-400"></i>
+          <span id="timerDisplay" class="font-bold text-emerald-400">05:00</span>
+          <button onclick="toggleTimer()" id="timerControlBtn" class="hover:text-emerald-300 ml-1 text-slate-400" title="타이머 시작/정지">
+            <i data-lucide="play" id="timerIcon" class="w-3 h-3"></i>
+          </button>
+          <button onclick="resetTimer()" class="hover:text-amber-400 text-slate-400" title="타이머 리셋 (5분)">
+            <i data-lucide="rotate-ccw" class="w-3 h-3"></i>
+          </button>
+        </div>
+
+        <!-- Script Drawer Toggle Button -->
+        <button onclick="toggleScriptModal()" class="px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 flex items-center gap-1.5 border border-slate-700 transition" title="발표 대본 (단축키 N)">
+          <i data-lucide="mic" class="w-3.5 h-3.5 text-cyan-400"></i>
+          <span class="hidden sm:inline">발표 대본</span>
+        </button>
+
+        <!-- Fullscreen Button -->
+        <button onclick="toggleFullScreen()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition" title="전체화면 (단축키 F)">
+          <i data-lucide="maximize" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Overview Grid Button -->
+        <button onclick="toggleOverviewModal()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition" title="슬라이드 목록 (단축키 ESC)">
+          <i data-lucide="layout-grid" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="w-full bg-slate-800/80 h-1 absolute bottom-0 left-0">
+      <div id="slideProgressBar" class="bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-500 h-1 w-[7.69%] transition-all duration-300"></div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN SLIDES CONTAINER ================= -->
+  <main class="flex-1 max-w-7xl mx-auto w-full p-4 sm:p-6 lg:p-8 flex items-center justify-center relative min-h-[720px]">
+
+    <!-- SLIDE 1: COVER & TITLE -->
+    <section class="slide active flex-col justify-between w-full h-full max-w-6xl mx-auto bg-slate-900/80 border border-slate-800 rounded-3xl p-8 lg:p-12 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+      <div class="absolute -top-32 -left-32 w-96 h-96 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="flex items-center justify-between border-b border-slate-800/80 pb-4">
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-semibold border border-emerald-500/30 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            PART 1 : 서비스 기획 & 비즈니스 모델
+          </span>
+          <span class="text-xs text-slate-400">발표자 1 (5분 배정)</span>
+        </div>
+        <span class="text-xs font-mono text-slate-500">Slide 01 / 13</span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center my-auto py-6">
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-slate-800 border border-slate-700 text-xs text-cyan-300 font-mono">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> 2030 주린이 첫 투자 지갑 지킴이 솔루션
+          </div>
+          
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
+            딱딱한 <span class="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">DART 공시</span>를<br>
+            손끝의 <span class="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">놀이터</span>로!
+          </h1>
+
+          <p class="text-slate-300 text-lg leading-relaxed font-normal">
+            <strong>"공시를 읽지 않은 투자는 도박이다."</strong><br>
+            사회초년생의 '묻지마 뇌동매매'를 끝내고, 3초 만에 호재와 상폐 지뢰를 판별하는 
+            <span class="text-emerald-400 font-semibold">게이미피케이션 금융 교육 & 실전 분석 플랫폼</span>
+          </p>
+
+          <div class="grid grid-cols-3 gap-3 pt-2">
+            <div class="bg-slate-950/60 p-3.5 rounded-xl border border-emerald-500/30">
+              <span class="text-[11px] text-emerald-400 font-bold block">PART 1 (5분)</span>
+              <p class="text-xs font-semibold text-slate-200 mt-1">기획 배경 & BM</p>
+              <span class="text-[10px] text-slate-400">페르소나 / B2B2C 모델</span>
+            </div>
+            <div class="bg-slate-950/60 p-3.5 rounded-xl border border-slate-800">
+              <span class="text-[11px] text-cyan-400 font-bold block">PART 2 (5분)</span>
+              <p class="text-xs font-semibold text-slate-200 mt-1">3대 핵심 기능</p>
+              <span class="text-[10px] text-slate-400">기업분석 / 모의투자 / 아케이드</span>
+            </div>
+            <div class="bg-slate-950/60 p-3.5 rounded-xl border border-slate-800">
+              <span class="text-[11px] text-purple-400 font-bold block">PART 3 (5분)</span>
+              <p class="text-xs font-semibold text-slate-200 mt-1">기술 & 토큰 비용</p>
+              <span class="text-[10px] text-slate-400">AI 아키텍처 / 극초저비용</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 flex justify-center">
+          <div class="relative group">
+            <div class="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-3xl blur opacity-30 group-hover:opacity-60 transition duration-700"></div>
+            <img src="./presentation_assets/hero_cover.png" alt="Easy-DART Hero Banner" class="relative rounded-2xl border border-slate-700 shadow-2xl object-cover max-h-[360px] w-full" onerror="this.src='https://placehold.co/600x400/0f172a/34d399?text=Easy-DART+Cover'">
+            <div class="absolute bottom-3 left-3 bg-slate-950/80 backdrop-blur-md px-3 py-1 rounded-lg border border-slate-700 text-[11px] font-mono text-emerald-300">
+              🎮 Cyberpunk Fintech Arcade
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-800/80 pt-4 flex items-center justify-between text-xs text-slate-400">
+        <span>키보드 방향키 <kbd class="px-1.5 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-300">→</kbd> 또는 <kbd class="px-1.5 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-300">Space</kbd> 로 슬라이드 넘김</span>
+        <span class="text-emerald-400 flex items-center gap-1 font-semibold">발표 대본 탑재 (단축키 N) <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i></span>
+      </div>
+    </section>
+
+    <!-- SLIDE 2: 기획 배경 (Why?) -->
+    <section class="slide flex-col justify-between w-full h-full max-w-6xl mx-auto bg-slate-900/80 border border-slate-800 rounded-3xl p-8 lg:p-12 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+      <div class="flex items-center justify-between border-b border-slate-800/80 pb-4">
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-semibold border border-emerald-500/30">
+            PART 1 : 기획 배경
+          </span>
+          <span class="text-xs text-slate-400">왜 Easy-DART가 지금 반드시 필요한가?</span>
+        </div>
+        <span class="text-xs font-mono text-slate-500">Slide 02 / 13</span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center my-auto py-4">
+        <div class="lg:col-span-6 space-y-5">
+          <div class="space-y-2">
+            <span class="text-red-400 text-xs font-bold tracking-wider uppercase flex items-center gap-1">
+              <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> 20대 청년층의 고질적 위기
+            </span>
+            <h2 class="text-3xl lg:text-4xl font-extrabold tracking-tight">
+              청년 금융이해력 <span class="text-red-400 underline decoration-red-500/40">최하위</span>,<br>
+              '묻지마 투자'가 부른 참사
+            </h2>
+          </div>
+
+          <div class="space-y-3">
+            <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 flex items-start gap-3">
+              <div class="w-7 h-7 rounded-lg bg-red-500/10 text-red-400 flex items-center justify-center font-bold text-sm shrink-0">1</div>
+              <div>
+                <h4 class="text-xs font-bold text-slate-200">금융감독원 2024 조사 결과</h4>
+                <p class="text-xs text-slate-400 mt-0.5">20대의 재무상황 점검은 <strong class="text-red-300">33.2점</strong>, 재무목표 설정은 <strong class="text-red-300">36.1점</strong>으로 전 연령 최하위 기록.</p>
+              </div>
+            </div>
+
+            <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 flex items-start gap-3">
+              <div class="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-sm shrink-0">2</div>
+              <div>
+                <h4 class="text-xs font-bold text-slate-200">금융지식 2.8점 vs 부채 3,700만원</h4>
+                <p class="text-xs text-slate-400 mt-0.5">서민금융진흥원 조사: 청년 자가진단 2.8점(5점 만점). 첫 월급·적금으로 유튜브/리딩방만 믿고 몰빵 투자.</p>
+              </div>
+            </div>
+
+            <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 flex items-start gap-3">
+              <div class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">3</div>
+              <div>
+                <h4 class="text-xs font-bold text-emerald-300">DART 공시의 거대한 진입장벽</h4>
+                <p class="text-xs text-slate-400 mt-0.5">‘감사의견 거절’, ‘전환사채(CB)’, ‘완전자본잠식’ 등 피할 수 있는 상폐 지뢰를 한자 용어 장벽 때문에 못 읽고 물림.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6 space-y-4">
+          <div class="bg-slate-950/90 p-4 rounded-2xl border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between text-[11px] text-slate-400 pb-1 border-b border-slate-800">
+              <span class="font-semibold text-slate-300 flex items-center gap-1.5"><i data-lucide="bar-chart-2" class="w-3.5 h-3.5 text-cyan-400"></i> 금융감독원 연령대별 재무관리 행위 점수</span>
+              <span class="text-slate-500 font-mono">2024 FSS Official</span>
+            </div>
+            <img src="./presentation_assets/bg_page_1_img_2.png" alt="금융이해력 그래프" class="rounded-xl w-full max-h-[170px] object-contain bg-white/5 p-1 border border-slate-800" onerror="this.src='https://placehold.co/600x200/0f172a/cbd5e1?text=FSS+Financial+Literacy+Chart'">
+            <div class="text-[11px] text-slate-400 text-center">
+              ▲ 20대 청년층의 재무상황 점검(33.2점) 및 재무목표 설정(36.1점)이 타 연령 대비 극단적 저조
+            </div>
+          </div>
+
+          <div class="bg-gradient-to-r from-emerald-950/40 to-slate-900 p-4 rounded-2xl border border-emerald-500/30">
+            <span class="text-emerald-400 text-xs font-bold flex items-center gap-1.5 mb-1">
+              <i data-lucide="check-circle-2" class="w-4 h-4"></i> Easy-DART의 솔루션 공식
+            </span>
+            <p class="text-xs text-slate-200 leading-relaxed">
+              <strong>"주입식 텍스트 교육은 뇌리에 남지 않는다."</strong><br>
+              직접 읽고 판단하지 않으면 조작할 수 없는 <strong class="text-emerald-300">행동주의 게이미피케이션</strong>으로 
+              20대 청년들에게 실전 공시 문해력(Financial Literacy)을 온몸으로 체득시킵니다.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-800/80 pt-3 flex items-center justify-between text-xs text-slate-400">
+        <span>Part 1-2 : 문제 정의 및 사회적 필요성</span>
+        <span class="font-mono text-emerald-400 font-semibold">[0:00 ~ 1:30]</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 3: 타겟 고객 및 페르소나 -->
+    <section class="slide flex-col justify-between w-full h-full max-w-6xl mx-auto bg-slate-900/80 border border-slate-800 rounded-3xl p-8 lg:p-12 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+      <div class="flex items-center justify-between border-b border-slate-800/80 pb-4">
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-semibold border border-emerald-500/30">
+            PART 1 : 타겟 분석
+          </span>
+          <span class="text-xs text-slate-400">2030 주린이 핵심 2대 페르소나 정밀 타겟팅</span>
+        </div>
+        <span class="text-xs font-mono text-slate-500">Slide 03 / 13</span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch my-auto py-4">
+        <!-- Persona 1 -->
+        <div class="bg-slate-950/80 p-6 rounded-2xl border border-cyan-500/30 flex flex-col justify-between relative group hover:border-cyan-400 transition">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-2xl">
+                  💄
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-slate-100">페르소나 ① 김지은 (23세 대학생)</h3>
+                  <span class="text-xs text-cyan-400 font-medium">초소액 · 일상소비형 주린이</span>
+                </div>
+              </div>
+              <span class="px-2 py-1 bg-cyan-950 text-cyan-300 text-[10px] rounded border border-cyan-800">월 80만원 알바</span>
+            </div>
+
+            <blockquote class="text-xs italic text-slate-300 bg-slate-900/90 p-3 rounded-lg border-l-2 border-cyan-400">
+              "매일 쓰는 올리브영이랑 네이버웹툰 주식은 사고 싶은데, DART 보고서만 열면 머리가 아파요."
+            </blockquote>
+
+            <div class="space-y-2 text-xs">
+              <div class="flex items-start gap-2">
+                <span class="text-red-400 font-bold shrink-0">Pain Point:</span>
+                <span class="text-slate-400">'매출 1조 원'이 얼마인지 체감 불가, 전문 회계 한자어에 즉시 이탈</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="text-emerald-400 font-bold shrink-0">Needs & Goal:</span>
+                <span class="text-slate-300">"올리브영 틴트 100만 개 판매" 같은 실증 비유, 1~5만원 소액 시작 경험</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-cyan-300 bg-cyan-950/20 p-2.5 rounded-lg">
+            ✨ <strong>맞춤 솔루션:</strong> [소비-이익 메타포 환산기] & 1초 쉬운 비유 [스마트 툴팁]
+          </div>
+        </div>
+
+        <!-- Persona 2 -->
+        <div class="bg-slate-950/80 p-6 rounded-2xl border border-emerald-500/30 flex flex-col justify-between relative group hover:border-emerald-400 transition">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-2xl">
+                  💼
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-slate-100">페르소나 ② 박민우 (31세 직장인)</h3>
+                  <span class="text-xs text-emerald-400 font-medium">시간효율 · 5분 팩트체크형</span>
+                </div>
+              </div>
+              <span class="px-2 py-1 bg-emerald-950 text-emerald-300 text-[10px] rounded border border-emerald-800">4년차 IT 대리</span>
+            </div>
+
+            <blockquote class="text-xs italic text-slate-300 bg-slate-900/90 p-3 rounded-lg border-l-2 border-emerald-400">
+              "퇴근 후 공시를 다 볼 시간은 없고... 내가 타는 현대차나 배민부터 스스로 검증하고 싶어요."
+            </blockquote>
+
+            <div class="space-y-2 text-xs">
+              <div class="flex items-start gap-2">
+                <span class="text-red-400 font-bold shrink-0">Pain Point:</span>
+                <span class="text-slate-400">시간 부족, 남들 말만 듣고 샀다 물릴까 불안하나 스스로 판단 기준 부재</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="text-emerald-400 font-bold shrink-0">Needs & Goal:</span>
+                <span class="text-slate-300">퇴근 후 5분 만에 본인이 핵심 지표(체력/성장/가격)를 체크하는 가이드라인</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-emerald-300 bg-emerald-950/20 p-2.5 rounded-lg">
+            ✨ <strong>맞춤 솔루션:</strong> 3단계 핵심 재무 지표 [초록불/빨간불 신호등] & 5분 판단 스위치
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 flex items-center justify-between text-xs">
+        <div class="flex items-center gap-2">
+          <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-bold text-[10px]">시장 GAP</span>
+          <span class="text-slate-300">토스·카카오는 '소수점 거래'는 열었으나 <strong>'사용자의 자체 분석 능력 육성'</strong>에는 실패 ➔ Easy-DART의 기회!</span>
+        </div>
+        <span class="text-slate-500 font-mono text-[11px]">DART 전자공시 100% 직결</span>
+      </div>
+
+      <div class="border-t border-slate-800/80 pt-3 flex items-center justify-between text-xs text-slate-400">
+        <span>Part 1-3 : 타겟 사용자 및 시장 기회</span>
+        <span class="font-mono text-emerald-400 font-semibold">[1:30 ~ 2:45]</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: 서비스 구성 & 학습 사다리 -->
+    <section class="slide flex-col justify-between w-full h-full max-w-6xl mx-auto bg-slate-900/80 border border-slate-800 rounded-3xl p-8 lg:p-12 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+      <div class="flex items-center justify-between border-b border-slate-800/80 pb-4">
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-semibold border border-emerald-500/30">
+            PART 1 : 서비스 구성
+          </span>
+          <span class="text-xs text-slate-400">4단계 학습 사다리 & 3대 GNB 아키텍처</span>
+        </div>
+        <span class="text-xs font-mono text-slate-500">Slide 04 / 13</span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center my-auto py-2">
+        <div class="lg:col-span-5 space-y-4">
+          <h2 class="text-2xl lg:text-3xl font-extrabold tracking-tight leading-snug">
+            초보자 진입장벽을 허무는<br>
+            <span class="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">4단계 학습 사다리 체계</span>
+          </h2>
+
+          <div class="space-y-2.5">
+            <div class="p-3 bg-slate-950/70 rounded-xl border border-emerald-500/40 flex items-center gap-3">
+              <span class="px-2 py-1 bg-emerald-500/20 text-emerald-300 font-mono text-xs font-bold rounded">Step 1</span>
+              <div>
+                <p class="text-xs font-bold text-slate-200">[선행 탐색] 일상 소비 환산</p>
+                <span class="text-[11px] text-slate-400">올리브영 결제액 ➔ 기업 실질 마진 체감</span>
+              </div>
+            </div>
+
+            <div class="p-3 bg-slate-950/70 rounded-xl border border-cyan-500/40 flex items-center gap-3">
+              <span class="px-2 py-1 bg-cyan-500/20 text-cyan-300 font-mono text-xs font-bold rounded">Step 2</span>
+              <div>
+                <p class="text-xs font-bold text-slate-200">[공시 분석] 손익계산서 듀얼 뷰</p>
+                <span class="text-[11px] text-slate-400">쉬운 해설(4대 지표) ➔ DART 원본표 + 속마음 번역</span>
+              </div>
+            </div>
+
+            <div class="p-3 bg-slate-950/70 rounded-xl border border-purple-500/40 flex items-center gap-3">
+              <span class="px-2 py-1 bg-purple-500/20 text-purple-300 font-mono text-xs font-bold rounded">Step 3</span>
+              <div>
+                <p class="text-xs font-bold text-slate-200">[체감 훈련] 3대 금융 아케이드</p>
+                <span class="text-[11px] text-slate-400">3초 판단(심사관) & 고속 회피(러너)로 상폐 지뢰 체화</span>
+              </div>
+            </div>
+
+            <div class="p-3 bg-slate-950/70 rounded-xl border border-amber-500/40 flex items-center gap-3">
+              <span class="px-2 py-1 bg-amber-500/20 text-amber-300 font-mono text-xs font-bold rounded">Step 4</span>
+              <div>
+                <p class="text-xs font-bold text-slate-200">[실전 자립] 실전 모의투자 샌드박스</p>
+                <span class="text-[11px] text-slate-400">1천만원 가상 자산 + 돌발 공시 대응 + AI 진단 리포트</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 flex flex-col items-center justify-center">
+          <div class="w-full bg-slate-950/90 p-3 rounded-2xl border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between text-[11px] text-slate-400 pb-1 border-b border-slate-800">
+              <span class="font-semibold text-slate-300">Easy-DART Total User Learning Journey</span>
+              <span class="text-emerald-400 font-mono text-[10px]">No-Login / 3초 초고속 시작</span>
+            </div>
+            <img src="./presentation_assets/ia_page_10_img_1.png" alt="학습 사다리 체계도" class="rounded-xl w-full max-h-[300px] object-contain bg-white/5 p-1 border border-slate-800" onerror="this.src='https://placehold.co/700x350/0f172a/38bdf8?text=Learning+Scaffolding+Architecture'">
+            <div class="flex items-center justify-between text-[11px] text-slate-400 px-1">
+              <span>🏢 기업 파헤치기 (/company-list)</span>
+              <span>📈 실전 모의투자 (/mock-invest)</span>
+              <span>🕹️ DART 오락실 (/quiz)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-800/80 pt-3 flex items-center justify-between text-xs text-slate-400">
+        <span>Part 1-4 : 전체 서비스 아키텍처 및 화면 플로우</span>
+        <span class="font-mono text-emerald-400 font-semibold">[2:45 ~ 3:45]</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: 비즈니스 모델 (BM) & 성장 전략 -->
+    <section class="slide flex-col justify-between w-full h-full max-w-6xl mx-auto bg-slate-900/80 border border-slate-800 rounded-3xl p-8 lg:p-12 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+      <div class="flex items-center justify-between border-b border-slate-800/80 pb-4">
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-semibold border border-emerald-500/30">
+            PART 1 : 사업 모델 (BM)
+          </span>
+          <span class="text-xs text-slate-400">무료 트래픽 유입 ➔ B2B2C 고마진 수익화 플라이휠</span>
+        </div>
+        <span class="text-xs font-mono text-slate-500">Slide 05 / 13</span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center my-auto py-2">
+        <div class="lg:col-span-7 space-y-3">
+          <h2 class="text-2xl lg:text-3xl font-extrabold tracking-tight">
+            합법 리워드 & B2B 제휴 기반의<br>
+            <span class="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">지속 가능한 4대 캐시카우</span>
+          </h2>
+
+          <div class="grid grid-cols-2 gap-3 text-xs">
+            <div class="bg-slate-950/70 p-3 rounded-xl border border-emerald-500/30">
+              <span class="text-emerald-400 font-bold block mb-1">① 증권사 비대면 계좌 CPA</span>
+              <p class="text-slate-300 text-[11px] leading-tight">게임 마스터 달성 시 제휴 증권사 계좌 개설 연계 (건당 <strong>1.5만~3.0만원</strong> 수수료 수취)</p>
+            </div>
+
+            <div class="bg-slate-950/70 p-3 rounded-xl border border-cyan-500/30">
+              <span class="text-cyan-400 font-bold block mb-1">② 100% 합법 소수점 주식 리워드</span>
+              <p class="text-slate-300 text-[11px] leading-tight">현금 직접 환전 ❌ ➔ 증권사 마케팅비 지원 <strong>소수점 주식 1,000원권</strong> ⭕ (사행성 규제 원천 차단)</p>
+            </div>
+
+            <div class="bg-slate-950/70 p-3 rounded-xl border border-purple-500/30">
+              <span class="text-purple-400 font-bold block mb-1">③ 상장사 IR 브랜디드 챌린지</span>
+              <p class="text-slate-300 text-[11px] leading-tight">상장사 홍보 공시를 3대 아케이드 엔진에 카드 데이터로 표준 템플릿화 판매 (외주 공수 최소화)</p>
+            </div>
+
+            <div class="bg-slate-950/70 p-3 rounded-xl border border-amber-500/30">
+              <span class="text-amber-400 font-bold block mb-1">④ B2C 프리미엄 단건 결제</span>
+              <p class="text-slate-300 text-[11px] leading-tight">월구독제 거부감 해소: 정밀 상폐 지뢰 진단서 및 무제한 AI 심화 코칭권 <strong>1,000~2,000원</strong> 소액 결제</p>
+            </div>
+          </div>
+
+          <div class="bg-emerald-950/30 border border-emerald-500/40 p-3 rounded-xl text-xs text-slate-300 flex items-center justify-between">
+            <span class="font-bold text-emerald-400">💡 3인 조직의 레버리지:</span>
+            <span>Cloud Run 자동 스케일링으로 유저가 5만에서 100만으로 늘어도 추가 인건비 없는 구조</span>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 bg-slate-950/90 p-4 rounded-2xl border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between text-xs pb-1 border-b border-slate-800">
+            <span class="font-bold text-slate-200">5개년 재무 추정 (Bull Case)</span>
+            <span class="text-[10px] text-slate-400 font-mono">(단위: 억 원)</span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-[11px] text-center font-mono">
+              <thead>
+                <tr class="text-slate-400 border-b border-slate-800">
+                  <th class="py-1 text-left font-sans">구분</th>
+                  <th class="py-1">1년차</th>
+                  <th class="py-1">3년차</th>
+                  <th class="py-1 text-emerald-400">5년차</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800/60 text-slate-300">
+                <tr>
+                  <td class="py-1 text-left font-sans text-slate-400">MAU</td>
+                  <td>5만명</td>
+                  <td>50만명</td>
+                  <td class="text-emerald-400 font-bold">100만명</td>
+                </tr>
+                <tr>
+                  <td class="py-1 text-left font-sans text-slate-400">총 매출</td>
+                  <td>5.0억</td>
+                  <td>55.5억</td>
+                  <td class="text-emerald-400 font-bold">129.0억</td>
+                </tr>
+                <tr>
+                  <td class="py-1 text-left font-sans text-slate-400">운영비용</td>
+                  <td>3.0억</td>
+                  <td>15.5억</td>
+                  <td>35.5억</td>
+                </tr>
+                <tr class="font-bold bg-emerald-500/10 text-emerald-300">
+                  <td class="py-1 text-left font-sans">영업이익</td>
+                  <td>2.0억</td>
+                  <td>40.0억</td>
+                  <td class="text-emerald-400">93.5억</td>
+                </tr>
+                <tr class="text-slate-400">
+                  <td class="py-1 text-left font-sans">영업이익률</td>
+                  <td>40%</td>
+                  <td>72%</td>
+                  <td class="text-emerald-300 font-bold">72%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-[10px] text-slate-500 text-right">※ 정부 공공지원사업(TIPS, FQ향상 바우처) 병행</p>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-800/80 pt-3 flex items-center justify-between text-xs text-slate-400">
+        <span>Part 1-5 : 비즈니스 모델 및 5개년 재무 로드맵</span>
+        <span class="font-mono text-emerald-400 font-semibold">[3:45 ~ 5:00] (발표자 1 마침)</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 6: 핵심기능 1 - 기업 파헤치기 -->
+    <section class="slide flex-col justify-between w-full h-full max-w-6xl mx-auto bg-slate-900/80 border border-slate-800 rounded-3xl p-8 lg:p-12 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+      <div class="flex items-center justify-between border-b border-slate-800/80 pb-4">
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-400 text-xs font-semibold border border-cyan-500/30">
+            PART 2 : 핵심 기능 ①
+          </span>
+          <span class="text-xs text-slate-400">기업 파헤치기 (/company-list, /company-detail)</span>
+        </div>
+        <span class="text-xs font-mono text-slate-500">Slide 06 / 13</span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center my-auto py-2">
+        <div class="lg:col-span-7 space-y-4">
+          <div class="space-y-1">
+            <span class="text-cyan-400 text-xs font-bold font-mono tracking-wider">FEATURE 01</span>
+            <h2 class="text-2xl lg:text-3xl font-extrabold tracking-tight">
+              소비 영수증이 기업 이익으로!<br>
+              <span class="bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">일상 메타포 & 듀얼 뷰어 손익계산서</span>
+            </h2>
+          </div>
+
+          <div class="space-y-3">
+            <div class="bg-slate-950/70 p-3.5 rounded-xl border border-cyan-500/30 flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-sm shrink-0">
+                <i data-lucide="calculator" class="w-4 h-4"></i>
+              </div>
+              <div>
+                <h4 class="text-xs font-bold text-slate-200">내 소비 ➡️ 기업 실적 환산기 (Hero Metaphor)</h4>
+                <p class="text-xs text-slate-400 mt-0.5">
+                  올리브영에서 <strong>35,000원</strong> 결제 시 ➔ <strong class="text-cyan-300">"독도토너 1.4병 마진 기여 (영업이익 4,270원)"</strong>로 일상 소비를 기업 재무와 즉시 직결.
+                </p>
+              </div>
+            </div>
+
+            <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">
+                <i data-lucide="split" class="w-4 h-4"></i>
+              </div>
+              <div>
+                <h4 class="text-xs font-bold text-slate-200">손익계산서 듀얼 뷰어 (Dual View)</h4>
+                <p class="text-xs text-slate-400 mt-0.5">
+                  <strong>[쉬운 해설 모드]</strong>(매출➔비용➔영업익 4대 카드)와 <strong>[DART 원본표 모드]</strong>(실제 전자공시 서식 + 💡 계정과목 스마트 툴팁 & 속마음 번역) 간 원클릭 전환.
+                </p>
+              </div>
+            </div>
+
+            <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-sm shrink-0">
+                <i data-lucide="traffic-cone" class="w-4 h-4"></i>
+              </div>
+              <div>
+                <h4 class="text-xs font-bold text-slate-200">AI 실전 투자 해석 (사? 말아?)</h4>
+                <p class="text-xs text-slate-400 mt-0.5">
+                  <strong class="text-emerald-400">🟢 초록불(성장 모멘텀)</strong> vs <strong class="text-red-400">🔴 빨간불(경계 리스크)</strong> 시그널 3줄 요약 + "내 5만원은 이 회사 지분의 0.000003%" 환산.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 space-y-3">
+          <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2.5">
+            <div class="flex items-center justify-between text-xs text-slate-400 pb-1 border-b border-slate-800">
+              <span class="font-bold text-slate-200 flex items-center gap-1.5"><i data-lucide="heart-pulse" class="w-3.5 h-3.5 text-cyan-400"></i> 주린이 3대 재무제표 건강검진표</span>
+              <span class="text-[10px] text-cyan-400 font-mono">1분 정복 가이드</span>
+            </div>
+            <img src="./presentation_assets/dart_info_page_1.png" alt="3대 재무제표" class="rounded-xl w-full max-h-[220px] object-contain bg-white/5 p-1 border border-slate-800" onerror="this.src='https://placehold.co/500x250/0f172a/06b6d4?text=3+Financial+Statements+Pillars'">
+            <div class="grid grid-cols-3 gap-1.5 text-center text-[10px]">
+              <div class="bg-slate-900 p-1.5 rounded border border-slate-800"><span class="text-emerald-400 font-bold">손익계산서</span><br><span class="text-slate-400">공격력 (수익성)</span></div>
+              <div class="bg-slate-900 p-1.5 rounded border border-slate-800"><span class="text-cyan-400 font-bold">재무상태표</span><br><span class="text-slate-400">방어력 (안전성)</span></div>
+              <div class="bg-slate-900 p-1.5 rounded border border-slate-800"><span class="text-purple-400 font-bold">현금흐름표</span><br><span class="text-slate-400">피의 순환 (진실성)</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-800/80 pt-3 flex items-center justify-between text-xs text-slate-400">
+        <span>Part 2-1 : 기업 파헤치기 및 소비 메타포</span>
+        <span class="font-mono text-cyan-400 font-semibold">[5:00 ~ 6:30] (발표자 2)</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 7: 핵심기능 2 - 실전 모의투자 -->
+    <section class="slide flex-col justify-between w-full h-full max-w-6xl mx-auto bg-slate-900/80 border border-slate-800 rounded-3xl p-8 lg:p-12 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+      <div class="flex items-center justify-between border-b border-slate-800/80 pb-4">
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-400 text-xs font-semibold border border-cyan-500/30">
+            PART 2 : 핵심 기능 ②
+          </span>
+          <span class="text-xs text-slate-400">실전 모의투자 샌드박스 (/mock-invest)</span>
+        </div>
+        <span class="text-xs font-mono text-slate-500">Slide 07 / 13</span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center my-auto py-2">
+        <div class="lg:col-span-6 space-y-4">
+          <div class="space-y-1">
+            <span class="text-cyan-400 text-xs font-bold font-mono tracking-wider">FEATURE 02</span>
+            <h2 class="text-2xl lg:text-3xl font-extrabold tracking-tight">
+              무지성 뇌동매매의 파멸 vs<br>
+              <span class="bg-gradient-to-r from-amber-400 via-orange-400 to-red-400 bg-clip-text text-transparent">DART 정밀분석의 75% 승률</span>
+            </h2>
+          </div>
+
+          <div class="bg-slate-950/80 p-3.5 rounded-xl border border-slate-800 space-y-2 text-xs">
+            <div class="flex items-center justify-between font-bold text-slate-200">
+              <span>5대 실전 트레이딩 전략 매커니즘</span>
+              <span class="text-emerald-400 text-[11px]">기본 시드 1,000만원 지급</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-[11px]">
+              <div class="bg-slate-900 p-2 rounded border border-red-500/30 text-slate-300">
+                <span class="text-red-400 font-bold">💣 무지성 풀매수</span><br>
+                1턴 환희 ➔ 2턴 급락 ➔ 3턴 90% 확률 대형 물림 & 3개월 강제 락업
+              </div>
+              <div class="bg-slate-900 p-2 rounded border border-emerald-500/30 text-slate-300">
+                <span class="text-emerald-400 font-bold">🔍 DART 정밀분석</span><br>
+                영업익·부채비율 확인 후 3회 분할매수 ➔ <strong>75~88% 고승률</strong>
+              </div>
+              <div class="bg-slate-900 p-2 rounded border border-amber-500/30 text-slate-300">
+                <span class="text-amber-400 font-bold">🚀 야수의 풀신용 (2.5X)</span><br>
+                -15% 하락 시 마진콜 즉시 청산
+              </div>
+              <div class="bg-slate-900 p-2 rounded border border-cyan-500/30 text-slate-300">
+                <span class="text-cyan-400 font-bold">💧 물타기 vs 🔥 불타기</span><br>
+                평단가 변동 원리 동적 인터랙션
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-slate-950/80 p-3.5 rounded-xl border border-slate-800 space-y-1.5 text-xs">
+            <span class="font-bold text-slate-200 block">유쾌한 B급 블랙코미디 장치</span>
+            <ul class="text-[11px] text-slate-400 space-y-1 list-disc list-inside">
+              <li><strong class="text-amber-300">📦🪙 골판지 박스 거지 핑거:</strong> -50% 깡통 시 등장, '주주배정 유상증자' 퀴즈 맞히면 회생 지원금 100만원 수령</li>
+              <li><strong class="text-cyan-300">📞 주담(IR) 전화:</strong> 50% 확률 반등 탈출 vs 50% 팩트폭격 멘탈 붕괴</li>
+              <li><strong class="text-emerald-300">🛍️ 인생역전 플렉스 상점:</strong> 번 돈으로 컵라면(1,500원)부터 <strong>여의도 파크원 펜트하우스(1억)</strong>까지 플렉스</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6 flex flex-col items-center justify-center">
+          <div class="w-full bg-slate-950 p-3 rounded-2xl border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between text-[11px] text-slate-400 pb-1 border-b border-slate-800">
+              <span class="font-bold text-slate-200 flex items-center gap-1.5"><i data-lucide="trending-up" class="w-3.5 h-3.5 text-amber-400"></i> 수익률 연동 캐릭터 4단계 진화</span>
+              <span class="text-slate-500 font-mono">Finger Mascot Evolution</span>
+            </div>
+            <img src="./presentation_assets/finger_evolution.png" alt="캐릭터 4단계 진화" class="rounded-xl w-full max-h-[290px] object-cover border border-slate-800 shadow-lg" onerror="this.src='https://placehold.co/600x300/0f172a/f59e0b?text=Finger+Stock+Evolution'">
+            <div class="grid grid-cols-4 gap-1 text-center text-[10px] text-slate-400">
+              <span class="text-red-400 font-bold">1단계: 골판지 거지</span>
+              <span class="text-blue-400 font-bold">2단계: 얼어붙은 핑거</span>
+              <span class="text-emerald-400 font-bold">3단계: 공시 가치투자</span>
+              <span class="text-amber-300 font-bold">4단계: 여의도 빌딩주</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-800/80 pt-3 flex items-center justify-between text-xs text-slate-400">
+        <span>Part 2-2 : 실전 모의투자 샌드박스 및 게이미피케이션</span>
+        <span class="font-mono text-cyan-400 font-semibold">[6:30 ~ 8:00]</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 8: 핵심기능 3 - DART 오락실 (3대 금융 아케이드) -->
+    <section class="slide flex-col justify-between w-full h-full max-w-6xl mx-auto bg-slate-900/80 border border-slate-800 rounded-3xl p-8 lg:p-12 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+      <div class="flex items-center justify-between border-b border-slate-800/80 pb-4">
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-400 text-xs font-semibold border border-cyan-500/30">
+            PART 2 : 핵심 기능 ③
+          </span>
+          <span class="text-xs text-slate-400">DART 오락실 (/quiz) & 3대 실전 아케이드</span>
+        </div>
+        <span class="text-xs font-mono text-slate-500">Slide 08 / 13</span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center my-auto py-2">
+        <div class="lg:col-span-6 space-y-4">
+          <div class="space-y-1">
+            <span class="text-cyan-400 text-xs font-bold font-mono tracking-wider">FEATURE 03</span>
+            <h2 class="text-2xl lg:text-3xl font-extrabold tracking-tight">
+              "읽지 않으면 피할 수 없다!"<br>
+              <span class="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">3대 정예 금융 아케이드 라인업</span>
+            </h2>
+          </div>
+
+          <div class="space-y-2.5">
+            <div class="p-3 bg-slate-950/70 rounded-xl border border-purple-500/40 flex items-start gap-3">
+              <span class="px-2 py-1 bg-purple-500/20 text-purple-300 font-mono text-xs font-bold rounded shrink-0">M-01</span>
+              <div>
+                <h4 class="text-xs font-bold text-purple-300">주식 & 회계 기초 퀴즈 아레나</h4>
+                <p class="text-xs text-slate-400 mt-0.5">
+                  손익, 재무, 감사의견, CB, 배당 등 6대 카테고리 <strong>62개 마스터 문항</strong>. 피셔-예이츠 2단계 셔플로 고갈 없는 무한 스트림 제공.
+                </p>
+              </div>
+            </div>
+
+            <div class="p-3 bg-slate-950/70 rounded-xl border border-cyan-500/40 flex items-start gap-3">
+              <span class="px-2 py-1 bg-cyan-500/20 text-cyan-300 font-mono text-xs font-bold rounded shrink-0">M-02</span>
+              <div>
+                <h4 class="text-xs font-bold text-cyan-300">DART 실전 투자 심사관 (BUY or SELL)</h4>
+                <p class="text-xs text-slate-400 mt-0.5">
+                  틴더 스타일 카드 스와이프: 실시간 공시 카드를 보고 <strong>우측(매수/호재) vs 좌측(손절/악재)</strong> 8초 내 판별! (⚡ 3초 번개 보너스 +100P)
+                </p>
+              </div>
+            </div>
+
+            <div class="p-3 bg-slate-950/70 rounded-xl border border-emerald-500/40 flex items-start gap-3">
+              <span class="px-2 py-1 bg-emerald-500/20 text-emerald-300 font-mono text-xs font-bold rounded shrink-0">M-03</span>
+              <div>
+                <h4 class="text-xs font-bold text-emerald-300">DART 급행 레인 러너 (Lane Runner)</h4>
+                <p class="text-xs text-slate-400 mt-0.5">
+                  3차선 고속 질주! 호재 캡슐(영업익 서프라이즈, 자사주 소각)은 먹고, <strong>악재 지뢰(완전자본잠식, 부채비율 900%)는 순간 회피</strong>하는 동체시력 훈련.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6 flex flex-col items-center justify-center">
+          <div class="w-full bg-slate-950 p-3 rounded-2xl border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between text-[11px] text-slate-400 pb-1 border-b border-slate-800">
+              <span class="font-bold text-slate-200 flex items-center gap-1.5"><i data-lucide="gamepad-2" class="w-3.5 h-3.5 text-purple-400"></i> Easy-DART Retro Cyberpunk Arcade</span>
+              <span class="text-purple-400 font-mono">Web Audio 8-bit SFX 내장</span>
+            </div>
+            <img src="./presentation_assets/arcade_machines.png" alt="3대 아케이드 머신" class="rounded-xl w-full max-h-[290px] object-cover border border-slate-800 shadow-lg" onerror="this.src='https://placehold.co/600x300/0f172a/8b5cf6?text=Arcade+Machines+Lineup'">
+            <div class="flex items-center justify-between text-[11px] text-slate-400 px-2">
+              <span>🧠 M-01 퀴즈 아레나</span>
+              <span>⚖️ M-02 투자 심사관</span>
+              <span>🏎️ M-03 레인 러너</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-800/80 pt-3 flex items-center justify-between text-xs text-slate-400">
+        <span>Part 2-3 : DART 오락실 3대 정예 아케이드 라인업</span>
+        <span class="font-mono text-cyan-400 font-semibold">[8:00 ~ 9:15]</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 9: AI 1:1 하브루타 코칭 & 에듀테크 완성도 -->
+    <section class="slide flex-col justify-between w-full h-full max-w-6xl mx-auto bg-slate-900/80 border border-slate-800 rounded-3xl p-8 lg:p-12 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+      <div class="flex items-center justify-between border-b border-slate-800/80 pb-4">
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-400 text-xs font-semibold border border-cyan-500/30">
+            PART 2 : AI 에듀테크 특화
+          </span>
+          <span class="text-xs text-slate-400">단순 오답 체크를 넘어선 소크라테스식 문답</span>
+        </div>
+        <span class="text-xs font-mono text-slate-500">Slide 09 / 13</span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center my-auto py-2">
+        <div class="lg:col-span-7 space-y-4">
+          <div class="space-y-1">
+            <span class="text-cyan-400 text-xs font-bold font-mono tracking-wider">AI TUTORING</span>
+            <h2 class="text-2xl lg:text-3xl font-extrabold tracking-tight">
+              1:1 AI 하브루타 처방전 &<br>
+              <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">장기 기억 형성 코칭 루프</span>
+            </h2>
+          </div>
+
+          <div class="space-y-3">
+            <div class="bg-slate-950/80 p-4 rounded-xl border border-cyan-500/40 space-y-2">
+              <div class="flex items-center gap-2 text-xs font-bold text-cyan-300">
+                <i data-lucide="bot" class="w-4 h-4"></i> Gemini 기반 AI 핑거코치의 소크라테스식 반문
+              </div>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                "단순히 '전환사채는 악재입니다'라고 정답만 주입하지 않습니다.<br>
+                <em class="text-amber-300 font-medium">『피자 한 판을 4명이 먹고 있는데, 8명이 갑자기 새 숟가락을 들고 식탁에 앉는다면 회원님의 피자 크기는 어떻게 될까요?』</em>처럼 유저 스스로 지분 희석의 위험을 깨닫게 유도합니다."
+              </p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 text-xs">
+              <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800">
+                <span class="font-bold text-slate-200 block mb-1">📋 10개 안건 실전 오답노트</span>
+                <p class="text-slate-400 text-[11px]">심사관 게임 종료 후 방금 놓친 공시 원문과 전문가 꿀팁 브리핑 제공</p>
+              </div>
+
+              <div class="bg-slate-950/70 p-3 rounded-xl border border-slate-800">
+                <span class="font-bold text-slate-200 block mb-1">🏆 4단계 주린이 승급제</span>
+                <p class="text-slate-400 text-[11px]">새싹 ➔ 지뢰 감별사 ➔ 여의도 불개미 ➔ 스마트 머니 명예의 전당 등극</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between text-xs text-slate-400 pb-1 border-b border-slate-800">
+            <span class="font-bold text-slate-200 flex items-center gap-1.5"><i data-lucide="network" class="w-3.5 h-3.5 text-cyan-400"></i> AI Debrief Sequence Flow</span>
+            <span class="text-slate-500 font-mono text-[10px]">FastAPI + Gemini LLM</span>
+          </div>
+          <img src="./presentation_assets/flowchart_page_15.png" alt="AI 코칭 시퀀스 다이어그램" class="rounded-xl w-full max-h-[260px] object-contain bg-white/5 p-1 border border-slate-800" onerror="this.src='https://placehold.co/500x300/0f172a/38bdf8?text=AI+Debrief+Sequence'">
+          <p class="text-[10px] text-slate-400 text-center">▲ 오답 공시 발생 시 Gemini가 JSON 기반 문답 처방전을 백엔드 비동기 생성</p>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-800/80 pt-3 flex items-center justify-between text-xs text-slate-400">
+        <span>Part 2-4 : AI 하브루타 처방전 및 학습 복기</span>
+        <span class="font-mono text-cyan-400 font-semibold">[9:15 ~ 10:00] (발표자 2 마침)</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 10: 기술 아키텍처 및 시스템 파이프라인 -->
+    <section class="slide flex-col justify-between w-full h-full max-w-6xl mx-auto bg-slate-900/80 border border-slate-800 rounded-3xl p-8 lg:p-12 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+      <div class="flex items-center justify-between border-b border-slate-800/80 pb-4">
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 rounded-full bg-purple-500/20 text-purple-400 text-xs font-semibold border border-purple-500/30">
+            PART 3 : 기술 구현
+          </span>
+          <span class="text-xs text-slate-400">시스템 아키텍처 및 무중단 파이프라인</span>
+        </div>
+        <span class="text-xs font-mono text-slate-500">Slide 10 / 13</span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center my-auto py-2">
+        <div class="lg:col-span-6 space-y-4">
+          <div class="space-y-1">
+            <span class="text-purple-400 text-xs font-bold font-mono tracking-wider">ARCHITECTURE</span>
+            <h2 class="text-2xl lg:text-3xl font-extrabold tracking-tight">
+              Open DART와 Gemini의 만남,<br>
+              <span class="bg-gradient-to-r from-purple-400 via-indigo-300 to-cyan-400 bg-clip-text text-transparent">경량 고성능 시스템 설계</span>
+            </h2>
+          </div>
+
+          <div class="space-y-2.5 text-xs">
+            <div class="p-3 bg-slate-950/70 rounded-xl border border-slate-800 flex items-start gap-3">
+              <span class="w-6 h-6 rounded bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-bold text-xs shrink-0">1</span>
+              <div>
+                <h4 class="font-bold text-slate-200">금융감독원 Open DART API (완전 무료)</h4>
+                <p class="text-slate-400 mt-0.5">일 <strong>20,000건 무료 쿼터</strong>. 20개 일상 기업의 최신 사업·감사보고서 및 손익·재무상태표 실시간 파싱.</p>
+              </div>
+            </div>
+
+            <div class="p-3 bg-slate-950/70 rounded-xl border border-slate-800 flex items-start gap-3">
+              <span class="w-6 h-6 rounded bg-purple-500/20 text-purple-300 flex items-center justify-center font-bold text-xs shrink-0">2</span>
+              <div>
+                <h4 class="font-bold text-slate-200">Google Gemini 1.5 Flash (속도·비용 극대화)</h4>
+                <p class="text-slate-400 mt-0.5">분당 15 RPM, 일 1,500회 무료 티어 제공. 초당 40+ 토큰의 초고속 응답으로 인터랙티브 딜레마 카드 실시간 생성.</p>
+              </div>
+            </div>
+
+            <div class="p-3 bg-slate-950/70 rounded-xl border border-slate-800 flex items-start gap-3">
+              <span class="w-6 h-6 rounded bg-cyan-500/20 text-cyan-300 flex items-center justify-center font-bold text-xs shrink-0">3</span>
+              <div>
+                <h4 class="font-bold text-slate-200">Cloud Run 무중단 오토스케일링 컨테이너</h4>
+                <p class="text-slate-400 mt-0.5">Python FastAPI 기반의 가벼운 비동기 엔진. 트래픽 0일 때 인스턴스 0으로 Scale-to-zero되어 유휴 서버비 0원.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6 bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between text-xs text-slate-400 pb-1 border-b border-slate-800">
+            <span class="font-bold text-slate-200 flex items-center gap-1.5"><i data-lucide="layers" class="w-3.5 h-3.5 text-purple-400"></i> 기업 공시 탐색 & AI 분석 시퀀스</span>
+            <span class="text-purple-400 font-mono text-[10px]">End-to-End Pipeline</span>
+          </div>
+          <img src="./presentation_assets/flowchart_page_9.png" alt="전체 시퀀스 다이어그램" class="rounded-xl w-full max-h-[280px] object-contain bg-white/5 p-1 border border-slate-800" onerror="this.src='https://placehold.co/500x300/0f172a/8b5cf6?text=System+Sequence+Diagram'">
+          <div class="flex items-center justify-between text-[11px] text-slate-400 px-1">
+            <span>Client (SPA)</span>
+            <span>➔ FastAPI Backend</span>
+            <span>➔ Open DART</span>
+            <span>➔ Gemini LLM</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-800/80 pt-3 flex items-center justify-between text-xs text-slate-400">
+        <span>Part 3-1 : 기술 스택 및 데이터 파이프라인</span>
+        <span class="font-mono text-purple-400 font-semibold">[10:00 ~ 11:15] (발표자 3)</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 11: 기능별 1회 호출당 토큰 소비량 및 단가 -->
+    <section class="slide flex-col justify-between w-full h-full max-w-6xl mx-auto bg-slate-900/80 border border-slate-800 rounded-3xl p-8 lg:p-12 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+      <div class="flex items-center justify-between border-b border-slate-800/80 pb-4">
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 rounded-full bg-purple-500/20 text-purple-400 text-xs font-semibold border border-purple-500/30">
+            PART 3 : 토큰 경제성
+          </span>
+          <span class="text-xs text-slate-400">기능별 토큰 소비량 및 2대 비용 안전장치</span>
+        </div>
+        <span class="text-xs font-mono text-slate-500">Slide 11 / 13</span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center my-auto py-2">
+        <div class="lg:col-span-12 space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-purple-400 text-xs font-bold font-mono tracking-wider">UNIT ECONOMICS</span>
+              <h2 class="text-2xl lg:text-3xl font-extrabold tracking-tight">
+                기능별 1회 호출당 토큰 소비량 및 단가 산정
+              </h2>
+            </div>
+            <div class="text-right text-xs text-slate-400 font-mono hidden sm:block">
+              기준 모델: <strong class="text-slate-200">Gemini 1.5 Flash</strong> (환율 $1 = 1,350원)
+            </div>
+          </div>
+
+          <div class="overflow-x-auto bg-slate-950 rounded-2xl border border-slate-800">
+            <table class="w-full text-xs text-left">
+              <thead class="bg-slate-900 text-slate-400 border-b border-slate-800 font-mono">
+                <tr>
+                  <th class="p-3">기능 및 API 엔드포인트</th>
+                  <th class="p-3">트리거 시점</th>
+                  <th class="p-3 text-center">입력 토큰</th>
+                  <th class="p-3 text-center">출력 토큰</th>
+                  <th class="p-3 text-center font-bold text-slate-200">1회 총 토큰</th>
+                  <th class="p-3 text-right">회당 비용(USD)</th>
+                  <th class="p-3 text-right text-emerald-400 font-bold">회당 비용(원화)</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800/60 font-mono text-slate-300">
+                <tr class="hover:bg-slate-900/40">
+                  <td class="p-3 font-sans font-semibold text-slate-200">
+                    1:1 하브루타 오답 처방전<br>
+                    <span class="text-[10px] text-slate-500 font-mono">POST /api/quiz/ai-debrief</span>
+                  </td>
+                  <td class="p-3 font-sans text-slate-400">게임 종료 후 오답 발생 시</td>
+                  <td class="p-3 text-center">약 200~250</td>
+                  <td class="p-3 text-center">약 120~180</td>
+                  <td class="p-3 text-center font-bold text-cyan-300">약 400 토큰</td>
+                  <td class="p-3 text-right">$0.00007</td>
+                  <td class="p-3 text-right text-emerald-400 font-bold">약 0.09원</td>
+                </tr>
+
+                <tr class="hover:bg-slate-900/40">
+                  <td class="p-3 font-sans font-semibold text-slate-200">
+                    무한 공시 딜레마 카드 생성<br>
+                    <span class="text-[10px] text-slate-500 font-mono">GET /api/quiz/ai-scenario</span>
+                  </td>
+                  <td class="p-3 font-sans text-slate-400">신규 공시 딜레마 요청 시</td>
+                  <td class="p-3 text-center">약 150~200</td>
+                  <td class="p-3 text-center">약 100~150</td>
+                  <td class="p-3 text-center font-bold text-purple-300">약 300 토큰</td>
+                  <td class="p-3 text-right">$0.00005</td>
+                  <td class="p-3 text-right text-emerald-400 font-bold">약 0.07원</td>
+                </tr>
+
+                <tr class="hover:bg-slate-900/40">
+                  <td class="p-3 font-sans font-semibold text-slate-200">
+                    공시 3줄 요약 & 리스크 분석<br>
+                    <span class="text-[10px] text-slate-500 font-mono">AISummaryService.summarize_report</span>
+                  </td>
+                  <td class="p-3 font-sans text-slate-400">기업 상세 공시 분석 요청 시</td>
+                  <td class="p-3 text-center">약 500~800</td>
+                  <td class="p-3 text-center">약 200~300</td>
+                  <td class="p-3 text-center font-bold text-amber-300">약 900 토큰</td>
+                  <td class="p-3 text-right">$0.00013</td>
+                  <td class="p-3 text-right text-emerald-400 font-bold">약 0.18원</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+            <div class="bg-slate-950 p-4 rounded-xl border border-emerald-500/30 flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm shrink-0">
+                🛡️
+              </div>
+              <div>
+                <h4 class="text-xs font-bold text-emerald-300">안전장치 1 : 0토큰 패스 (Zero-Token Bypass)</h4>
+                <p class="text-xs text-slate-400 mt-1">
+                  유저가 오답 없이 퍼펙트 클리어한 경우, Gemini API를 전혀 호출하지 않고 로컬 즉시 반환으로 처리하여 <strong>토큰 소모가 정확히 0</strong>입니다.
+                </p>
+              </div>
+            </div>
+
+            <div class="bg-slate-950 p-4 rounded-xl border border-cyan-500/30 flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-sm shrink-0">
+                ⚡
+              </div>
+              <div>
+                <h4 class="text-xs font-bold text-cyan-300">안전장치 2 : Fallback 자동 보호 엔진</h4>
+                <p class="text-xs text-slate-400 mt-1">
+                  네트워크 단절, API 키 장애, 일일 쿼터 소진 시에도 에러를 내지 않고 <strong>내장된 룰베이스 템플릿으로 100% 자동 전환</strong>되어 비용 폭탄을 원천 차단합니다.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-800/80 pt-3 flex items-center justify-between text-xs text-slate-400">
+        <span>Part 3-2 : 호출당 토큰 단가 및 안전장치 설계</span>
+        <span class="font-mono text-purple-400 font-semibold">[11:15 ~ 12:30]</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 12: 트래픽 규모별 예상 지출 시뮬레이션 & 인터랙티브 계산기 -->
+    <section class="slide flex-col justify-between w-full h-full max-w-6xl mx-auto bg-slate-900/80 border border-slate-800 rounded-3xl p-8 lg:p-12 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+      <div class="flex items-center justify-between border-b border-slate-800/80 pb-4">
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 rounded-full bg-purple-500/20 text-purple-400 text-xs font-semibold border border-purple-500/30">
+            PART 3 : 예상 지출 시뮬레이션
+          </span>
+          <span class="text-xs text-slate-400">일 1,500회까지 완전 무료(0원) & 트래픽 규모별 비용</span>
+        </div>
+        <span class="text-xs font-mono text-slate-500">Slide 12 / 13</span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center my-auto py-2">
+        <div class="lg:col-span-7 space-y-4">
+          <div class="space-y-1">
+            <span class="text-purple-400 text-xs font-bold font-mono tracking-wider">COST SIMULATION</span>
+            <h2 class="text-2xl lg:text-3xl font-extrabold tracking-tight">
+              일 1,500회(월 4.5만회)까지 <span class="text-emerald-400">전액 0원</span>,<br>
+              하루 1만 회 폭증해도 <span class="text-cyan-400">월 2만 원대</span>
+            </h2>
+          </div>
+
+          <div class="overflow-x-auto bg-slate-950 rounded-2xl border border-slate-800">
+            <table class="w-full text-xs text-center font-mono">
+              <thead class="bg-slate-900 text-slate-400 border-b border-slate-800">
+                <tr>
+                  <th class="p-2.5 text-left font-sans">일일 호출 수</th>
+                  <th class="p-2.5">월간 누적 호출</th>
+                  <th class="p-2.5">무료 티어 적용</th>
+                  <th class="p-2.5 text-right font-sans">월간 예상 비용</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800/60 text-slate-300">
+                <tr class="bg-emerald-500/5">
+                  <td class="p-2.5 text-left font-sans font-semibold text-slate-200">일 100회</td>
+                  <td class="p-2.5">3,000회</td>
+                  <td class="p-2.5 text-emerald-400 font-bold">100% 무료 (Free Tier)</td>
+                  <td class="p-2.5 text-right font-bold text-emerald-400 font-sans">0원</td>
+                </tr>
+                <tr class="bg-emerald-500/5">
+                  <td class="p-2.5 text-left font-sans font-semibold text-slate-200">일 500회</td>
+                  <td class="p-2.5">15,000회</td>
+                  <td class="p-2.5 text-emerald-400 font-bold">100% 무료 (Free Tier)</td>
+                  <td class="p-2.5 text-right font-bold text-emerald-400 font-sans">0원</td>
+                </tr>
+                <tr class="bg-emerald-500/10">
+                  <td class="p-2.5 text-left font-sans font-semibold text-emerald-300">일 1,000회</td>
+                  <td class="p-2.5 font-bold text-emerald-300">30,000회</td>
+                  <td class="p-2.5 text-emerald-400 font-bold">100% 무료 (1,500회 한도)</td>
+                  <td class="p-2.5 text-right font-bold text-emerald-400 font-sans">0원</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-left font-sans font-semibold text-slate-200">일 3,000회</td>
+                  <td class="p-2.5">90,000회</td>
+                  <td class="p-2.5 text-slate-400">유료 전환 (종량제)</td>
+                  <td class="p-2.5 text-right font-bold text-slate-200 font-sans">약 8,500원 / 월</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 text-left font-sans font-semibold text-cyan-300">일 10,000회</td>
+                  <td class="p-2.5 font-bold text-cyan-300">300,000회</td>
+                  <td class="p-2.5 text-slate-400">유료 전환 (종량제)</td>
+                  <td class="p-2.5 text-right font-bold text-cyan-300 font-sans">약 28,350원 / 월</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="p-3 bg-slate-950/80 rounded-xl border border-slate-800 text-xs text-slate-400 flex items-center justify-between">
+            <span>🏛️ <strong>DART API 지출:</strong> 일 20,000건 무료 쿼터로 <strong>전액 0원</strong></span>
+            <span class="text-emerald-400 font-semibold">초기 운영비 리스크 0%</span>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 bg-slate-950 p-5 rounded-2xl border border-purple-500/40 space-y-4">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+            <span class="font-bold text-xs text-purple-300 flex items-center gap-1.5">
+              <i data-lucide="sliders" class="w-4 h-4"></i> 실시간 토큰 비용 시뮬레이터
+            </span>
+            <span class="text-[10px] text-slate-500 font-mono">Live Widget</span>
+          </div>
+
+          <div class="space-y-3">
+            <div>
+              <div class="flex justify-between text-xs text-slate-300 mb-1">
+                <span>일일 AI 호출 횟수:</span>
+                <span id="sliderValueText" class="font-bold text-emerald-400 font-mono">1,500 회/일</span>
+              </div>
+              <input type="range" id="trafficSlider" min="100" max="15000" step="100" value="1500" oninput="updateCalculator(this.value)" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500">
+              <div class="flex justify-between text-[10px] text-slate-500 font-mono mt-1">
+                <span>100회</span>
+                <span class="text-emerald-400 font-bold">1,500회(무료한도)</span>
+                <span>15,000회</span>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2 text-center">
+              <span class="text-[11px] text-slate-400 block">예상 월간 총 지출 (DART + GEMINI)</span>
+              <div id="calcCostText" class="text-3xl font-black text-emerald-400 tracking-tight font-mono">
+                0 원 / 월
+              </div>
+              <div id="calcDetailText" class="text-[11px] text-emerald-300/80">
+                🎉 Gemini 1.5 Flash 무료 티어(1,500 RPD)로 100% 충당!
+              </div>
+            </div>
+          </div>
+
+          <p class="text-[10px] text-slate-500 leading-tight">
+            * 1회당 평균 400토큰(오답 처방전 기준) 산출. 백엔드 캐싱 및 0토큰 패스 적용 시 실제 지출은 이보다 30% 더 낮아집니다.
+          </p>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-800/80 pt-3 flex items-center justify-between text-xs text-slate-400">
+        <span>Part 3-3 : 트래픽 규모별 지출 시뮬레이션 및 비용 타당성</span>
+        <span class="font-mono text-purple-400 font-semibold">[12:30 ~ 13:45]</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 13: 종합 결론 & 향후 로드맵 & Q&A -->
+    <section class="slide flex-col justify-between w-full h-full max-w-6xl mx-auto bg-slate-900/80 border border-slate-800 rounded-3xl p-8 lg:p-12 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+      <div class="flex items-center justify-between border-b border-slate-800/80 pb-4">
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-semibold border border-emerald-500/30">
+            종합 결론 & Q&A
+          </span>
+          <span class="text-xs text-slate-400">Easy-DART가 열어갈 차세대 청년 금융의 미래</span>
+        </div>
+        <span class="text-xs font-mono text-slate-500">Slide 13 / 13</span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center my-auto py-2">
+        <div class="lg:col-span-7 space-y-4">
+          <h2 class="text-3xl lg:text-4xl font-black tracking-tight leading-snug">
+            "지인 추천 '묻지마 매수'에서,<br>
+            공시를 읽는 <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">'스마트 머니'로</span>"
+          </h2>
+
+          <div class="grid grid-cols-3 gap-3">
+            <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 text-center">
+              <div class="text-2xl font-black text-emerald-400 font-mono">3X ↑</div>
+              <span class="text-xs font-bold text-slate-200 mt-1 block">체류 시간 극대화</span>
+              <p class="text-[10px] text-slate-400 mt-0.5">정적 문서 ➔ 인터랙티브 게임</p>
+            </div>
+
+            <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 text-center">
+              <div class="text-2xl font-black text-cyan-400 font-mono">75% ↑</div>
+              <span class="text-xs font-bold text-slate-200 mt-1 block">공시 확인 승률</span>
+              <p class="text-[10px] text-slate-400 mt-0.5">뇌동매매 실패를 직접 체화</p>
+            </div>
+
+            <div class="bg-slate-950/70 p-3.5 rounded-xl border border-slate-800 text-center">
+              <div class="text-2xl font-black text-purple-400 font-mono">0원</div>
+              <span class="text-xs font-bold text-slate-200 mt-1 block">초기 AI 운영비</span>
+              <p class="text-[10px] text-slate-400 mt-0.5">Gemini 무료 티어 내 완벽 운영</p>
+            </div>
+          </div>
+
+          <div class="bg-slate-950/90 p-4 rounded-xl border border-emerald-500/30 text-xs text-slate-300 space-y-1.5">
+            <span class="font-bold text-emerald-400 flex items-center gap-1.5">
+              <i data-lucide="check-check" class="w-4 h-4"></i> 3인 15분 발표 핵심 한 줄 요약
+            </span>
+            <p class="text-slate-300 leading-relaxed text-[11px]">
+              Easy-DART는 단순한 오락 웹앱이 아닌, <strong>20대 사회초년생의 소중한 자산을 지켜주는 '실전 금융 방패'</strong>이며, 
+              증권사 B2B2C 제휴와 공공 바우처를 결합해 월 1만원 미만의 서버비로 연 100억 대 성장을 이뤄낼 독보적 에듀테크 플랫폼입니다.
+            </p>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between text-xs pb-1 border-b border-slate-800 font-bold text-slate-200">
+            <span class="flex items-center gap-1.5"><i data-lucide="help-circle" class="w-4 h-4 text-cyan-400"></i> 심사위원 예상 질의응답 (Q&A)</span>
+            <span class="text-cyan-400 font-mono text-[10px]">Ready</span>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <div class="p-2.5 bg-slate-900 rounded-lg border border-slate-800/80">
+              <p class="font-bold text-slate-200 text-[11px]">Q1. 퀴즈 문항 고갈 우려는 없나요?</p>
+              <p class="text-slate-400 text-[10px] mt-0.5">62문항 마스터 DB에 2단계 피셔-예이츠 셔플 탑재 + Gemini 기반 실시간 동적 딜레마 생성 파이프라인으로 무한 공급 가능합니다.</p>
+            </div>
+
+            <div class="p-2.5 bg-slate-900 rounded-lg border border-slate-800/80">
+              <p class="font-bold text-slate-200 text-[11px]">Q2. 기존 주식 앱과 무엇이 다른가요?</p>
+              <p class="text-slate-400 text-[10px] mt-0.5">조작과 독해의 일체화(3초 스와이프/차선변경) + 소크라테스식 1:1 하브루타 처방전을 통해 진짜 공시 문해력을 길러줍니다.</p>
+            </div>
+
+            <div class="p-2.5 bg-slate-900 rounded-lg border border-slate-800/80">
+              <p class="font-bold text-slate-200 text-[11px]">Q3. 배포 및 서버 비용 부담은 없나요?</p>
+              <p class="text-slate-400 text-[10px] mt-0.5">Google Cloud Run 기반 무중단 컨테이너 배포 및 Scale-to-zero로 유휴비용이 0원이며, LocalStorage로 DB 비용을 최소화했습니다.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-800/80 pt-3 flex items-center justify-between text-xs text-slate-400">
+        <span class="text-emerald-400 font-bold">경청해 주셔서 감사합니다! Q&A를 시작하겠습니다.</span>
+        <span class="font-mono text-purple-400 font-semibold">[13:45 ~ 15:00] (전체 발표 종료)</span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= BOTTOM CONTROLS & NAVIGATION ================= -->
+  <footer class="no-print bg-slate-900/90 border-t border-slate-800 px-6 py-3">
+    <div class="max-w-7xl mx-auto flex items-center justify-between text-xs">
+      
+      <div class="flex items-center gap-3">
+        <div class="font-mono font-bold text-slate-300">
+          <span id="currentSlideNum" class="text-emerald-400 text-sm">01</span> / 13
+        </div>
+        <div class="hidden sm:block text-slate-400 text-[11px] truncate max-w-xs lg:max-w-md" id="currentSlideTitle">
+          타이틀 : Easy-DART 소개
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button onclick="prevSlide()" id="prevBtn" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center gap-1 font-medium transition disabled:opacity-40 disabled:cursor-not-allowed">
+          <i data-lucide="chevron-left" class="w-4 h-4"></i>
+          <span class="hidden sm:inline">이전</span>
+        </button>
+
+        <button onclick="nextSlide()" id="nextBtn" class="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold flex items-center gap-1 shadow-lg shadow-emerald-600/20 transition disabled:opacity-40 disabled:cursor-not-allowed">
+          <span>다음</span>
+          <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ================= PRESENTER SCRIPT DRAWER / MODAL (단축키 N) ================= -->
+  <div id="scriptModal" class="no-print fixed inset-y-0 right-0 w-full sm:w-[420px] bg-slate-900 border-l border-slate-800 shadow-2xl z-50 p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300">
+    <div class="space-y-4 flex-1 overflow-y-auto pr-1">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div class="flex items-center gap-2">
+          <i data-lucide="mic" class="w-4 h-4 text-emerald-400"></i>
+          <span class="font-bold text-sm text-slate-100">발표자 전용 5분 스크립트</span>
+        </div>
+        <button onclick="toggleScriptModal()" class="p-1 text-slate-400 hover:text-slate-200">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="flex items-center justify-between text-xs px-3 py-2 bg-slate-950 rounded-lg border border-slate-800">
+        <span id="scriptPresenterBadge" class="font-semibold text-emerald-400">발표자 1 (PART 1)</span>
+        <span id="scriptTimeGuidance" class="text-slate-500 font-mono">권장 시간: 45초</span>
+      </div>
+
+      <div id="scriptTextContent" class="text-xs text-slate-300 leading-relaxed space-y-2 whitespace-pre-line bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+      </div>
+    </div>
+
+    <div class="pt-4 border-t border-slate-800 text-[11px] text-slate-500 flex items-center justify-between">
+      <span>단축키 <kbd class="px-1.5 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-300">N</kbd> 으로 열기/닫기</span>
+      <span class="text-emerald-400 font-mono">Easy-DART Official</span>
+    </div>
+  </div>
+
+  <!-- ================= SLIDE OVERVIEW MODAL (단축키 ESC) ================= -->
+  <div id="overviewModal" class="no-print fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 p-6 hidden items-center justify-center">
+    <div class="max-w-5xl w-full bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl flex flex-col max-h-[85vh]">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div>
+          <h3 class="font-bold text-base text-slate-100">전체 슬라이드 둘러보기 (13 Slides)</h3>
+          <p class="text-xs text-slate-400">원하는 슬라이드를 클릭하면 해당 페이지로 즉시 이동합니다.</p>
+        </div>
+        <button onclick="toggleOverviewModal()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 overflow-y-auto py-4 pr-1" id="overviewGrid">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const slidesData = [
+      {
+        part: 1,
+        title: "타이틀 : Easy-DART 소개",
+        presenter: "발표자 1 (기획 & 비즈니스)",
+        time: "0:00 ~ 0:45 (45초)",
+        script: `"안녕하세요! 20대 사회초년생의 첫 투자 지갑 지킴이, Easy-DART(핑거다트) 발표를 맡은 [발표자 1]입니다.\\n\\n저희는 '공시를 읽지 않은 투자는 도박이다'라는 문제의식에서 출발했습니다. 수많은 20대 청년들이 주식을 시작하지만, DART 공시의 거대한 진입장벽 때문에 유튜브나 지인의 말만 믿고 '묻지마 투자'를 하다 상폐 지뢰를 밟습니다.\\n\\n오늘 발표는 총 3개 파트로 15분간 진행됩니다. 제가 Part 1에서 기획 배경과 타겟, 비즈니스 모델을 말씀드리고, 이어서 Part 2에서 3대 핵심 기능, Part 3에서 기술 구현과 토큰 비용을 상세히 공유해 드리겠습니다."`
+      },
+      {
+        part: 1,
+        title: "기획 배경 : 20대 금융 문해력 실태와 위기",
+        presenter: "발표자 1 (기획 & 비즈니스)",
+        time: "0:45 ~ 1:45 (60초)",
+        script: `"먼저 기획 배경입니다. 금융감독원의 2024년 전국민 금융이해력 조사에 따르면, 20대 청년층의 재무상황 점검 점수는 33.2점, 재무목표 설정은 36.1점으로 전 연령대에서 가장 취약했습니다.\\n\\n자가진단 점수는 2.8점에 불과한데 평균 대출은 3,700만 원에 달합니다. 지인 추천이나 숏폼 영상만 믿고 매수했다가 감사의견 거절, 전환사채 폭탄 같은 상폐 신호를 구별하지 못해 큰 원금 손실을 겪고 있습니다.\\n\\n하지만 100페이지가 넘는 DART 공시는 전문 한자어로 가득 차 초보자가 읽기 어렵습니다. 따라서 저희는 단순 강의가 아니라 '직접 읽지 않으면 조작할 수 없는' 게이미피케이션 플랫폼을 설계하게 되었습니다."`
+      },
+      {
+        part: 1,
+        title: "타겟 분석 : 김지은 & 박민우 2대 페르소나",
+        presenter: "발표자 1 (기획 & 비즈니스)",
+        time: "1:45 ~ 2:45 (60초)",
+        script: `"저희의 타겟은 명확합니다.\\n\\n첫째, 23세 대학생 김지은 페르소나입니다. 올리브영, 네이버웹툰처럼 평소 돈을 쓰는 일상 브랜드를 1~5만 원 소액으로 투자하고 싶지만, '매출 1조 원'이라는 숫자가 감이 오지 않습니다. 이들을 위해 '틴트 100만 개 판매' 같은 일상 소비 메타포 환산기를 제공합니다.\\n\\n둘째, 31세 직장인 박민우 페르소나입니다. 퇴근 후 두꺼운 공시를 읽을 시간은 없지만 남의 말만 믿고 사기는 불안합니다. 이들에게는 5분 만에 스스로 판단 스위치를 누를 수 있는 3단계 핵심 재무 프레임워크를 제공합니다.\\n\\n토스나 카카오가 거래 장벽은 낮췄지만 유저의 자체 공시 독해력은 길러주지 못했다는 점에서 Easy-DART의 독보적인 시장 기회가 있습니다."`
+      },
+      {
+        part: 1,
+        title: "서비스 구성 : 4단계 학습 사다리 & 3대 GNB",
+        presenter: "발표자 1 (기획 & 비즈니스)",
+        time: "2:45 ~ 3:45 (60초)",
+        script: `"서비스 구성입니다. Easy-DART는 교육학적 비계 설계에 따라 [선행 탐색 ➔ 공시 분석 ➔ 체감 훈련 ➔ 실전 모의투자 자립]의 4단계 학습 사다리로 구축되었습니다.\\n\\n글로벌 GNB는 3대 핵심 메뉴로 단일화했습니다.\\n1.0 기업 파헤치기에서는 일상 소비를 이익으로 환산하고 손익계산서를 듀얼 뷰로 독해합니다.\\n2.0 실전 모의투자에서는 가상 시드 1,000만 원으로 5대 매매 전략과 돌발 공시를 테스트합니다.\\n3.0 DART 오락실에서는 3대 아케이드를 통해 상폐 지뢰를 몸으로 회피합니다.\\n\\n특히 회원가입의 피로감 없이 3초 만에 즉시 진입하는 No-Login 구조를 채택해 접근성을 극대화했습니다."`
+      },
+      {
+        part: 1,
+        title: "사업화 모델 : B2B2C 플라이휠 & 5개년 로드맵",
+        presenter: "발표자 1 (기획 & 비즈니스)",
+        time: "3:45 ~ 5:00 (75초)",
+        script: `"사업화 모델(BM)입니다. 20대 초보 타겟은 유료 구독 거부감이 높기 때문에 기본 기능은 100% 무료로 개방하여 대규모 트래픽을 선점합니다.\\n\\n대신 고마진 B2B2C 모델을 구축했습니다. 게임 마스터 달성 유저에게 제휴 증권사 비대면 계좌 개설을 연계하여 건당 1.5만~3만 원의 CPA 수수료를 수취합니다. 게임 리워드 역시 위험한 현금 환전이 아닌, 증권사가 비용을 부담하는 '소수점 주식 1,000원권'으로 지급하여 사행성 규제를 100% 합법적으로 우회했습니다.\\n\\n여기에 상장사 IR 브랜디드 챌린지와 정부 금융지원 바우처를 결합해, 3인 조직 기준으로 1년차 5억 원에서 5년차 129억 원 매출, 72%의 영업이익률을 달성하는 고효율 레버리지 구조를 완성했습니다.\\n\\n이어서 [발표자 2]님이 3대 핵심 기능을 시연해 드리겠습니다."`
+      },
+      {
+        part: 2,
+        title: "핵심기능 ① : 기업 파헤치기 & 소비 메타포",
+        presenter: "발표자 2 (핵심 기능)",
+        time: "5:00 ~ 6:15 (75초)",
+        script: `"네, 이어서 3대 핵심 기능을 맡은 [발표자 2]입니다.\\n\\n첫 번째 기능은 [기업 파헤치기]입니다. 주린이가 가장 먼저 마주하는 '체감 불가한 숫자'를 깨기 위해 [소비-이익 환산기]를 도입했습니다.\\n예를 들어 올리브영에서 35,000원짜리 토너를 샀다고 입력하면, '내가 독도토너 1.4병분의 영업이익(4,270원)에 기여했다'고 직관적으로 번역해 줍니다.\\n\\n손익계산서 듀얼 뷰어도 핵심입니다. 초보자를 위한 [쉬운 해설 모드]에서는 매출부터 영업익까지 4대 카드로 시각화하고, 실전에 도전하는 [DART 원본표 모드]에서는 실제 전자공시 양식 위에 계정과목 스마트 툴팁을 띄워 진짜 공시 독해력을 키워줍니다.\\n마지막으로 AI가 초록불(성장 호재)과 빨간불(주의 리스크)로 3줄 요약해 줍니다."`
+      },
+      {
+        part: 2,
+        title: "핵심기능 ② : 실전 모의투자 샌드박스",
+        presenter: "발표자 2 (핵심 기능)",
+        time: "6:15 ~ 7:30 (75초)",
+        script: `"두 번째 기능은 [실전 모의투자 Pro]입니다. 지루한 가상 주식 거래가 아니라, 유쾌한 블랙코미디와 5대 매매 전략으로 현실을 체감시킵니다.\\n\\n유저가 공시를 안 보고 '무지성 풀매수'를 누르면, 1턴의 달콤한 급등 뒤에 2턴 악재, 3턴에 90% 확률로 -45% 하한가 폭락과 3개월 강제 락업의 지옥을 맛보게 됩니다. 반대로 DART 정밀분석을 거쳐 3회 분할매수하면 75% 이상의 높은 승률로 안전하게 수익을 냅니다.\\n\\n손실이 -50%를 넘으면 화면에 '골판지 박스 거지 핑거'가 비를 맞으며 등장하고, 유상증자 퀴즈를 맞춰야 회생 지원금을 받습니다. 번 돈으로는 한강물 수온계부터 여의도 파크원 펜트하우스까지 구매하는 강력한 도파민 보상 루프를 구축했습니다."`
+      },
+      {
+        part: 2,
+        title: "핵심기능 ③ : DART 오락실 3대 아케이드",
+        presenter: "발표자 2 (핵심 기능)",
+        time: "7:30 ~ 8:45 (75초)",
+        script: `"세 번째 기능은 [DART 오락실] 3대 정예 아케이드입니다. 주입식 강의를 완전히 대체하는 행동주의 인터랙션입니다.\\n\\nMachine 01 [기초 퀴즈 아레나]는 6대 카테고리 62개 마스터 문항을 2단계 피셔-예이츠 셔플로 끝없이 무작위 스트리밍하며 용어를 학습시킵니다.\\nMachine 02 [실전 투자 심사관]은 틴더 스타일 좌우 스와이프 게임입니다. 실제 20대 일상 기업의 공시 카드를 8초 안에 읽고 호재는 매수(우측), 악재는 손절(좌측)로 가려냅니다. 3초 안에 판단하면 번개 보너스를 줍니다.\\nMachine 03 [레인 러너]는 3차선 고속도로를 질주하며 영업흑자는 먹고, 완전자본잠식이나 부채비율 900% 같은 상폐 지뢰는 순간 회피하는 체감형 게임입니다."`
+      },
+      {
+        part: 2,
+        title: "AI 에듀테크 : 1:1 하브루타 코칭 & 오답노트",
+        presenter: "발표자 2 (핵심 기능)",
+        time: "8:45 ~ 10:00 (75초)",
+        script: `"저희 게임의 화룡점정은 [AI 1:1 하브루타 처방전]입니다.\\n\\n게임이 끝났을 때 단순히 정답만 알려주면 다음 판에서 또 틀립니다. Google Gemini AI 코치가 등장하여, '왜 전환사채 발행을 호재로 보셨나요? 친구들과 피자를 먹는데 갑자기 손님이 늘어나면 내 몫은 어떻게 될까요?'처럼 소크라테스식 질문을 던져 유저 스스로 지분 희석 원리를 깨닫게 만듭니다.\\n\\n또한 방금 심사했던 10개 안건의 원문과 생존 팁이 담긴 실전 오답노트를 제공하고, 4단계 주린이 승급제를 통해 성취감을 부여합니다.\\n\\n이제 Part 3에서 [발표자 3]님이 이 모든 기능을 구동하는 백엔드 아키텍처와 실제 토큰 지출 비용을 증명해 드리겠습니다."`
+      },
+      {
+        part: 3,
+        title: "기술 아키텍처 : Open DART & Gemini 연동",
+        presenter: "발표자 3 (기술 & 토큰 비용)",
+        time: "10:00 ~ 11:15 (75초)",
+        script: `"기술 아키텍처 및 토큰 비용을 맡은 [발표자 3]입니다.\\n\\nEasy-DART는 클라우드 네이티브와 경량 고성능을 최우선으로 설계되었습니다.\\n프론트엔드는 가벼운 Vanilla JS와 Web Audio API를 사용해 별도의 무거운 사운드 에셋 없이 브라우저 내에서 8비트 레트로 SFX를 실시간 합성합니다.\\n\\n백엔드는 Python FastAPI와 Uvicorn 비동기 서버로 구축되었습니다. 대한민국 금융감독원 Open DART API와 Google Gemini 1.5 Flash를 유기적으로 연결했습니다.\\n무엇보다 Google Cloud Run 컨테이너로 패키징되어 트래픽이 없을 때는 인스턴스가 0으로 내려가(Scale-to-zero) 고정 서버비가 발생하지 않으며, 무계정 LocalStorage 구조로 DB 유지비도 극소화했습니다."`
+      },
+      {
+        part: 3,
+        title: "토큰 경제성 : 기능별 소비량 및 2대 안전장치",
+        presenter: "발표자 3 (기술 & 토큰 비용)",
+        time: "11:15 ~ 12:30 (75초)",
+        script: `"다음은 서비스의 지속 가능성을 결정짓는 핵심 지표, 기능별 1회 호출당 토큰 소비량과 단가입니다.\\n\\n저희는 속도와 비용에 특화된 Gemini 1.5 Flash를 채택했습니다. 1:1 하브루타 오답 처방전은 프롬프트와 오답 목록을 포함해 회당 약 400토큰, 원화로 약 0.09원입니다. 공시 딜레마 카드는 약 300토큰(0.07원), 3줄 요약은 약 900토큰(0.18원)에 불과합니다.\\n\\n특히 2대 비용 안전장치를 구현했습니다.\\n첫째, '0토큰 패스'입니다. 오답이 없는 퍼펙트 클리어 시 AI를 아예 호출하지 않아 토큰 소비가 0원입니다.\\n둘째, 'Fallback 보호 엔진'입니다. 네트워크 장애나 쿼터 소진 시에도 중단 없이 내장 템플릿으로 자동 전환되어 비용 폭탄을 원천 차단했습니다."`
+      },
+      {
+        part: 3,
+        title: "비용 시뮬레이션 : 트래픽 규모별 지출 추정",
+        presenter: "발표자 3 (기술 & 토큰 비용)",
+        time: "12:30 ~ 13:45 (75초)",
+        script: `"실제 트래픽 규모별 지출 시뮬레이션을 보시겠습니다.\\n\\n가장 호출 비중이 높은 하브루타 처방전을 기준으로 산출한 결과입니다. Gemini API는 하루 1,500회(분당 15회)의 강력한 무료 티어를 제공합니다. 따라서 일일 1,000회, 월 3만 회 호출까지는 토큰 지출이 '0원'입니다. 금융감독원 DART API 역시 일 20,000건 무료이므로 전액 0원입니다.\\n\\n서비스가 급성장해 하루 3,000회가 유입되어 유료로 전환되더라도 월 8,500원, 하루 10,000회라는 대규모 트래픽이 발생해도 월 지출은 약 28,350원에 불과합니다.\\n우측의 시뮬레이터 슬라이더를 움직여보시면 알 수 있듯, 서비스 운영 비용은 사실상 제로에 수렴하는 완벽한 경제성을 입증했습니다."`
+      },
+      {
+        part: 3,
+        title: "종합 결론 & 향후 로드맵 & Q&A",
+        presenter: "발표자 3 (기술 & 토큰 비용)",
+        time: "13:45 ~ 15:00 (75초)",
+        script: `"발표를 마무리하겠습니다.\\n\\nEasy-DART의 3대 핵심 성과는 명확합니다.\\n1. 체류 시간 3배 증대: 난해한 공시를 3대 아케이드와 모의투자로 전환해 몰입감을 극대화했습니다.\\n2. 실전 금융 문해력 확보: 뇌동매매의 참패와 DART 정밀분석의 75% 고승률을 직접 몸으로 체득시켰습니다.\\n3. 압도적 재무 타당성: AI 토큰 비용 월 1만 원 이하의 극초저비용과 B2B2C 증권사 제휴를 통해 72%의 영업이익률을 달성합니다.\\n\\n20대 청년들이 자본시장에서 지인의 말에 휘둘리지 않고, 자신의 소중한 월급을 스스로 지킬 수 있는 금융 방패가 되겠습니다.\\n경청해 주셔서 대단히 감사합니다. 질문을 받겠습니다!"`
+      }
+    ];
+
+    let currentSlide = 1;
+    const totalSlides = slidesData.length;
+
+    let timerDuration = 300;
+    let timerRemaining = 300;
+    let timerInterval = null;
+    let isTimerRunning = false;
+
+    function initPresentation() {
+      renderOverviewGrid();
+      goToSlide(1);
+      lucide.createIcons();
+    }
+
+    function goToSlide(n) {
+      if (n < 1 || n > totalSlides) return;
+      currentSlide = n;
+
+      const slides = document.querySelectorAll('.slide');
+      slides.forEach((s, idx) => {
+        if (idx === currentSlide - 1) {
+          s.classList.add('active');
+        } else {
+          s.classList.remove('active');
+        }
+      });
+
+      const p = slidesData[currentSlide - 1].part;
+      ['partBtn1', 'partBtn2', 'partBtn3'].forEach((id, idx) => {
+        const btn = document.getElementById(id);
+        if (idx + 1 === p) {
+          btn.className = "part-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all bg-emerald-500/20 text-emerald-400 border border-emerald-500/40";
+          btn.querySelector('span:first-child').className = "w-2 h-2 rounded-full bg-emerald-400 animate-pulse";
+        } else {
+          btn.className = "part-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all text-slate-400 hover:text-slate-200";
+          btn.querySelector('span:first-child').className = "w-2 h-2 rounded-full bg-slate-600";
+        }
+      });
+
+      document.getElementById('currentSlideNum').innerText = String(currentSlide).padStart(2, '0');
+      document.getElementById('currentSlideTitle').innerText = slidesData[currentSlide - 1].title;
+      document.getElementById('prevBtn').disabled = (currentSlide === 1);
+      document.getElementById('nextBtn').disabled = (currentSlide === totalSlides);
+
+      const pct = (currentSlide / totalSlides) * 100;
+      document.getElementById('slideProgressBar').style.width = pct + '%';
+
+      updateScriptModalContent();
+      lucide.createIcons();
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) goToSlide(currentSlide - 1);
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) goToSlide(currentSlide + 1);
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'Backspace' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'f' || e.key === 'F') {
+        e.preventDefault();
+        toggleFullScreen();
+      } else if (e.key === 'n' || e.key === 'N') {
+        e.preventDefault();
+        toggleScriptModal();
+      } else if (e.key === 'Escape') {
+        toggleOverviewModal();
+      }
+    });
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+    }
+
+    function toggleTimer() {
+      if (isTimerRunning) {
+        pauseTimer();
+      } else {
+        startTimer();
+      }
+    }
+
+    function startTimer() {
+      if (isTimerRunning) return;
+      isTimerRunning = true;
+      document.getElementById('timerIcon').setAttribute('data-lucide', 'pause');
+      lucide.createIcons();
+
+      timerInterval = setInterval(() => {
+        if (timerRemaining > 0) {
+          timerRemaining--;
+          updateTimerUI();
+        } else {
+          pauseTimer();
+          document.getElementById('timerDisplay').classList.add('text-red-500', 'animate-ping');
+        }
+      }, 1000);
+    }
+
+    function pauseTimer() {
+      isTimerRunning = false;
+      clearInterval(timerInterval);
+      document.getElementById('timerIcon').setAttribute('data-lucide', 'play');
+      lucide.createIcons();
+    }
+
+    function resetTimer() {
+      pauseTimer();
+      timerRemaining = 300;
+      updateTimerUI();
+    }
+
+    function updateTimerUI() {
+      const m = Math.floor(timerRemaining / 60);
+      const s = timerRemaining % 60;
+      const displayStr = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      const el = document.getElementById('timerDisplay');
+      el.innerText = displayStr;
+
+      if (timerRemaining > 60) {
+        el.className = "font-bold text-emerald-400";
+      } else if (timerRemaining > 30) {
+        el.className = "font-bold text-amber-400 animate-pulse";
+      } else {
+        el.className = "font-bold text-red-400 animate-pulse";
+      }
+    }
+
+    let isScriptOpen = false;
+    function toggleScriptModal() {
+      const modal = document.getElementById('scriptModal');
+      isScriptOpen = !isScriptOpen;
+      if (isScriptOpen) {
+        modal.classList.remove('translate-x-full');
+      } else {
+        modal.classList.add('translate-x-full');
+      }
+    }
+
+    function updateScriptModalContent() {
+      const data = slidesData[currentSlide - 1];
+      document.getElementById('scriptPresenterBadge').innerText = data.presenter;
+      document.getElementById('scriptTimeGuidance').innerText = "권장 시간: " + data.time;
+      document.getElementById('scriptTextContent').innerText = data.script;
+    }
+
+    let isOverviewOpen = false;
+    function toggleOverviewModal() {
+      const modal = document.getElementById('overviewModal');
+      isOverviewOpen = !isOverviewOpen;
+      if (isOverviewOpen) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      } else {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function renderOverviewGrid() {
+      const grid = document.getElementById('overviewGrid');
+      grid.innerHTML = '';
+      slidesData.forEach((s, idx) => {
+        const item = document.createElement('div');
+        item.className = "bg-slate-950 p-3 rounded-xl border border-slate-800 hover:border-emerald-500 cursor-pointer transition text-left space-y-1.5";
+        item.onclick = () => {
+          goToSlide(idx + 1);
+          toggleOverviewModal();
+        };
+
+        const partColors = {
+          1: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30",
+          2: "text-cyan-400 bg-cyan-500/10 border-cyan-500/30",
+          3: "text-purple-400 bg-purple-500/10 border-purple-500/30"
+        };
+
+        item.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-mono font-bold text-slate-400">#${String(idx + 1).padStart(2, '0')}</span>
+            <span class="text-[9px] px-1.5 py-0.5 rounded border font-semibold ${partColors[s.part]}">Part ${s.part}</span>
+          </div>
+          <p class="text-xs font-semibold text-slate-200 line-clamp-2">${s.title}</p>
+          <span class="text-[10px] text-slate-500 font-mono block">${s.time}</span>
+        `;
+        grid.appendChild(item);
+      });
+    }
+
+    function updateCalculator(val) {
+      document.getElementById('sliderValueText').innerText = Number(val).toLocaleString() + ' 회/일';
+      const costEl = document.getElementById('calcCostText');
+      const detailEl = document.getElementById('calcDetailText');
+
+      if (val <= 1500) {
+        costEl.innerText = "0 원 / 월";
+        costEl.className = "text-3xl font-black text-emerald-400 tracking-tight font-mono";
+        detailEl.innerText = `🎉 Gemini 1.5 Flash 무료 티어(일 1,500회) 적용! 전액 무료(0원) 운영 가능`;
+      } else {
+        const paidCalls = (val - 1500) * 30;
+        const totalKrw = Math.round(paidCalls * 0.086);
+        const totalUsd = (paidCalls * 0.00006375).toFixed(2);
+        
+        costEl.innerText = `약 ${totalKrw.toLocaleString()} 원 / 월`;
+        costEl.className = "text-3xl font-black text-cyan-400 tracking-tight font-mono";
+        detailEl.innerText = `월 ${paidCalls.toLocaleString()}회 초과분 종량제 과금 (약 $${totalUsd} USD)`;
+      }
+    }
+
+    window.onload = initPresentation;
+  </script>
+</body>
+</html>
