@@ -15,10 +15,12 @@ export const apiClient = {
     return res.json();
   },
 
-  async getCompanyDetail(companyId) {
-    const res = await fetch(`${API_BASE_URL}/companies/${companyId}`);
+  async getCompanyDetail(companyId, year = '') {
+    const url = year ? `${API_BASE_URL}/companies/${companyId}?year=${year}` : `${API_BASE_URL}/companies/${companyId}`;
+    const res = await fetch(url);
     return res.json();
   },
+
 
   // 퀴즈 API (팀원 C)
   async getBasicTermQuizzes(topic = 'all', limit = null) {

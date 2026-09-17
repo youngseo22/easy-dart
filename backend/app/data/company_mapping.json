@@ -2,7 +2,7 @@
   {
     "id": "olive",
     "name": "CJ올리브영",
-    "corp_code": "01407335",
+    "corp_code": "01423068",
     "category": "beauty",
     "category_name": "뷰티 & 헬스케어",
     "icon": "🧴",
@@ -191,7 +191,7 @@
   {
     "id": "baemin",
     "name": "우아한형제들 (배달의민족)",
-    "corp_code": "00889254",
+    "corp_code": "01063273",
     "category": "fnb",
     "category_name": "배달 & 커머스",
     "icon": "🛵",
@@ -260,7 +260,7 @@
   {
     "id": "hyundai",
     "name": "현대자동차",
-    "corp_code": "00164779",
+    "corp_code": "00164742",
     "category": "mobility",
     "category_name": "모빌리티 & 완성차",
     "icon": "🚗",
@@ -294,7 +294,7 @@
   {
     "id": "daiso",
     "name": "아성다이소",
-    "corp_code": "00257009",
+    "corp_code": "00411835",
     "category": "mobility",
     "category_name": "균일가 생활용품",
     "icon": "🛒",

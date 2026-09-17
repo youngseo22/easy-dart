@@ -4,6 +4,7 @@
 from fastapi import APIRouter, HTTPException
 import json
 import os
+from app.services.dart_service import DartService
 
 router = APIRouter()
 
@@ -18,13 +19,17 @@ def load_companies():
 COMPANY_DETAILS_DB = {
     "olive": {
         "badge": "뷰티 & 헬스케어 1위",
-        "doc": "2023 정기 사업보고서",
-        "metaphor_head": "연간 순이익 = 독도토너 약 1,864만 병!",
+        "doc": "2023 연결감사보고서",
+        "metaphor_head": "연간 순이익 = 독도토너 약 1억 1,576만 병!",
         "financials": {
-            "revenue": "3조 8,682억",
-            "cost": "3조 4,022억",
-            "operating_profit": "4,660억 (12.2%)",
-            "net_profit": "3,640억 (9.4%)"
+            "revenue": "3조 8,612억",
+            "cost": "3조 3,952억",
+            "operating_profit": "4,660억 (12.1%)",
+            "net_profit": "3,473억 (9.0%)",
+            "raw_revenue": 3861182100138,
+            "raw_cost": 3395166844461,
+            "raw_op_profit": 466015255677,
+            "raw_net_profit": 347298269234
         },
         "ai_summary": {
             "summary": [
@@ -410,12 +415,16 @@ COMPANY_DETAILS_DB = {
     "hyundai": {
         "badge": "완성차 글로벌 TOP 3",
         "doc": "2023 사업보고서",
-        "metaphor_head": "영업이익 15조 = 아반떼 75만 대 순마진!",
+        "metaphor_head": "연간 영업이익 15조 원! 아반떼 75만 대 순마진 규모",
         "financials": {
             "revenue": "162조 6,636억",
             "cost": "147조 5,367억",
             "operating_profit": "15조 1,269억 (9.3%)",
-            "net_profit": "12조 2,714억 (7.5%)"
+            "net_profit": "12조 2,723억 (7.5%)",
+            "raw_revenue": 162663579000000,
+            "raw_cost": 147536678000000,
+            "raw_op_profit": 15126901000000,
+            "raw_net_profit": 12272301000000
         },
         "ai_summary": {
             "summary": [
@@ -550,17 +559,47 @@ def get_company_list(category: str = None, query: str = None):
     return {"count": len(companies), "companies": companies}
 
 @router.get("/{company_id}")
-def get_company_detail(company_id: str):
-    """선택한 기업의 공시 상세 분석 데이터 (손익계산서, AI 요약, 메타포) 조회"""
+async def get_company_detail(company_id: str, year: str = "2024"):
+    """선택한 기업의 공시 상세 분석 데이터 (손익계산서, DART 원본 표, AI 요약, 메타포) 조회 (연도별)"""
     companies = load_companies()
     target = next((c for c in companies if c.get("id") == company_id), None)
     if not target:
         raise HTTPException(status_code=404, detail="해당 기업을 찾을 수 없습니다.")
     
-    detail_data = COMPANY_DETAILS_DB.get(company_id, COMPANY_DETAILS_DB["olive"])
+    detail_data = COMPANY_DETAILS_DB.get(company_id, COMPANY_DETAILS_DB.get("olive", {}))
+    analysis = await DartService.get_company_analysis(target, year=year)
     
-    return {
-        "company": {**target, "badge": detail_data.get("badge"), "doc": detail_data.get("doc"), "metaphor_head": detail_data.get("metaphor_head")},
-        "financials": detail_data["financials"],
-        "ai_summary": detail_data["ai_summary"]
+    vp = analysis.get("visual_pipeline", {})
+    
+    # 해당 연도에 맞춰 동적 financials 생성 (DART 실데이터 우선 연동)
+    financials = {
+        "revenue": vp.get("revenue", {}).get("formatted", detail_data.get("financials", {}).get("revenue", "-")),
+        "cost": vp.get("cost", {}).get("formatted", detail_data.get("financials", {}).get("cost", "-")),
+        "operating_profit": vp.get("op_profit", {}).get("formatted", detail_data.get("financials", {}).get("operating_profit", "-")),
+        "net_profit": vp.get("net_profit", {}).get("formatted", detail_data.get("financials", {}).get("net_profit", "-")),
+        "raw_revenue": vp.get("revenue", {}).get("raw", 1),
+        "raw_cost": vp.get("cost", {}).get("raw", 0),
+        "raw_op_profit": vp.get("op_profit", {}).get("raw", 0),
+        "raw_net_profit": vp.get("net_profit", {}).get("raw", 0)
     }
+
+    doc_label = f"{year} 사업보고서" if target.get("stock_code") else f"{year} 연결감사보고서"
+
+    return {
+        **analysis,
+        "company": {
+            **target,
+            "badge": detail_data.get("badge", target.get("category_name")),
+            "doc": doc_label,
+            "metaphor_head": analysis.get("metaphor", {}).get("headline") or detail_data.get("metaphor_head")
+        },
+        "financials": financials,
+        "ai_summary": detail_data.get("ai_summary", {
+            "summary": [f"{target.get('name')}의 {year}년 공시 분석이 완료되었습니다."],
+            "good_points": [f"{target.get('name')}의 지속적인 본업 경쟁력"],
+            "risks": ["시장 불확실성 및 거시경제 모니터링 필요"]
+        })
+    }
+
+
+
