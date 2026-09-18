@@ -21,6 +21,12 @@ export const apiClient = {
     return res.json();
   },
 
+  // company_data 폴더에서 직접 JSON 가져오기 (정적 파일 접근)
+  async getRawCompanyData(companyId) {
+    const res = await fetch(`/company_data/${companyId}.json`);
+    return res.json();
+  },
+
 
   // 퀴즈 API (팀원 C)
   async getBasicTermQuizzes(topic = 'all', limit = null) {

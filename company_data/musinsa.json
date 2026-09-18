@@ -1,0 +1,128 @@
+{
+  "id": "musinsa",
+  "name": "무신사",
+  "corp_name_official": "주식회사 무신사 (01185521)",
+  "corp_code": "01185521",
+  "stock_code": null,
+  "category": "beauty",
+  "category_name": "패션 & 커머스",
+  "icon": "👕",
+  "status_badge": "거래액 4조 🛍️",
+  "doc_type": "연결감사보고서 (손익계산서)",
+  "approx_annual_revenue": 1000000000000,
+  "metaphor": {
+    "item_name": "맨투맨 티셔츠",
+    "item_price": 50000,
+    "margin_rate": 0.085,
+    "margin_rate_pct": 8.5,
+    "unit": "장",
+    "annual_metaphor": "연간 거래액 4조 돌파! 5만 원짜리 맨투맨 8,000만 장 거래 규모",
+    "scale_summary": "1030 세대 패션 1위 플랫폼과 무신사 스탠다드 PB 성장",
+    "default_spend": 60000
+  },
+  "ai_summary": {
+    "summary": [
+      "연간 거래액 4조 원을 돌파하며 국내 1등 패션 플랫폼으로 확고히 자리잡았습니다.",
+      "29CM 합병 시너지로 여성 패션 카테고리 점유율을 크게 확대했습니다.",
+      "무신사 스탠다드 오프라인 매장 확장을 통해 O2O 시너지를 극대화하고 있습니다."
+    ],
+    "good_points": [
+      "1030 세대 패션 시장 지배력과 막강한 팬덤",
+      "자체 PB(무신사 스탠다드)의 고마진 성장"
+    ],
+    "risks": [
+      "C-커머스 초저가 패션 공세",
+      "오프라인 매장 출점에 따른 고정비 부담"
+    ]
+  },
+  "financials_by_year": {
+    "2025": {
+      "revenue": "1조 4,500억",
+      "cost": "1조 3,200억",
+      "operating_profit": "1,300억 (9.0%)",
+      "net_profit": "1,020억 (7.0%)",
+      "raw_revenue": 1450000000000,
+      "raw_cost": 1320000000000,
+      "raw_op_profit": 130000000000,
+      "raw_net_profit": 102000000000,
+      "growth_yoy": {
+        "revenue": "+16.0%",
+        "op_profit": "+23.8%",
+        "net_profit": "+24.4%"
+      },
+      "dart_table": [
+        { "account_nm": "수익(매출액)", "easy_name": "손님이 낸 돈 (매출액)", "description": "무신사 및 29CM 플랫폼에서 발생한 총 매출액이에요.", "thstrm_amount": "1,450,000,000,000", "frmtrm_amount": "1,250,000,000,000", "growth_rate": "+16.0%" },
+        { "account_nm": "매출원가", "easy_name": "물건 떼온 값 (원가 밑천)", "description": "무신사 스탠다드 의류 제작 원가 및 직매입 원가예요.", "thstrm_amount": "530,000,000,000", "frmtrm_amount": "450,000,000,000", "growth_rate": "+17.8%" },
+        { "account_nm": "매출총이익", "easy_name": "기본 마진 (원가 뺀 돈)", "description": "매출액에서 직매입 상품 원가를 뺀 1차 마진이에요.", "thstrm_amount": "920,000,000,000", "frmtrm_amount": "800,000,000,000", "growth_rate": "+15.0%" },
+        { "account_nm": "판매비와관리비", "easy_name": "매장 굴리는 데 든 비용 (판관비)", "description": "오프라인 플래그십 임대료, 개발자 인건비, 마케팅비예요.", "thstrm_amount": "790,000,000,000", "frmtrm_amount": "695,000,000,000", "growth_rate": "+13.7%" },
+        { "account_nm": "영업이익", "easy_name": "본업 장사로 남긴 돈 (영업이익)", "description": "패션 플랫폼 본업으로 남긴 알짜 영업이익이에요.", "thstrm_amount": "130,000,000,000", "frmtrm_amount": "105,000,000,000", "growth_rate": "+23.8%" },
+        { "account_nm": "당기순이익", "easy_name": "진짜 내 금고에 남은 돈 (순이익)", "description": "세금까지 모두 납부하고 무신사 금고에 남은 순이익이에요.", "thstrm_amount": "102,000,000,000", "frmtrm_amount": "82,000,000,000", "growth_rate": "+24.4%" },
+        { "account_nm": "자산총계", "easy_name": "회사의 모든 재산 총합", "description": "현금, 오프라인 매장 자산 등 무신사의 총 자산이에요.", "thstrm_amount": "1,650,000,000,000", "frmtrm_amount": "1,400,000,000,000", "growth_rate": "+17.9%" },
+        { "account_nm": "부채총계", "easy_name": "회사가 갚아야 할 빚", "description": "입점 브랜드 정산 예정 대금, 임차보증금 부채 등이에요.", "thstrm_amount": "550,000,000,000", "frmtrm_amount": "480,000,000,000", "growth_rate": "+14.6%" },
+        { "account_nm": "자본총계", "easy_name": "진짜 순수한 내 돈 (순자산)", "description": "총 자산에서 부채를 뺀 무신사의 순수 자기자본이에요.", "thstrm_amount": "1,100,000,000,000", "frmtrm_amount": "920,000,000,000", "growth_rate": "+19.6%" }
+      ]
+    },
+    "2024": {
+      "revenue": "1조 2,500억",
+      "cost": "1조 1,450억",
+      "operating_profit": "1,050억 (8.4%)",
+      "net_profit": "820억 (6.6%)",
+      "raw_revenue": 1250000000000,
+      "raw_cost": 1145000000000,
+      "raw_op_profit": 105000000000,
+      "raw_net_profit": 82000000000,
+      "growth_yoy": {
+        "revenue": "+25.9%",
+        "op_profit": "+22.4%",
+        "net_profit": "+22.4%"
+      },
+      "dart_table": [
+        { "account_nm": "수익(매출액)", "easy_name": "손님이 낸 돈 (매출액)", "description": "무신사 및 29CM 플랫폼에서 발생한 총 매출액이에요.", "thstrm_amount": "1,250,000,000,000", "frmtrm_amount": "993,100,000,000", "growth_rate": "+25.9%" },
+        { "account_nm": "매출원가", "easy_name": "물건 떼온 값 (원가 밑천)", "description": "무신사 스탠다드 의류 제작 원가 및 직매입 원가예요.", "thstrm_amount": "450,000,000,000", "frmtrm_amount": "372,000,000,000", "growth_rate": "+21.0%" },
+        { "account_nm": "매출총이익", "easy_name": "기본 마진 (원가 뺀 돈)", "description": "매출액에서 직매입 상품 원가를 뺀 1차 마진이에요.", "thstrm_amount": "800,000,000,000", "frmtrm_amount": "621,100,000,000", "growth_rate": "+28.8%" },
+        { "account_nm": "판매비와관리비", "easy_name": "매장 굴리는 데 든 비용 (판관비)", "description": "오프라인 플래그십 임대료, 개발자 인건비, 마케팅비예요.", "thstrm_amount": "695,000,000,000", "frmtrm_amount": "535,300,000,000", "growth_rate": "+29.8%" },
+        { "account_nm": "영업이익", "easy_name": "본업 장사로 남긴 돈 (영업이익)", "description": "패션 플랫폼 본업으로 남긴 알짜 영업이익이에요.", "thstrm_amount": "105,000,000,000", "frmtrm_amount": "85,800,000,000", "growth_rate": "+22.4%" },
+        { "account_nm": "당기순이익", "easy_name": "진짜 내 금고에 남은 돈 (순이익)", "description": "세금까지 모두 납부하고 무신사 금고에 남은 순이익이에요.", "thstrm_amount": "82,000,000,000", "frmtrm_amount": "67,000,000,000", "growth_rate": "+22.4%" },
+        { "account_nm": "자산총계", "easy_name": "회사의 모든 재산 총합", "description": "현금, 오프라인 매장 자산 등 무신사의 총 자산이에요.", "thstrm_amount": "1,400,000,000,000", "frmtrm_amount": "1,180,000,000,000", "growth_rate": "+18.6%" },
+        { "account_nm": "부채총계", "easy_name": "회사가 갚아야 할 빚", "description": "입점 브랜드 정산 예정 대금, 임차보증금 부채 등이에요.", "thstrm_amount": "480,000,000,000", "frmtrm_amount": "420,000,000,000", "growth_rate": "+14.3%" },
+        { "account_nm": "자본총계", "easy_name": "진짜 순수한 내 돈 (순자산)", "description": "총 자산에서 부채를 뺀 무신사의 순수 자기자본이에요.", "thstrm_amount": "920,000,000,000", "frmtrm_amount": "760,000,000,000", "growth_rate": "+21.1%" }
+      ]
+    },
+    "2023": {
+      "revenue": "9,931억",
+      "cost": "9,073억",
+      "operating_profit": "858억 (8.6%)",
+      "net_profit": "670억 (6.7%)",
+      "raw_revenue": 993100000000,
+      "raw_cost": 907300000000,
+      "raw_op_profit": 85800000000,
+      "raw_net_profit": 67000000000,
+      "growth_yoy": {
+        "revenue": "+40.2%",
+        "op_profit": "+60.4%",
+        "net_profit": "+86.1%"
+      },
+      "dart_table": [
+        { "account_nm": "수익(매출액)", "easy_name": "손님이 낸 돈 (매출액)", "description": "무신사 및 29CM 플랫폼에서 발생한 총 매출액이에요.", "thstrm_amount": "993,100,000,000", "frmtrm_amount": "708,300,000,000", "growth_rate": "+40.2%" },
+        { "account_nm": "매출원가", "easy_name": "물건 떼온 값 (원가 밑천)", "description": "무신사 스탠다드 의류 제작 원가 및 직매입 원가예요.", "thstrm_amount": "372,000,000,000", "frmtrm_amount": "270,000,000,000", "growth_rate": "+37.8%" },
+        { "account_nm": "매출총이익", "easy_name": "기본 마진 (원가 뺀 돈)", "description": "매출액에서 직매입 상품 원가를 뺀 1차 마진이에요.", "thstrm_amount": "621,100,000,000", "frmtrm_amount": "438,300,000,000", "growth_rate": "+41.7%" },
+        { "account_nm": "판매비와관리비", "easy_name": "매장 굴리는 데 든 비용 (판관비)", "description": "오프라인 플래그십 임대료, 개발자 인건비, 마케팅비예요.", "thstrm_amount": "535,300,000,000", "frmtrm_amount": "384,800,000,000", "growth_rate": "+39.1%" },
+        { "account_nm": "영업이익", "easy_name": "본업 장사로 남긴 돈 (영업이익)", "description": "패션 플랫폼 본업으로 남긴 알짜 영업이익이에요.", "thstrm_amount": "85,800,000,000", "frmtrm_amount": "53,500,000,000", "growth_rate": "+60.4%" },
+        { "account_nm": "당기순이익", "easy_name": "진짜 내 금고에 남은 돈 (순이익)", "description": "세금까지 모두 납부하고 무신사 금고에 남은 순이익이에요.", "thstrm_amount": "67,000,000,000", "frmtrm_amount": "36,000,000,000", "growth_rate": "+86.1%" },
+        { "account_nm": "자산총계", "easy_name": "회사의 모든 재산 총합", "description": "현금, 오프라인 매장 자산 등 무신사의 총 자산이에요.", "thstrm_amount": "1,180,000,000,000", "frmtrm_amount": "950,000,000,000", "growth_rate": "+24.2%" },
+        { "account_nm": "부채총계", "easy_name": "회사가 갚아야 할 빚", "description": "입점 브랜드 정산 예정 대금, 임차보증금 부채 등이에요.", "thstrm_amount": "420,000,000,000", "frmtrm_amount": "340,000,000,000", "growth_rate": "+23.5%" },
+        { "account_nm": "자본총계", "easy_name": "진짜 순수한 내 돈 (순자산)", "description": "총 자산에서 부채를 뺀 무신사의 순수 자기자본이에요.", "thstrm_amount": "760,000,000,000", "frmtrm_amount": "610,000,000,000", "growth_rate": "+24.6%" }
+      ]
+    }
+  },
+  "quiz": {
+    "question": "무신사의 DART 공시에서 주목할 만한 성장 동력과 수익 모델의 핵심은 무엇일까요?",
+    "options": [
+      { "text": "입점 브랜드 중개 수수료와 자체 브랜드(무신사 스탠다드)의 동반 성장", "is_correct": true },
+      { "text": "해외 명품 직수입 독점 판매", "is_correct": false },
+      { "text": "오프라인 백화점 단독 입점 전략", "is_correct": false },
+      { "text": "배송비 전액 유료화 정책", "is_correct": false }
+    ],
+    "explanation": "무신사는 20대 패션 플랫폼 1위 지배력을 바탕으로 중개 수수료와 가성비/고품질 PB인 무신사 스탠다드 오프라인 매장 확장을 통해 성장하고 있습니다."
+  }
+}

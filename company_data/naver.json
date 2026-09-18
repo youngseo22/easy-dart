@@ -1,0 +1,119 @@
+{
+  "id": "naver",
+  "name": "네이버",
+  "corp_name_official": "네이버 주식회사 (00266961)",
+  "corp_code": "00266961",
+  "stock_code": "035420",
+  "category": "tech",
+  "category_name": "포털 & 커머스 & AI",
+  "icon": "🟢",
+  "status_badge": "매출 9.6조 🌐",
+  "doc_type": "연결재무제표 (포괄손익계산서)",
+  "approx_annual_revenue": 10000000000000,
+  "metaphor": {
+    "item_name": "네이버플러스 멤버십",
+    "item_price": 4900,
+    "margin_rate": 0.154,
+    "margin_rate_pct": 15.4,
+    "unit": "개월치",
+    "annual_metaphor": "연간 매출 9.6조! 대한민국 전 국민이 네이버 쇼핑 20만 원씩 이용",
+    "scale_summary": "검색·쇼핑·핀테크·웹툰 4대 축의 막강한 생태계",
+    "default_spend": 30000
+  },
+  "ai_summary": {
+    "summary": [
+      "검색, 커머스, 핀테크, 콘텐츠 전 사업부가 고르게 성장해 역대 최대 매출을 기록했습니다.",
+      "네이버페이와 스마트스토어의 강력한 결합으로 커머스 생태계를 락인했습니다.",
+      "생성형 AI 하이퍼클로바X를 중심으로 B2B AI 솔루션 사업을 확장하고 있습니다."
+    ],
+    "good_points": [
+      "국내 1위 검색 포털 기반의 강력한 트래픽 락인",
+      "네이버웹툰 미국 상장 등 글로벌 콘텐츠 IP 파워"
+    ],
+    "risks": [
+      "빅테크 AI 경쟁 심화",
+      "유튜브/SNS로의 검색 트래픽 분산 우려"
+    ]
+  },
+  "financials_by_year": {
+    "2025": {
+      "revenue": "11조 8,500억",
+      "cost": "9조 7,000억",
+      "operating_profit": "2조 1,500억 (18.1%)",
+      "net_profit": "1조 4,500억 (12.2%)",
+      "raw_revenue": 11850000000000,
+      "raw_cost": 9700000000000,
+      "raw_op_profit": 2150000000000,
+      "raw_net_profit": 1450000000000,
+      "growth_yoy": {
+        "revenue": "+10.4%",
+        "op_profit": "+12.0%",
+        "net_profit": "+13.3%"
+      },
+      "dart_table": [
+        { "account_nm": "수익(매출액)", "easy_name": "손님이 낸 돈 (매출액)", "description": "검색광고, 커머스, 웹툰, 클라우드 전 부문 총매출이에요.", "thstrm_amount": "11,850,000,000,000", "frmtrm_amount": "10,730,000,000,000", "growth_rate": "+10.4%" },
+        { "account_nm": "영업이익", "easy_name": "본업 장사로 남긴 돈 (영업이익)", "description": "포털 및 플랫폼 본업으로 남긴 순수 영업이익이에요.", "thstrm_amount": "2,150,000,000,000", "frmtrm_amount": "1,920,000,000,000", "growth_rate": "+12.0%" },
+        { "account_nm": "당기순이익", "easy_name": "진짜 내 금고에 남은 돈 (순이익)", "description": "세금과 금융손익을 거쳐 최종 금고에 남은 순이익이에요.", "thstrm_amount": "1,450,000,000,000", "frmtrm_amount": "1,280,000,000,000", "growth_rate": "+13.3%" },
+        { "account_nm": "자산총계", "easy_name": "회사의 모든 재산 총합", "description": "데이터센터, 현금, 계열사 지분 등 네이버 총 자산이에요.", "thstrm_amount": "41,200,000,000,000", "frmtrm_amount": "37,200,000,000,000", "growth_rate": "+10.8%" },
+        { "account_nm": "부채총계", "easy_name": "회사가 갚아야 할 빚", "description": "네이버페이 충전금 부채, 회사채 등 남의 돈이에요.", "thstrm_amount": "12,800,000,000,000", "frmtrm_amount": "11,500,000,000,000", "growth_rate": "+11.3%" },
+        { "account_nm": "자본총계", "easy_name": "진짜 순수한 내 돈 (순자산)", "description": "총 자산에서 부채를 뺀 순수 자기자본 밑천이에요.", "thstrm_amount": "28,400,000,000,000", "frmtrm_amount": "25,700,000,000,000", "growth_rate": "+10.5%" }
+      ]
+    },
+    "2024": {
+      "revenue": "10조 7,300억",
+      "cost": "8조 8,100억",
+      "operating_profit": "1조 9,200억 (17.9%)",
+      "net_profit": "1조 2,800억 (11.9%)",
+      "raw_revenue": 10730000000000,
+      "raw_cost": 8810000000000,
+      "raw_op_profit": 1920000000000,
+      "raw_net_profit": 1280000000000,
+      "growth_yoy": {
+        "revenue": "+11.0%",
+        "op_profit": "+29.0%",
+        "net_profit": "+29.6%"
+      },
+      "dart_table": [
+        { "account_nm": "수익(매출액)", "easy_name": "손님이 낸 돈 (매출액)", "description": "검색광고, 커머스, 웹툰, 클라우드 전 부문 총매출이에요.", "thstrm_amount": "10,730,000,000,000", "frmtrm_amount": "9,670,600,000,000", "growth_rate": "+11.0%" },
+        { "account_nm": "영업이익", "easy_name": "본업 장사로 남긴 돈 (영업이익)", "description": "포털 및 플랫폼 본업으로 남긴 순수 영업이익이에요.", "thstrm_amount": "1,920,000,000,000", "frmtrm_amount": "1,488,800,000,000", "growth_rate": "+29.0%" },
+        { "account_nm": "당기순이익", "easy_name": "진짜 내 금고에 남은 돈 (순이익)", "description": "세금과 금융손익을 거쳐 최종 금고에 남은 순이익이에요.", "thstrm_amount": "1,280,000,000,000", "frmtrm_amount": "988,000,000,000", "growth_rate": "+29.6%" },
+        { "account_nm": "자산총계", "easy_name": "회사의 모든 재산 총합", "description": "데이터센터, 현금, 계열사 지분 등 네이버 총 자산이에요.", "thstrm_amount": "37,200,000,000,000", "frmtrm_amount": "33,890,000,000,000", "growth_rate": "+9.8%" },
+        { "account_nm": "부채총계", "easy_name": "회사가 갚아야 할 빚", "description": "네이버페이 충전금 부채, 회사채 등 남의 돈이에요.", "thstrm_amount": "11,500,000,000,000", "frmtrm_amount": "10,200,000,000,000", "growth_rate": "+12.7%" },
+        { "account_nm": "자본총계", "easy_name": "진짜 순수한 내 돈 (순자산)", "description": "총 자산에서 부채를 뺀 순수 자기자본 밑천이에요.", "thstrm_amount": "25,700,000,000,000", "frmtrm_amount": "23,690,000,000,000", "growth_rate": "+8.5%" }
+      ]
+    },
+    "2023": {
+      "revenue": "9조 6,706억",
+      "cost": "8조 1,818억",
+      "operating_profit": "1조 4,888억 (15.4%)",
+      "net_profit": "9,880억 (10.2%)",
+      "raw_revenue": 9670600000000,
+      "raw_cost": 8181800000000,
+      "raw_op_profit": 1488800000000,
+      "raw_net_profit": 988000000000,
+      "growth_yoy": {
+        "revenue": "+17.6%",
+        "op_profit": "+14.1%",
+        "net_profit": "+46.8%"
+      },
+      "dart_table": [
+        { "account_nm": "수익(매출액)", "easy_name": "손님이 낸 돈 (매출액)", "description": "검색광고, 커머스, 웹툰, 클라우드 전 부문 총매출이에요.", "thstrm_amount": "9,670,600,000,000", "frmtrm_amount": "8,220,100,000,000", "growth_rate": "+17.6%" },
+        { "account_nm": "영업이익", "easy_name": "본업 장사로 남긴 돈 (영업이익)", "description": "포털 및 플랫폼 본업으로 남긴 순수 영업이익이에요.", "thstrm_amount": "1,488,800,000,000", "frmtrm_amount": "1,304,700,000,000", "growth_rate": "+14.1%" },
+        { "account_nm": "당기순이익", "easy_name": "진짜 내 금고에 남은 돈 (순이익)", "description": "세금과 금융손익을 거쳐 최종 금고에 남은 순이익이에요.", "thstrm_amount": "988,000,000,000", "frmtrm_amount": "673,200,000,000", "growth_rate": "+46.8%" },
+        { "account_nm": "자산총계", "easy_name": "회사의 모든 재산 총합", "description": "데이터센터, 현금, 계열사 지분 등 네이버 총 자산이에요.", "thstrm_amount": "33,890,000,000,000", "frmtrm_amount": "31,450,000,000,000", "growth_rate": "+7.8%" },
+        { "account_nm": "부채총계", "easy_name": "회사가 갚아야 할 빚", "description": "네이버페이 충전금 부채, 회사채 등 남의 돈이에요.", "thstrm_amount": "10,200,000,000,000", "frmtrm_amount": "9,600,000,000,000", "growth_rate": "+6.3%" },
+        { "account_nm": "자본총계", "easy_name": "진짜 순수한 내 돈 (순자산)", "description": "총 자산에서 부채를 뺀 순수 자기자본 밑천이에요.", "thstrm_amount": "23,690,000,000,000", "frmtrm_amount": "21,850,000,000,000", "growth_rate": "+8.4%" }
+      ]
+    }
+  },
+  "quiz": {
+    "question": "네이버의 연간 매출이 9.6조 원을 돌파하며 역대 최대를 기록할 수 있었던 주요 요인은 무엇일까요?",
+    "options": [
+      { "text": "검색 광고, 커머스(스마트스토어), 네이버페이, 웹툰 등 전 사업부의 고른 성장", "is_correct": true },
+      { "text": "네이버 검색 서비스를 전면 유료 구독제로 전환했기 때문", "is_correct": false },
+      { "text": "국내 모든 포털 사이트를 강제 인수합병했기 때문", "is_correct": false },
+      { "text": "스마트폰 하드웨어 자체 제조 및 판매 수익 덕분", "is_correct": false }
+    ],
+    "explanation": "네이버는 핵심 검색 광고뿐만 아니라 네이버페이, 스마트스토어 커머스, 글로벌 네이버웹툰 성장에 힘입어 사상 최대 실적을 달성했습니다."
+  }
+}

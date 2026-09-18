@@ -1,0 +1,121 @@
+{
+  "id": "hyundai",
+  "name": "현대자동차",
+  "corp_name_official": "현대자동차주식회사 (00164742)",
+  "corp_code": "00164742",
+  "stock_code": "005380",
+  "category": "auto",
+  "category_name": "모빌리티 & 완성차",
+  "icon": "🚗",
+  "status_badge": "상장사 1위 🏆",
+  "doc_type": "연결재무제표 (포괄손익계산서)",
+  "approx_annual_revenue": 175000000000000,
+  "metaphor": {
+    "item_name": "차량 순마진 지분",
+    "item_price": 20000000,
+    "margin_rate": 0.093,
+    "margin_rate_pct": 9.3,
+    "unit": "대분",
+    "annual_metaphor": "영업익 15조 (상장사 1위) = 제네시스/SUV 순이익 60만 대 분량",
+    "scale_summary": "전 세계 1위 수준의 하이브리드(HEV) 및 제네시스 수익성",
+    "default_spend": 50000
+  },
+  "ai_summary": {
+    "summary": [
+      "영업이익 15조 1,269억 원으로 삼성전자를 제치고 2023년 상장사 영업이익 1위에 등극했습니다.",
+      "고수익 제네시스와 싼타페/투싼 등 SUV 판매 호조가 이익 성장을 견인했습니다.",
+      "전기차 캐즘 속에서 하이브리드(HEV) 판매 급증으로 완벽하게 방어했습니다."
+    ],
+    "good_points": [
+      "글로벌 완성차 최고 수준의 하이브리드 경쟁력",
+      "제네시스 브랜드의 럭셔리 라인업 안착"
+    ],
+    "risks": [
+      "미국/유럽 전기차 보조금 축소 정책 리스크",
+      "글로벌 고금리에 따른 자동차 할부 부담"
+    ]
+  },
+  "financials_by_year": {
+    "2025": {
+      "revenue": "186조 2,545억",
+      "cost": "174조 7,866억",
+      "operating_profit": "11조 4,679억 (6.2%)",
+      "net_profit": "10조 3,648억 (5.6%)",
+      "raw_revenue": 186254472000000,
+      "raw_cost": 174786621000000,
+      "raw_op_profit": 11467851000000,
+      "raw_net_profit": 10364775000000,
+      "growth_yoy": {
+        "revenue": "+6.3%",
+        "op_profit": "-19.5%",
+        "net_profit": "-21.7%"
+      },
+      "dart_table": [
+        { "account_nm": "수익(매출액)", "easy_name": "손님이 낸 돈 (매출액)", "description": "전 세계 고객들이 현대차를 사고 지불한 총 금액이에요.", "thstrm_amount": "186,254,472,000,000", "frmtrm_amount": "175,231,153,000,000", "growth_rate": "+6.3%" },
+        { "account_nm": "영업이익", "easy_name": "본업 장사로 남긴 돈 (영업이익)", "description": "차 팔아서 순수 본업으로 남긴 알짜배기 이익이에요.", "thstrm_amount": "11,467,851,000,000", "frmtrm_amount": "14,239,592,000,000", "growth_rate": "-19.5%" },
+        { "account_nm": "당기순이익", "easy_name": "진짜 내 금고에 남은 돈 (순이익)", "description": "세금까지 싹 내고 최종적으로 현대차 주머니에 남은 돈이에요.", "thstrm_amount": "10,364,775,000,000", "frmtrm_amount": "13,229,908,000,000", "growth_rate": "-21.7%" },
+        { "account_nm": "자산총계", "easy_name": "회사의 모든 재산 총합", "description": "전 세계 공장, 연구소, 현금 등 현대차의 모든 자산 총합이에요.", "thstrm_amount": "368,844,849,000,000", "frmtrm_amount": "339,798,429,000,000", "growth_rate": "+8.6%" },
+        { "account_nm": "부채총계", "easy_name": "회사가 갚아야 할 빚", "description": "글로벌 조달 채권, 할부금융 부채 등 갚아야 할 빚이에요.", "thstrm_amount": "241,196,612,000,000", "frmtrm_amount": "219,522,496,000,000", "growth_rate": "+9.9%" },
+        { "account_nm": "자본총계", "easy_name": "진짜 순수한 내 돈 (순자산)", "description": "총 자산에서 부채를 뺀 현대차의 순수 자본이에요.", "thstrm_amount": "127,648,237,000,000", "frmtrm_amount": "120,275,933,000,000", "growth_rate": "+6.1%" }
+      ]
+    },
+    "2024": {
+      "revenue": "175조 2,312억",
+      "cost": "160조 9,916억",
+      "operating_profit": "14조 2,396억 (8.1%)",
+      "net_profit": "13조 2,299억 (7.5%)",
+      "raw_revenue": 175231153000000,
+      "raw_cost": 160991561000000,
+      "raw_op_profit": 14239592000000,
+      "raw_net_profit": 13229908000000,
+      "growth_yoy": {
+        "revenue": "+7.7%",
+        "op_profit": "-5.9%",
+        "net_profit": "+7.8%"
+      },
+      "dart_table": [
+        { "account_nm": "수익(매출액)", "easy_name": "손님이 낸 돈 (매출액)", "description": "전 세계 고객들이 현대차를 사고 지불한 총 금액이에요.", "thstrm_amount": "175,231,153,000,000", "frmtrm_amount": "162,663,579,000,000", "growth_rate": "+7.7%" },
+        { "account_nm": "영업이익", "easy_name": "본업 장사로 남긴 돈 (영업이익)", "description": "차 팔아서 순수 본업으로 남긴 알짜배기 이익이에요.", "thstrm_amount": "14,239,592,000,000", "frmtrm_amount": "15,126,901,000,000", "growth_rate": "-5.9%" },
+        { "account_nm": "당기순이익", "easy_name": "진짜 내 금고에 남은 돈 (순이익)", "description": "세금까지 싹 내고 최종적으로 현대차 주머니에 남은 돈이에요.", "thstrm_amount": "13,229,908,000,000", "frmtrm_amount": "12,272,301,000,000", "growth_rate": "+7.8%" },
+        { "account_nm": "자산총계", "easy_name": "회사의 모든 재산 총합", "description": "전 세계 공장, 연구소, 현금 등 현대차의 모든 자산 총합이에요.", "thstrm_amount": "339,798,429,000,000", "frmtrm_amount": "282,463,355,000,000", "growth_rate": "+20.3%" },
+        { "account_nm": "부채총계", "easy_name": "회사가 갚아야 할 빚", "description": "글로벌 조달 채권, 할부금융 부채 등 갚아야 할 빚이에요.", "thstrm_amount": "219,522,496,000,000", "frmtrm_amount": "184,184,893,000,000", "growth_rate": "+19.2%" },
+        { "account_nm": "자본총계", "easy_name": "진짜 순수한 내 돈 (순자산)", "description": "총 자산에서 부채를 뺀 현대차의 순수 자본이에요.", "thstrm_amount": "120,275,933,000,000", "frmtrm_amount": "98,278,462,000,000", "growth_rate": "+22.4%" }
+      ]
+    },
+    "2023": {
+      "revenue": "162조 6,636억",
+      "cost": "147조 5,367억",
+      "operating_profit": "15조 1,269억 (9.3%)",
+      "net_profit": "12조 2,723억 (7.5%)",
+      "raw_revenue": 162663579000000,
+      "raw_cost": 147536678000000,
+      "raw_op_profit": 15126901000000,
+      "raw_net_profit": 12272301000000,
+      "growth_yoy": {
+        "revenue": "+14.4%",
+        "op_profit": "+54.0%",
+        "net_profit": "+53.7%"
+      },
+      "dart_table": [
+        { "account_nm": "수익(매출액)", "easy_name": "손님이 낸 돈 (매출액)", "description": "전 세계 고객들이 현대차를 사고 지불한 총 금액이에요.", "thstrm_amount": "162,663,579,000,000", "frmtrm_amount": "142,151,529,000,000", "growth_rate": "+14.4%" },
+        { "account_nm": "매출원가", "easy_name": "물건 떼온 값 (원가 밑천)", "description": "차량 강판, 배터리, 부품값과 생산공장 가동비예요.", "thstrm_amount": "129,598,382,000,000", "frmtrm_amount": "114,815,489,000,000", "growth_rate": "+12.9%" },
+        { "account_nm": "판매비와관리비", "easy_name": "매장 굴리는 데 든 비용 (판관비)", "description": "직원 월급, 전 세계 대리점 운영비, R&D 연구비예요.", "thstrm_amount": "17,938,296,000,000", "frmtrm_amount": "17,511,889,000,000", "growth_rate": "+2.4%" },
+        { "account_nm": "영업이익", "easy_name": "본업 장사로 남긴 돈 (영업이익)", "description": "차 팔아서 순수 본업으로 남긴 알짜배기 이익 (상장사 1위!)", "thstrm_amount": "15,126,901,000,000", "frmtrm_amount": "9,824,151,000,000", "growth_rate": "+54.0%" },
+        { "account_nm": "당기순이익", "easy_name": "진짜 내 금고에 남은 돈 (순이익)", "description": "세금까지 싹 내고 최종적으로 현대차 주머니에 남은 돈이에요.", "thstrm_amount": "12,272,301,000,000", "frmtrm_amount": "7,983,674,000,000", "growth_rate": "+53.7%" },
+        { "account_nm": "자산총계", "easy_name": "회사의 모든 재산 총합", "description": "전 세계 공장, 연구소, 현금 등 현대차의 모든 자산 총합이에요.", "thstrm_amount": "282,463,355,000,000", "frmtrm_amount": "255,742,462,000,000", "growth_rate": "+10.4%" },
+        { "account_nm": "부채총계", "easy_name": "회사가 갚아야 할 빚", "description": "글로벌 조달 채권, 할부금융 부채 등 갚아야 할 빚이에요.", "thstrm_amount": "184,184,893,000,000", "frmtrm_amount": "170,050,477,000,000", "growth_rate": "+8.3%" },
+        { "account_nm": "자본총계", "easy_name": "진짜 순수한 내 돈 (순자산)", "description": "총 자산에서 부채를 뺀 현대차의 순수 자본이에요.", "thstrm_amount": "98,278,462,000,000", "frmtrm_amount": "85,691,985,000,000", "growth_rate": "+14.7%" }
+      ]
+    }
+  },
+  "quiz": {
+    "question": "현대자동차가 2023~2024년 역대 최대 영업이익(상장사 1위)을 달성할 수 있었던 일등공신은 무엇일까요?",
+    "options": [
+      { "text": "고수익 제네시스 럭셔리 라인업과 하이브리드(HEV)·SUV 판매 호조", "is_correct": true },
+      { "text": "경차와 저가 승용차 위주의 대량 박리다매 판매", "is_correct": false },
+      { "text": "모든 생산 공장을 100% 무인 로봇으로 전환했기 때문", "is_correct": false },
+      { "text": "전기차 전 차종에 대한 50% 파격 할인 프로모션", "is_correct": false }
+    ],
+    "explanation": "현대차는 단가가 높은 제네시스 럭셔리 브랜드와 SUV, 그리고 전기차 캐즘 속에서 하이브리드(HEV) 차량 판매가 폭발하며 역대급 실적을 기록했습니다."
+  }
+}
