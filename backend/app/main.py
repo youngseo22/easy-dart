@@ -62,6 +62,21 @@ def redirect_quiz():
 def redirect_mock_invest():
     return RedirectResponse(url="/mock-invest")
 
+@app.get("/frontend/src/pages/quiz_terms/judge.html")
+@app.get("/frontend/src/pages/quiz_terms/judge")
+def redirect_judge():
+    return RedirectResponse(url="/judge")
+
+@app.get("/frontend/src/pages/quiz_terms/runner.html")
+@app.get("/frontend/src/pages/quiz_terms/runner")
+def redirect_runner():
+    return RedirectResponse(url="/runner")
+
+@app.get("/frontend/src/pages/quiz_terms/radar_shooter.html")
+@app.get("/frontend/src/pages/quiz_terms/radar_shooter")
+def redirect_radar_shooter():
+    return RedirectResponse(url="/radar-shooter")
+
 # 프론트엔드 정적 웹 서빙 (모듈 및 에셋)
 if (ROOT_DIR / "frontend").exists():
     app.mount("/frontend", StaticFiles(directory=str(ROOT_DIR / "frontend")), name="frontend")
@@ -71,6 +86,9 @@ COMPANY_LIST_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "company_list" / "
 COMPANY_DETAIL_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "company_detail" / "index.html"
 QUIZ_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "quiz_terms" / "index.html"
 MOCK_INVEST_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "quiz_terms" / "mock_invest.html"
+JUDGE_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "quiz_terms" / "judge.html"
+RUNNER_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "quiz_terms" / "runner.html"
+RADAR_SHOOTER_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "quiz_terms" / "radar_shooter.html"
 
 # 깔끔한 URL 라우팅
 @app.get("/")
@@ -100,6 +118,25 @@ def page_mock_invest():
 def page_quiz():
     """4. DART 오락실 & 금융 퀴즈 센터 페이지"""
     return FileResponse(QUIZ_PAGE)
+
+@app.get("/judge")
+@app.get("/judge.html")
+def page_judge():
+    """5. DART 실전 투자 심사관 (BUY/SELL)"""
+    return FileResponse(JUDGE_PAGE)
+
+@app.get("/runner")
+@app.get("/runner.html")
+def page_runner():
+    """6. DART 급행 레인 러너"""
+    return FileResponse(RUNNER_PAGE)
+
+@app.get("/radar-shooter")
+@app.get("/radar_shooter.html")
+@app.get("/dart-shooter")
+def page_radar_shooter():
+    """7. 공시 레이더 미사일 슈팅"""
+    return FileResponse(RADAR_SHOOTER_PAGE)
 
 
 
