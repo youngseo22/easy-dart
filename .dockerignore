@@ -1,0 +1,10 @@
+.git
+.gitignore
+.obsidian
+.env
+backend/venv
+**/__pycache__
+**/*.pyc
+**/*.pyo
+.pytest_cache
+presentation
