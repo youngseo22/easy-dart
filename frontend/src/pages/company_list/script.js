@@ -411,13 +411,15 @@ async function fetchCompaniesData() {
   applyFilterAndRender();
 }
 
+const SUPPORTED_COMPANY_IDS = ['olive', 'hyundai', 'musinsa', 'naver', 'starbucks'];
+
 /**
  * 검색어 및 카테고리 필터 통합 적용 및 그리드 렌더링
  */
 function applyFilterAndRender() {
   const query = (document.getElementById('companySearchInput')?.value || '').toLowerCase().trim();
   
-  let list = allCompanies;
+  let list = [...allCompanies];
   if (currentCategory !== 'all') {
     list = list.filter(c => c.category === currentCategory);
   }
@@ -432,10 +434,17 @@ function applyFilterAndRender() {
     });
   }
 
+  // [정렬] 1순위: 활성화된 기업(5개사) 최우선 배치, 2순위: 각 그룹 내 한글 가나다순(오름차순)
+  list.sort((a, b) => {
+    const aSupported = SUPPORTED_COMPANY_IDS.includes(a.id);
+    const bSupported = SUPPORTED_COMPANY_IDS.includes(b.id);
+    if (aSupported && !bSupported) return -1;
+    if (!aSupported && bSupported) return 1;
+    return (a.name || '').localeCompare(b.name || '', 'ko');
+  });
+
   renderCards(list);
 }
-
-const SUPPORTED_COMPANY_IDS = ['olive', 'hyundai', 'musinsa', 'naver', 'starbucks'];
 
 /**
  * 기업 카드 HTML 그리드 렌더링

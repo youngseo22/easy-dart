@@ -560,6 +560,8 @@ COMPANY_DETAILS_DB = {
     }
 }
 
+SUPPORTED_COMPANY_IDS = ["olive", "hyundai", "musinsa", "naver", "starbucks"]
+
 @router.get("/")
 def get_company_list(category: str = None, query: str = None):
     """20대 일상 기업 목록 조회 (검색 및 카테고리 필터링)"""
@@ -568,6 +570,12 @@ def get_company_list(category: str = None, query: str = None):
         companies = [c for c in companies if c.get("category") == category]
     if query:
         companies = [c for c in companies if query.lower() in c.get("name", "").lower()]
+    
+    # 1순위: 지원 기업(5개사) 우선 배치, 2순위: 한글 이름 오름차순(가나다순)
+    companies = sorted(
+        companies,
+        key=lambda c: (0 if c.get("id") in SUPPORTED_COMPANY_IDS else 1, c.get("name", ""))
+    )
     return {"count": len(companies), "companies": companies}
 
 @router.get("/{company_id}")
