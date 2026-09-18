@@ -1,0 +1,130 @@
+{
+  "id": "olive",
+  "name": "CJ올리브영",
+  "corp_name_official": "씨제이올리브영 주식회사 (01423068)",
+  "corp_code": "01423068",
+  "stock_code": null,
+  "category": "beauty",
+  "category_name": "뷰티 & 헬스케어",
+  "icon": "🧴",
+  "status_badge": "성장세 📈",
+  "doc_type": "연결감사보고서",
+  "approx_annual_revenue": 4800000000000,
+  "metaphor": {
+    "item_name": "독도토너",
+    "item_price": 3000,
+    "margin_rate": 0.122,
+    "margin_rate_pct": 12.2,
+    "unit": "병",
+    "annual_metaphor": "연간 순이익 = 독도토너 약 1억 1,576만 병!",
+    "scale_summary": "전국 1,340여 개 매장과 오늘드림 옴니채널 독점력",
+    "default_spend": 35000
+  },
+  "ai_summary": {
+    "summary": [
+      "연간 매출 3조 8,612억 원(+39%)으로 창사 이래 최대 실적을 달성했습니다.",
+      "오늘드림(당일 배송) 인기로 온라인 매출 비중이 사상 처음 30.6%를 돌파했습니다.",
+      "영업이익률 12.1%로 일반 유통마트(3~5%) 대비 3배 이상의 고수익성을 기록했습니다."
+    ],
+    "good_points": [
+      "오프라인 매장 1,340개 독점력",
+      "K-뷰티 외국인 관광객 매출 급증",
+      "PB 브랜드 마진율 강화"
+    ],
+    "risks": [
+      "국내 출점 한계에 따른 글로벌 확장 과제",
+      "공정위 납품업체 상생 규제 이슈"
+    ]
+  },
+  "financials_by_year": {
+    "2025": {
+      "revenue": "5조 8,335억",
+      "cost": "5조 888억",
+      "operating_profit": "7,447억 (12.8%)",
+      "net_profit": "5,547억 (9.5%)",
+      "raw_revenue": 5833494914003,
+      "raw_cost": 5088805680751,
+      "raw_op_profit": 744689233252,
+      "raw_net_profit": 554716452987,
+      "growth_yoy": {
+        "revenue": "+21.8%",
+        "op_profit": "+22.5%",
+        "net_profit": "+15.8%"
+      },
+      "dart_table": [
+        { "account_nm": "수익(매출액)", "easy_name": "손님이 낸 돈 (매출액)", "description": "손님들이 매장에서 상품을 사고 결제한 총 금액이에요.", "thstrm_amount": "5,833,494,914,003", "frmtrm_amount": "4,789,961,250,065", "growth_rate": "+21.8%" },
+        { "account_nm": "매출원가", "easy_name": "물건 떼온 값 (원가 밑천)", "description": "화장품/생필품을 납품받아 오는 데 든 순수 밑천이에요.", "thstrm_amount": "3,062,092,206,973", "frmtrm_amount": "2,482,376,964,937", "growth_rate": "+23.4%" },
+        { "account_nm": "매출총이익", "easy_name": "기본 마진 (원가 뺀 돈)", "description": "손님이 낸 돈에서 공장 원가만 빼고 1차로 남긴 마진이에요.", "thstrm_amount": "2,771,402,707,030", "frmtrm_amount": "2,307,584,285,128", "growth_rate": "+20.1%" },
+        { "account_nm": "판매비와관리비", "easy_name": "매장 굴리는 데 든 비용 (판관비)", "description": "알바 월급, 강남역 매장 임대료, 오늘드림 배송비, 광고비예요.", "thstrm_amount": "2,026,713,473,778", "frmtrm_amount": "1,699,911,998,436", "growth_rate": "+19.2%" },
+        { "account_nm": "영업이익", "easy_name": "본업 장사로 남긴 돈 (영업이익)", "description": "화장품 팔아서 순수 본업으로 남긴 알짜배기 이익이에요.", "thstrm_amount": "744,689,233,252", "frmtrm_amount": "607,672,286,692", "growth_rate": "+22.5%" },
+        { "account_nm": "법인세비용", "easy_name": "국가에 낸 기업 세금", "description": "회사가 1년 동안 돈을 많이 벌어서 국가에 낸 세금이에요.", "thstrm_amount": "156,467,929,810", "frmtrm_amount": "156,854,705,669", "growth_rate": "-0.2%" },
+        { "account_nm": "당기순이익", "easy_name": "진짜 내 금고에 남은 돈 (순이익)", "description": "세금까지 싹 다 내고 금고에 남은 진짜 최종 순이익이에요.", "thstrm_amount": "554,716,452,987", "frmtrm_amount": "478,872,465,122", "growth_rate": "+15.8%" },
+        { "account_nm": "자산총계", "easy_name": "회사의 모든 재산 총합", "description": "올리브영이 가진 내 돈과 빚을 모두 합친 총 재산이에요.", "thstrm_amount": "2,551,720,284,530", "frmtrm_amount": "2,267,977,800,343", "growth_rate": "+12.5%" },
+        { "account_nm": "부채총계", "easy_name": "회사가 갚아야 할 빚", "description": "납품대금 외상값, 은행 빚 등 갚아야 할 남의 돈이에요.", "thstrm_amount": "1,548,903,724,827", "frmtrm_amount": "1,265,931,343,943", "growth_rate": "+22.4%" },
+        { "account_nm": "자본총계", "easy_name": "진짜 순수한 내 돈 (순자산)", "description": "총 재산에서 빚을 빼고 남은 순수한 알짜 밑천이에요.", "thstrm_amount": "1,002,816,559,703", "frmtrm_amount": "1,002,046,456,400", "growth_rate": "+0.1%" }
+      ]
+    },
+    "2024": {
+      "revenue": "4조 7,900억",
+      "cost": "4조 1,823억",
+      "operating_profit": "6,077억 (12.7%)",
+      "net_profit": "4,789억 (10.0%)",
+      "raw_revenue": 4789961250065,
+      "raw_cost": 4182288963373,
+      "raw_op_profit": 607672286692,
+      "raw_net_profit": 478872465122,
+      "growth_yoy": {
+        "revenue": "+24.1%",
+        "op_profit": "+30.4%",
+        "net_profit": "+37.9%"
+      },
+      "dart_table": [
+        { "account_nm": "수익(매출액)", "easy_name": "손님이 낸 돈 (매출액)", "description": "손님들이 매장에서 상품을 사고 결제한 총 금액이에요.", "thstrm_amount": "4,789,961,250,065", "frmtrm_amount": "3,861,182,100,138", "growth_rate": "+24.1%" },
+        { "account_nm": "매출원가", "easy_name": "물건 떼온 값 (원가 밑천)", "description": "화장품/생필품을 납품받아 오는 데 든 순수 밑천이에요.", "thstrm_amount": "2,482,376,964,937", "frmtrm_amount": "2,001,074,163,948", "growth_rate": "+24.1%" },
+        { "account_nm": "매출총이익", "easy_name": "기본 마진 (원가 뺀 돈)", "description": "손님이 낸 돈에서 공장 원가만 빼고 1차로 남긴 마진이에요.", "thstrm_amount": "2,307,584,285,128", "frmtrm_amount": "1,860,107,936,190", "growth_rate": "+24.1%" },
+        { "account_nm": "판매비와관리비", "easy_name": "매장 굴리는 데 든 비용 (판관비)", "description": "알바 월급, 강남역 매장 임대료, 오늘드림 배송비, 광고비예요.", "thstrm_amount": "1,699,911,998,436", "frmtrm_amount": "1,394,092,680,513", "growth_rate": "+21.9%" },
+        { "account_nm": "영업이익", "easy_name": "본업 장사로 남긴 돈 (영업이익)", "description": "화장품 팔아서 순수 본업으로 남긴 알짜배기 이익이에요.", "thstrm_amount": "607,672,286,692", "frmtrm_amount": "466,015,255,677", "growth_rate": "+30.4%" },
+        { "account_nm": "법인세비용", "easy_name": "국가에 낸 기업 세금", "description": "회사가 1년 동안 돈을 많이 벌어서 국가에 낸 세금이에요.", "thstrm_amount": "156,854,705,669", "frmtrm_amount": "111,775,900,211", "growth_rate": "+40.3%" },
+        { "account_nm": "당기순이익", "easy_name": "진짜 내 금고에 남은 돈 (순이익)", "description": "세금까지 싹 다 내고 금고에 남은 진짜 최종 순이익이에요.", "thstrm_amount": "478,872,465,122", "frmtrm_amount": "347,298,269,234", "growth_rate": "+37.9%" },
+        { "account_nm": "자산총계", "easy_name": "회사의 모든 재산 총합", "description": "올리브영이 가진 내 돈과 빚을 모두 합친 총 재산이에요.", "thstrm_amount": "2,267,977,800,343", "frmtrm_amount": "2,010,430,204,828", "growth_rate": "+12.8%" },
+        { "account_nm": "부채총계", "easy_name": "회사가 갚아야 할 빚", "description": "납품대금 외상값, 은행 빚 등 갚아야 할 남의 돈이에요.", "thstrm_amount": "1,265,931,343,943", "frmtrm_amount": "1,031,970,974,984", "growth_rate": "+22.7%" },
+        { "account_nm": "자본총계", "easy_name": "진짜 순수한 내 돈 (순자산)", "description": "총 재산에서 빚을 빼고 남은 순수한 알짜 밑천이에요.", "thstrm_amount": "1,002,046,456,400", "frmtrm_amount": "978,459,229,844", "growth_rate": "+2.4%" }
+      ]
+    },
+    "2023": {
+      "revenue": "3조 8,612억",
+      "cost": "3조 3,952억",
+      "operating_profit": "4,660억 (12.1%)",
+      "net_profit": "3,473억 (9.0%)",
+      "raw_revenue": 3861182100138,
+      "raw_cost": 3395166844461,
+      "raw_op_profit": 466015255677,
+      "raw_net_profit": 347298269234,
+      "growth_yoy": {
+        "revenue": "+39.0%",
+        "op_profit": "+69.8%",
+        "net_profit": "+66.9%"
+      },
+      "dart_table": [
+        { "account_nm": "수익(매출액)", "easy_name": "손님이 낸 돈 (매출액)", "description": "손님들이 매장에서 상품을 사고 결제한 총 금액이에요.", "thstrm_amount": "3,861,182,100,138", "frmtrm_amount": "2,777,471,418,699", "growth_rate": "+39.0%" },
+        { "account_nm": "매출원가", "easy_name": "물건 떼온 값 (원가 밑천)", "description": "화장품/생필품을 납품받아 오는 데 든 순수 밑천이에요.", "thstrm_amount": "2,001,074,163,948", "frmtrm_amount": "1,461,535,202,186", "growth_rate": "+36.9%" },
+        { "account_nm": "매출총이익", "easy_name": "기본 마진 (원가 뺀 돈)", "description": "손님이 낸 돈에서 공장 원가만 빼고 1차로 남긴 마진이에요.", "thstrm_amount": "1,860,107,936,190", "frmtrm_amount": "1,315,936,216,513", "growth_rate": "+41.4%" },
+        { "account_nm": "판매비와관리비", "easy_name": "매장 굴리는 데 든 비용 (판관비)", "description": "알바 월급, 강남역 매장 임대료, 오늘드림 배송비, 광고비예요.", "thstrm_amount": "1,394,092,680,513", "frmtrm_amount": "1,041,416,760,769", "growth_rate": "+33.9%" },
+        { "account_nm": "영업이익", "easy_name": "본업 장사로 남긴 돈 (영업이익)", "description": "화장품 팔아서 순수 본업으로 남긴 알짜배기 이익이에요.", "thstrm_amount": "466,015,255,677", "frmtrm_amount": "274,519,455,744", "growth_rate": "+69.8%" },
+        { "account_nm": "법인세비용", "easy_name": "국가에 낸 기업 세금", "description": "회사가 1년 동안 돈을 많이 벌어서 국가에 낸 세금이에요.", "thstrm_amount": "111,775,900,211", "frmtrm_amount": "60,606,754,835", "growth_rate": "+84.4%" },
+        { "account_nm": "당기순이익", "easy_name": "진짜 내 금고에 남은 돈 (순이익)", "description": "세금까지 싹 다 내고 금고에 남은 진짜 최종 순이익이에요.", "thstrm_amount": "347,298,269,234", "frmtrm_amount": "208,061,367,751", "growth_rate": "+66.9%" },
+        { "account_nm": "자산총계", "easy_name": "회사의 모든 재산 총합", "description": "올리브영이 가진 내 돈과 빚을 모두 합친 총 재산이에요.", "thstrm_amount": "2,010,430,204,828", "frmtrm_amount": "1,619,407,824,768", "growth_rate": "+24.1%" },
+        { "account_nm": "부채총계", "easy_name": "회사가 갚아야 할 빚", "description": "납품대금 외상값, 은행 빚 등 갚아야 할 남의 돈이에요.", "thstrm_amount": "1,031,970,974,984", "frmtrm_amount": "879,815,496,331", "growth_rate": "+17.3%" },
+        { "account_nm": "자본총계", "easy_name": "진짜 순수한 내 돈 (순자산)", "description": "총 재산에서 빚을 빼고 남은 순수한 알짜 밑천이에요.", "thstrm_amount": "978,459,229,844", "frmtrm_amount": "739,592,328,437", "growth_rate": "+32.3%" }
+      ]
+    }
+  },
+  "quiz": {
+    "question": "올리브영의 2023년 매출 중 온라인(오늘드림 등) 비중은 30%를 돌파했을까요?",
+    "options": [
+      { "text": "⭕ 그렇다 (30.6%로 돌파)", "is_correct": true },
+      { "text": "❌ 아니다", "is_correct": false }
+    ],
+    "explanation": "올리브영은 오늘드림 퀵커머스 성장으로 온라인 비중이 사상 처음 30%를 넘었습니다."
+  }
+}

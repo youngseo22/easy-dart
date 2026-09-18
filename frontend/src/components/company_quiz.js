@@ -45,15 +45,20 @@ export function renderCompanyQuizSection(containerId, quizData, onAnswerCallback
       const opt = quizData.options[idx];
       const fb = container.querySelector('#quizFeedbackBox');
       
-      // 모든 버튼 비활성화 및 정답 표시
+      // 모든 버튼 비활성화 및 정답/오답/미선택 상태 스타일링
       container.querySelectorAll('.quiz-opt-item').forEach((b, i) => {
-        b.classList.remove('border-indigo-500', 'hover:border-indigo-500');
+        b.disabled = true;
+        b.classList.remove('cursor-pointer', 'hover:border-indigo-500', 'hover:bg-indigo-50/30', 'group');
+        
         if (quizData.options[i].is_correct) {
-          b.className = 'quiz-opt-item p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-500 font-bold text-xs sm:text-sm text-left text-emerald-900 flex items-center justify-between';
-          b.innerHTML = `<span>${quizData.options[i].text}</span><span class="text-emerald-700 font-black text-xs">✓ 정답</span>`;
+          b.className = 'quiz-opt-item p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-500 font-bold text-xs sm:text-sm text-left text-emerald-900 flex items-center justify-between pointer-events-none cursor-default shadow-sm';
+          b.innerHTML = `<span>${quizData.options[i].text}</span><span class="text-emerald-700 font-black text-xs shrink-0 ml-2">✓ 정답</span>`;
         } else if (i === idx && !opt.is_correct) {
-          b.className = 'quiz-opt-item p-4 rounded-2xl bg-rose-50 border-2 border-rose-400 font-bold text-xs sm:text-sm text-left text-rose-900 flex items-center justify-between';
-          b.innerHTML = `<span>${quizData.options[i].text}</span><span class="text-rose-700 font-black text-xs">✕ 오답</span>`;
+          b.className = 'quiz-opt-item p-4 rounded-2xl bg-rose-50 border-2 border-rose-400 font-bold text-xs sm:text-sm text-left text-rose-900 flex items-center justify-between pointer-events-none cursor-default shadow-sm';
+          b.innerHTML = `<span>${quizData.options[i].text}</span><span class="text-rose-700 font-black text-xs shrink-0 ml-2">✕ 선택한 오답</span>`;
+        } else {
+          b.className = 'quiz-opt-item p-4 rounded-2xl bg-slate-50/70 border-2 border-slate-200/70 font-bold text-xs sm:text-sm text-left text-slate-400 flex items-center justify-between pointer-events-none cursor-default opacity-40';
+          b.innerHTML = `<span>${quizData.options[i].text}</span><span class="text-slate-300 text-xs shrink-0 ml-2">-</span>`;
         }
       });
       

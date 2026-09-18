@@ -411,13 +411,15 @@ async function fetchCompaniesData() {
   applyFilterAndRender();
 }
 
+const SUPPORTED_COMPANY_IDS = ['olive', 'hyundai', 'musinsa', 'naver', 'starbucks'];
+
 /**
  * 검색어 및 카테고리 필터 통합 적용 및 그리드 렌더링
  */
 function applyFilterAndRender() {
   const query = (document.getElementById('companySearchInput')?.value || '').toLowerCase().trim();
   
-  let list = allCompanies;
+  let list = [...allCompanies];
   if (currentCategory !== 'all') {
     list = list.filter(c => c.category === currentCategory);
   }
@@ -431,6 +433,15 @@ function applyFilterAndRender() {
       return nameMatch || catMatch || keyMatch || itemMatch;
     });
   }
+
+  // [정렬] 1순위: 활성화된 기업(5개사) 최우선 배치, 2순위: 각 그룹 내 한글 가나다순(오름차순)
+  list.sort((a, b) => {
+    const aSupported = SUPPORTED_COMPANY_IDS.includes(a.id);
+    const bSupported = SUPPORTED_COMPANY_IDS.includes(b.id);
+    if (aSupported && !bSupported) return -1;
+    if (!aSupported && bSupported) return 1;
+    return (a.name || '').localeCompare(b.name || '', 'ko');
+  });
 
   renderCards(list);
 }
@@ -452,8 +463,9 @@ function renderCards(items) {
   if (noResults) noResults.classList.add('hidden');
 
   grid.innerHTML = items.map(c => {
+    const isSupported = SUPPORTED_COMPANY_IDS.includes(c.id);
     const catName = c.category_name || '일상 기업';
-    const badge = c.status_badge || '공시 분석 📈';
+    const badge = isSupported ? (c.status_badge || '공시 분석 📈') : '준비중 ⏳';
     const metaphorText = c.metaphor || `영업이익으로 ${c.item_name || '대표 상품'} 대량 판매 효과!`;
     const docName = c.doc_name || '2023 사업보고서';
     const stat1Label = c.stat1?.label || '대표 상품';
@@ -461,53 +473,103 @@ function renderCards(items) {
     const stat2Label = c.stat2?.label || '이익률';
     const stat2Val = c.stat2?.val || (c.margin_rate ? `${(c.margin_rate * 100).toFixed(1)}%` : '-');
 
-    return `
-      <div class="company-card bg-white rounded-3xl p-6 border border-slate-200/90 shadow-subtle cursor-pointer group flex flex-col justify-between" onclick="location.href='/company-details?id=${c.id}'">
-        <div>
-          <!-- Header -->
-          <div class="flex items-center justify-between mb-4">
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-sm">
-                ${c.icon || '🏢'}
+    if (isSupported) {
+      return `
+        <div class="company-card bg-white rounded-3xl p-6 border border-slate-200/90 shadow-subtle cursor-pointer group flex flex-col justify-between hover:border-emerald-300 hover:shadow-md transition-all" onclick="location.href='/company-details?id=${c.id}'">
+          <div>
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform shadow-sm">
+                  ${c.icon || '🏢'}
+                </div>
+                <div>
+                  <h3 class="font-extrabold text-base text-slate-900 group-hover:text-emerald-700 transition-colors">${c.name}</h3>
+                  <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">${catName}</span>
+                </div>
               </div>
-              <div>
-                <h3 class="font-extrabold text-base text-slate-900 group-hover:text-emerald-700 transition-colors">${c.name}</h3>
-                <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">${catName}</span>
+              <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">${badge}</span>
+            </div>
+
+            <!-- Metaphor Highlight Box -->
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1 mb-4">
+              <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">체감 환산 💡</p>
+              <p class="text-xs sm:text-sm font-extrabold text-slate-800 leading-snug">
+                "${metaphorText}"
+              </p>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div class="p-2.5 rounded-xl bg-slate-50">
+                <p class="text-[10px] text-slate-400">${stat1Label}</p>
+                <p class="font-black text-slate-800 text-sm truncate">${stat1Val}</p>
+              </div>
+              <div class="p-2.5 rounded-xl bg-slate-50">
+                <p class="text-[10px] text-slate-400">${stat2Label}</p>
+                <p class="font-black text-emerald-700 text-sm truncate">${stat2Val}</p>
               </div>
             </div>
-            <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">${badge}</span>
           </div>
 
-          <!-- Metaphor Highlight Box -->
-          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1 mb-4">
-            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">체감 환산 💡</p>
-            <p class="text-xs sm:text-sm font-extrabold text-slate-800 leading-snug">
-              "${metaphorText}"
-            </p>
-          </div>
-
-          <!-- Stats Grid -->
-          <div class="grid grid-cols-2 gap-2 text-xs">
-            <div class="p-2.5 rounded-xl bg-slate-50">
-              <p class="text-[10px] text-slate-400">${stat1Label}</p>
-              <p class="font-black text-slate-800 text-sm truncate">${stat1Val}</p>
-            </div>
-            <div class="p-2.5 rounded-xl bg-slate-50">
-              <p class="text-[10px] text-slate-400">${stat2Label}</p>
-              <p class="font-black text-emerald-700 text-sm truncate">${stat2Val}</p>
-            </div>
+          <!-- Footer Link -->
+          <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+            <span>DART ${docName}</span>
+            <span class="font-bold text-emerald-600 group-hover:translate-x-1.5 transition-transform flex items-center gap-0.5">
+              상세 파헤치기 ➡️
+            </span>
           </div>
         </div>
+      `;
+    } else {
+      return `
+        <div class="company-card bg-slate-100/60 rounded-3xl p-6 border border-slate-200/80 shadow-none cursor-not-allowed flex flex-col justify-between opacity-50 grayscale-[40%] select-none">
+          <div>
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-slate-200/80 text-slate-500 flex items-center justify-center text-2xl shadow-none">
+                  ${c.icon || '🏢'}
+                </div>
+                <div>
+                  <h3 class="font-extrabold text-base text-slate-600">${c.name}</h3>
+                  <span class="text-[11px] font-semibold text-slate-500 bg-slate-200/80 px-2 py-0.5 rounded-md">${catName}</span>
+                </div>
+              </div>
+              <span class="text-xs font-bold text-slate-500 bg-slate-200 px-2.5 py-1 rounded-full border border-slate-300">준비중 ⏳</span>
+            </div>
 
-        <!-- Footer Link -->
-        <div class="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-          <span>DART ${docName}</span>
-          <span class="font-bold text-emerald-600 group-hover:translate-x-1.5 transition-transform flex items-center gap-0.5">
-            상세 파헤치기 ➡️
-          </span>
+            <!-- Metaphor Highlight Box -->
+            <div class="p-4 rounded-2xl bg-slate-200/40 border border-slate-200/60 space-y-1 mb-4">
+              <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">체감 환산 💡</p>
+              <p class="text-xs sm:text-sm font-bold text-slate-500 leading-snug">
+                "${metaphorText}"
+              </p>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div class="p-2.5 rounded-xl bg-slate-200/50">
+                <p class="text-[10px] text-slate-400">${stat1Label}</p>
+                <p class="font-bold text-slate-600 text-sm truncate">${stat1Val}</p>
+              </div>
+              <div class="p-2.5 rounded-xl bg-slate-200/50">
+                <p class="text-[10px] text-slate-400">${stat2Label}</p>
+                <p class="font-bold text-slate-500 text-sm truncate">${stat2Val}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer Link -->
+          <div class="mt-5 pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-slate-400">
+            <span>DART 데이터 연동 준비중</span>
+            <span class="font-semibold text-slate-400 flex items-center gap-1">
+              <span>🔒 준비중</span>
+            </span>
+          </div>
         </div>
-      </div>
-    `;
+      `;
+    }
   }).join('');
 
   if (window.lucide) lucide.createIcons();

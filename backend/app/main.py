@@ -59,6 +59,8 @@ def redirect_quiz():
 
 @app.get("/frontend/src/pages/quiz_terms/mock_invest.html")
 @app.get("/frontend/src/pages/quiz_terms/mock_invest")
+@app.get("/frontend/src/pages/mock_invest/index.html")
+@app.get("/frontend/src/pages/mock_invest")
 def redirect_mock_invest():
     return RedirectResponse(url="/mock-invest")
 
@@ -77,15 +79,18 @@ def redirect_runner():
 def redirect_radar_shooter():
     return RedirectResponse(url="/radar-shooter")
 
-# 프론트엔드 정적 웹 서빙 (모듈 및 에셋)
+# 프론트엔드 및 기업 데이터 정적 서빙
 if (ROOT_DIR / "frontend").exists():
     app.mount("/frontend", StaticFiles(directory=str(ROOT_DIR / "frontend")), name="frontend")
+
+if (ROOT_DIR / "company_data").exists():
+    app.mount("/company_data", StaticFiles(directory=str(ROOT_DIR / "company_data")), name="company_data")
 
 # 프론트엔드 실제 페이지 경로
 COMPANY_LIST_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "company_list" / "index.html"
 COMPANY_DETAIL_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "company_detail" / "index.html"
+MOCK_INVEST_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "mock_invest" / "index.html"
 QUIZ_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "quiz_terms" / "index.html"
-MOCK_INVEST_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "quiz_terms" / "mock_invest.html"
 JUDGE_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "quiz_terms" / "judge.html"
 RUNNER_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "quiz_terms" / "runner.html"
 RADAR_SHOOTER_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "quiz_terms" / "radar_shooter.html"

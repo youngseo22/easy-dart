@@ -9,6 +9,18 @@ from app.services.dart_service import DartService
 router = APIRouter()
 
 DATA_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "company_mapping.json")
+COMPANY_DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "company_data"))
+
+def load_company_data_json(company_id: str):
+    """company_data/{company_id}.json 파일 로드"""
+    fpath = os.path.join(COMPANY_DATA_DIR, f"{company_id}.json")
+    if os.path.exists(fpath):
+        try:
+            with open(fpath, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"[company_data] 로드 에러 ({company_id}): {e}")
+    return None
 
 def load_companies():
     if os.path.exists(DATA_PATH):
@@ -548,6 +560,8 @@ COMPANY_DETAILS_DB = {
     }
 }
 
+SUPPORTED_COMPANY_IDS = ["olive", "hyundai", "musinsa", "naver", "starbucks"]
+
 @router.get("/")
 def get_company_list(category: str = None, query: str = None):
     """20대 일상 기업 목록 조회 (검색 및 카테고리 필터링)"""
@@ -556,6 +570,12 @@ def get_company_list(category: str = None, query: str = None):
         companies = [c for c in companies if c.get("category") == category]
     if query:
         companies = [c for c in companies if query.lower() in c.get("name", "").lower()]
+    
+    # 1순위: 지원 기업(5개사) 우선 배치, 2순위: 한글 이름 오름차순(가나다순)
+    companies = sorted(
+        companies,
+        key=lambda c: (0 if c.get("id") in SUPPORTED_COMPANY_IDS else 1, c.get("name", ""))
+    )
     return {"count": len(companies), "companies": companies}
 
 @router.get("/{company_id}")
@@ -563,42 +583,68 @@ async def get_company_detail(company_id: str, year: str = "2024"):
     """선택한 기업의 공시 상세 분석 데이터 (손익계산서, DART 원본 표, AI 요약, 메타포) 조회 (연도별)"""
     companies = load_companies()
     target = next((c for c in companies if c.get("id") == company_id), None)
+    
+    # company_data/{company_id}.json 확인
+    company_data_doc = load_company_data_json(company_id)
+    
+    if not target and company_data_doc:
+        target = {
+            "id": company_data_doc.get("id"),
+            "name": company_data_doc.get("name"),
+            "corp_code": company_data_doc.get("corp_code"),
+            "category": company_data_doc.get("category"),
+            "category_name": company_data_doc.get("category_name"),
+            "icon": company_data_doc.get("icon"),
+            "status_badge": company_data_doc.get("status_badge"),
+            "item_name": company_data_doc.get("metaphor", {}).get("item_name"),
+            "item_price": company_data_doc.get("metaphor", {}).get("item_price"),
+            "margin_rate": company_data_doc.get("metaphor", {}).get("margin_rate")
+        }
+        
     if not target:
         raise HTTPException(status_code=404, detail="해당 기업을 찾을 수 없습니다.")
     
-    detail_data = COMPANY_DETAILS_DB.get(company_id, COMPANY_DETAILS_DB.get("olive", {}))
+    detail_data = COMPANY_DETAILS_DB.get(company_id, {})
     analysis = await DartService.get_company_analysis(target, year=year)
     
     vp = analysis.get("visual_pipeline", {})
     
-    # 해당 연도에 맞춰 동적 financials 생성 (DART 실데이터 우선 연동)
+    # company_data_doc이 있을 경우 정밀 데이터셋 반영
+    doc_fin = company_data_doc.get("financials_by_year", {}).get(year, {}) if company_data_doc else {}
+    doc_ai = company_data_doc.get("ai_summary") if company_data_doc else detail_data.get("ai_summary")
+    doc_meta = company_data_doc.get("metaphor") if company_data_doc else {}
+
     financials = {
-        "revenue": vp.get("revenue", {}).get("formatted", detail_data.get("financials", {}).get("revenue", "-")),
-        "cost": vp.get("cost", {}).get("formatted", detail_data.get("financials", {}).get("cost", "-")),
-        "operating_profit": vp.get("op_profit", {}).get("formatted", detail_data.get("financials", {}).get("operating_profit", "-")),
-        "net_profit": vp.get("net_profit", {}).get("formatted", detail_data.get("financials", {}).get("net_profit", "-")),
-        "raw_revenue": vp.get("revenue", {}).get("raw", 1),
-        "raw_cost": vp.get("cost", {}).get("raw", 0),
-        "raw_op_profit": vp.get("op_profit", {}).get("raw", 0),
-        "raw_net_profit": vp.get("net_profit", {}).get("raw", 0)
+        "revenue": doc_fin.get("revenue") or vp.get("revenue", {}).get("formatted", detail_data.get("financials", {}).get("revenue", "-")),
+        "cost": doc_fin.get("cost") or vp.get("cost", {}).get("formatted", detail_data.get("financials", {}).get("cost", "-")),
+        "operating_profit": doc_fin.get("operating_profit") or vp.get("op_profit", {}).get("formatted", detail_data.get("financials", {}).get("operating_profit", "-")),
+        "net_profit": doc_fin.get("net_profit") or vp.get("net_profit", {}).get("formatted", detail_data.get("financials", {}).get("net_profit", "-")),
+        "raw_revenue": doc_fin.get("raw_revenue") or vp.get("revenue", {}).get("raw", 1),
+        "raw_cost": doc_fin.get("raw_cost") or vp.get("cost", {}).get("raw", 0),
+        "raw_op_profit": doc_fin.get("raw_op_profit") or vp.get("op_profit", {}).get("raw", 0),
+        "raw_net_profit": doc_fin.get("raw_net_profit") or vp.get("net_profit", {}).get("raw", 0)
     }
 
     doc_label = f"{year} 사업보고서" if target.get("stock_code") else f"{year} 연결감사보고서"
 
+    # DART 원본 표가 company_data_doc에 있으면 우선 반영
+    dart_raw_table = doc_fin.get("dart_table") or analysis.get("dart_raw_table", [])
+
     return {
         **analysis,
+        "dart_raw_table": dart_raw_table,
         "company": {
             **target,
             "badge": detail_data.get("badge", target.get("category_name")),
             "doc": doc_label,
-            "metaphor_head": analysis.get("metaphor", {}).get("headline") or detail_data.get("metaphor_head")
+            "metaphor_head": doc_meta.get("annual_metaphor") or analysis.get("metaphor", {}).get("headline") or detail_data.get("metaphor_head")
         },
         "financials": financials,
-        "ai_summary": detail_data.get("ai_summary", {
+        "ai_summary": doc_ai or {
             "summary": [f"{target.get('name')}의 {year}년 공시 분석이 완료되었습니다."],
             "good_points": [f"{target.get('name')}의 지속적인 본업 경쟁력"],
             "risks": ["시장 불확실성 및 거시경제 모니터링 필요"]
-        })
+        }
     }
 
 
