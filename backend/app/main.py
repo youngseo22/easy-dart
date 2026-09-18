@@ -77,9 +77,12 @@ def redirect_runner():
 def redirect_radar_shooter():
     return RedirectResponse(url="/radar-shooter")
 
-# 프론트엔드 정적 웹 서빙 (모듈 및 에셋)
+# 프론트엔드 및 기업 데이터 정적 서빙
 if (ROOT_DIR / "frontend").exists():
     app.mount("/frontend", StaticFiles(directory=str(ROOT_DIR / "frontend")), name="frontend")
+
+if (ROOT_DIR / "company_data").exists():
+    app.mount("/company_data", StaticFiles(directory=str(ROOT_DIR / "company_data")), name="company_data")
 
 # 프론트엔드 실제 페이지 경로
 COMPANY_LIST_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "company_list" / "index.html"
