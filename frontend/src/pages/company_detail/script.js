@@ -408,7 +408,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   selectDocType('IS');
 
   setupSpendInputListener();
-  setupCompanySwitcherListener();
   setupFinancialModeToggle();
   setupScrollSpy();
   await loadCompanyDetails(currentCompanyId, currentFinancialYear);
@@ -823,24 +822,6 @@ function setupSpendInputListener() {
     inputEl.addEventListener('input', (e) => {
       const spend = parseInt(e.target.value, 10) || 0;
       updateLiveSpendMetaphor(currentCompanyId, spend);
-    });
-  }
-}
-
-function setupCompanySwitcherListener() {
-  const switcher = document.getElementById('detailCompanySwitcher');
-  if (switcher) {
-    switcher.value = currentCompanyId;
-    switcher.addEventListener('change', async (e) => {
-      const targetId = e.target.value;
-      if (targetId) {
-        currentCompanyId = targetId;
-        const newUrl = `${window.location.pathname}?id=${targetId}`;
-        window.history.pushState({}, '', newUrl);
-        await loadCompanyDetails(targetId);
-        await loadCompanyQuiz(targetId);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
     });
   }
 }
