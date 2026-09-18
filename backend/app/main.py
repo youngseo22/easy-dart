@@ -59,6 +59,8 @@ def redirect_quiz():
 
 @app.get("/frontend/src/pages/quiz_terms/mock_invest.html")
 @app.get("/frontend/src/pages/quiz_terms/mock_invest")
+@app.get("/frontend/src/pages/mock_invest/index.html")
+@app.get("/frontend/src/pages/mock_invest")
 def redirect_mock_invest():
     return RedirectResponse(url="/mock-invest")
 
@@ -87,8 +89,8 @@ if (ROOT_DIR / "company_data").exists():
 # 프론트엔드 실제 페이지 경로
 COMPANY_LIST_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "company_list" / "index.html"
 COMPANY_DETAIL_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "company_detail" / "index.html"
+MOCK_INVEST_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "mock_invest" / "index.html"
 QUIZ_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "quiz_terms" / "index.html"
-MOCK_INVEST_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "quiz_terms" / "mock_invest.html"
 JUDGE_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "quiz_terms" / "judge.html"
 RUNNER_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "quiz_terms" / "runner.html"
 RADAR_SHOOTER_PAGE = ROOT_DIR / "frontend" / "src" / "pages" / "quiz_terms" / "radar_shooter.html"

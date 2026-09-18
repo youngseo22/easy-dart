@@ -159,9 +159,9 @@
 ## 7. 화면 구성 및 시스템 아키텍처 (Tech Stack & Routing)
 
 ### 7.1 화면 및 라우팅 연동
-- **백엔드 라우터**: [`backend/app/main.py`](file:///c:/Users/admy7/OneDrive/바탕%20화면/FingerDART/backend/app/main.py)
-  - `/mock-invest`, `/mock-investment` ➔ [`mock_invest.html`](file:///c:/Users/admy7/OneDrive/바탕%20화면/FingerDART/frontend/src/pages/quiz_terms/mock_invest.html) 렌더링
-- **프론트엔드 메인 페이지**: [`frontend/src/pages/quiz_terms/mock_invest.html`](file:///c:/Users/admy7/OneDrive/바탕%20화면/FingerDART/frontend/src/pages/quiz_terms/mock_invest.html)
+- **백엔드 라우터**: `backend/app/main.py`
+  - `/mock-invest`, `/mock-investment` ➔ `frontend/src/pages/mock_invest/index.html` 렌더링
+- **프론트엔드 메인 페이지**: `frontend/src/pages/mock_invest/index.html`
 - **전역 GNB 3대 탭 동기화**:
   1. `[🏢 기업 파헤치기]` (`/company-list`)
   2. `[📈 실전 모의투자]` (`/mock-invest`) - **Active**
