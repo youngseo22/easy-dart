@@ -194,13 +194,13 @@ Easy-DART의 게임 엔진은 **"텍스트를 정독하고 판별하지 않으�
 
 ---
 
-## 👥 5. 팀원별 담당 영역 (3인 분업)
+## 👥 5. 팀원별 담당 영역
 
 | 팀원 | 역할 | 주요 담당 디렉토리 및 작업 내용 | 진행 상태 |
 | :--- | :--- | :--- | :---: |
-| **👤 팀원 A** | **DART 데이터 & AI 백엔드** | `backend/app/services/dart_service.py`, `ai_summary_service.py`, `data/company_mapping.json` | 진행 중 |
-| **👤 팀원 B** | **기업 목록 & 상세 UI / 환산 로직** | `company_preview.html`, `company_detail_preview.html`, `frontend/src/utils/metaphor_calculator.js` | 진행 중 |
-| **👤 팀원 C (은경)** | **🎮 퀴즈 풀스택 & 3대 금융 아케이드 + 인게임 AI 시스템** | `frontend/src/pages/quiz_terms/`, `backend/app/api/quiz.py`, `services/quiz_service.py` (AI 하브루타 오답 처방전, 동적 공시 생성, 투자 성향 진단) | **완성 (배포 완료)** |
+| **👤 영서 (팀원 A)** | **DART 데이터 & AI 백엔드 & 기업 목록 UI** | `frontend/src/pages/company_list/`, `company_data/`, `backend/app/services/dart_service.py`, `ai_summary_service.py`, `api/companies.py` (DART 공시 연동, 기업별 JSON 데이터셋 관리) | **완성** |
+| **👤 소현 (팀원 B)** | **기업 상세 UI / 환산 로직** | `company_detail/`, `frontend/src/utils/metaphor_calculator.js` (소비 메타포, 재무제표 시각화) | **완성** |
+| **👤 은경 (팀원 C)** | **🎮 퀴즈 풀스택 & 3대 금융 아케이드 + 인게임 AI 시스템** | `frontend/src/pages/quiz_terms/`, `backend/app/api/quiz.py`, `services/quiz_service.py` (AI 하브루타 오답 처방전, 동적 공시 생성, 투자 성향 진단) | **완성** |
 
 ---
 
@@ -208,27 +208,27 @@ Easy-DART의 게임 엔진은 **"텍스트를 정독하고 판별하지 않으�
 
 ```text
 easy-dart/
+├── 📁 company_data/               # 🏢 [팀원 A] DART 기업별 공시 & 재무 데이터셋
+│   ├── index.json                 # 전체 기업 메타정보 인덱스
+│   ├── olive.json                 # CJ올리브영 공시 & 3개년 손익 데이터
+│   ├── hyundai.json               # 현대자동차 공시 & 3개년 손익 데이터
+│   ├── musinsa.json               # 무신사 공시 & 3개년 손익 데이터
+│   ├── naver.json                 # 네이버 공시 & 3개년 손익 데이터
+│   └── starbucks.json             # 스타벅스 공시 & 3개년 손익 데이터
+│
 ├── 📄 GAMIFICATION_PLAN.md        # [팀원 C] 게이미피케이션 마스터 기획서 (v2.1)
 ├── 📄 .env                        # [환경변수] DART, GEMINI API 키 설정 파일
-├── 📄 run.sh                      # [Bash] 백엔드 서버 원클릭 실행 스크립트
-├── 📄 README.md                   # 📈 프로젝트 통합 기획서 & 진행상황 보고서
-│
-├── 📄 dart_shooter_preview.html   # [단독 프리뷰] 🚀 공시 레이더 미사일 슈팅 (Machine 01)
-├── 📄 judge_preview.html          # [단독 프리뷰] ⚖️ DART 실전 투자 심사관 (Machine 02)
-├── 📄 runner_preview.html         # [단독 프리뷰] 🏎️ DART 급행 레인 러너 (Machine 03)
-├── 📄 game_arcade_preview.html    # [단독 프리뷰] 🕹️ 핑거다트 레트로 오락실 메인 허브
-├── 📄 company_preview.html        # [단독 프리뷰] 기업 파헤치기 메인
-├── 📄 company_detail_preview.html # [단독 프리뷰] 기업 공시 상세 해설
-├── 📄 quiz_preview.html           # [단독 프리뷰] 1분 기초 용어 퀴즈
+├── 📄 run.sh                      # [Bash] 통합 풀스택 서버 원클릭 실행 스크립트
+├── 📄 README.md                   # 📈 프로젝트 통합 기획서 & 아키텍처 문서
 │
 ├── 📁 backend/                    # FastAPI 백엔드
 │   ├── requirements.txt
 │   └── app/
-│       ├── main.py                # FastAPI 엔트리포인트 (CORS, 라우터 등록)
+│       ├── main.py                # FastAPI 엔트리포인트 (CORS, 정적 마운트, 라우터)
 │       ├── config.py              # 환경변수 로딩 모듈
 │       ├── api/
-│       │   ├── companies.py       # [팀원 A & B] 기업 목록/상세 API
-│       │   └── quiz.py            # [팀원 C] 퀴즈 & 공시 데이터셋 조회 API
+│       │   ├── companies.py       # [팀원 A & B] 기업 목록/상세 API (company_data 로드)
+│       │   └── quiz.py            # [팀원 C] 퀴즈 & 게임 API
 │       ├── services/
 │       │   ├── dart_service.py    # [팀원 A] DART OpenAPI 실시간 연동
 │       │   ├── ai_summary_service.py # [팀원 A] LLM 공시 요약 및 분석
@@ -242,10 +242,10 @@ easy-dart/
         ├── styles/
         │   └── common.css         # 글로벌 공통 디자인 시스템
         ├── api/
-        │   └── client.js          # 백엔드 API 클라이언트
+        │   └── client.js          # 백엔드 API & company_data 클라이언트
         └── pages/
-            ├── company_list/      # [팀원 B] 기업 목록 & 소비 환산기
-            ├── company_detail/    # [팀원 B] 기업 공시 상세 해설 (손익계산서)
+            ├── company_list/      # [팀원 A] 기업 목록 & 소비 환산기
+            ├── company_detail/    # [팀원 B] 기업 공시 상세 해설 (손익계산서 & 연도별 비교)
             └── quiz_terms/        # [팀원 C] 🕹️ 실전 아케이드 & 📚 기초 용어 퀴즈 통합 허브
                 ├── 📄 index.html                # 듀얼 모드 메인 허브 + 실시간 명예의 전당
                 ├── 📄 radar_shooter.html         # Machine 01: 공시 레이더 미사일 슈팅
@@ -263,24 +263,21 @@ easy-dart/
 
 ## 🚀 7. 빠른 시작 가이드 (Quick Start)
 
-### 7.1 프론트엔드 바로 즐기기 (추천 ⭐)
-프론트엔드 게임 및 퀴즈는 **순수 HTML / CSS / JavaScript**로 설계되어 별도의 서버나 가상환경 없이 즉시 브라우저에서 실행 가능합니다:
-- [`frontend/src/pages/quiz_terms/index.html`](frontend/src/pages/quiz_terms/index.html) 파일을 브라우저(Chrome, Edge 등)로 직접 열거나 VS Code의 **Live Server**로 실행하세요.
-- 루트 경로의 단독 프리뷰 파일(`game_arcade_preview.html`, `dart_shooter_preview.html`, `judge_preview.html` 등)도 독립 실행을 100% 지원합니다.
-
-### 7.2 백엔드 환경변수 설정 (`.env`)
-루트 경로의 [`.env`](.env) 파일에 API 키를 입력합니다 (Git 자동 무시):
+### 7.1 백엔드 환경변수 설정 (`.env`)
+루트 경로의 [`.env`](.env) 파일에 API 키를 입력합니다:
 ```env
 DART_API_KEY=your_dart_api_key_here
 GEMINI_API_KEY=your_gemini_api_key_here
 HOST=0.0.0.0
-PORT=8000
+PORT=8080
 ```
 
-### 7.3 백엔드 FastAPI 서버 실행 (`run.sh`)
-Git Bash 터미널에서 아래 명령어를 실행하면 가상환경 구성, 패키지 설치, 서버 구동이 자동으로 진행됩니다:
+### 7.2 원클릭 서버 실행 (`run.sh`)
+Git Bash 터미널에서 아래 명령어를 실행하면 가상환경 구성, 패키지 설치, 풀스택 서버 구동이 원클릭으로 진행됩니다:
 ```bash
 bash run.sh
 ```
-- 서버 주소: `http://localhost:8000`
-- API 문서(Swagger): `http://localhost:8000/docs`
+
+- 🏢 **기업 목록**: `http://localhost:8080/company-list`
+- 📊 **기업 공시 상세**: `http://localhost:8080/company-details?company=olive`
+- 🕹️ **퀴즈 & 아케이드**: `http://localhost:8080/quiz`
