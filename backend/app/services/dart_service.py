@@ -431,6 +431,36 @@ class DartService:
                 ]
 
         data_map = {
+            "musinsa": [
+                {"account_nm": "수익(매출액)", "thstrm_amount": "993,100,000,000", "frmtrm_amount": "708,300,000,000"},
+                {"account_nm": "매출원가", "thstrm_amount": "372,000,000,000", "frmtrm_amount": "270,000,000,000"},
+                {"account_nm": "매출총이익", "thstrm_amount": "621,100,000,000", "frmtrm_amount": "438,300,000,000"},
+                {"account_nm": "판매비와관리비", "thstrm_amount": "535,300,000,000", "frmtrm_amount": "384,800,000,000"},
+                {"account_nm": "영업이익", "thstrm_amount": "85,800,000,000", "frmtrm_amount": "53,500,000,000"},
+                {"account_nm": "당기순이익", "thstrm_amount": "67,000,000,000", "frmtrm_amount": "36,000,000,000"},
+                {"account_nm": "자산총계", "thstrm_amount": "1,180,000,000,000", "frmtrm_amount": "950,000,000,000"},
+                {"account_nm": "부채총계", "thstrm_amount": "420,000,000,000", "frmtrm_amount": "340,000,000,000"},
+                {"account_nm": "자본총계", "thstrm_amount": "760,000,000,000", "frmtrm_amount": "610,000,000,000"}
+            ],
+            "naver": [
+                {"account_nm": "수익(매출액)", "thstrm_amount": "9,670,600,000,000", "frmtrm_amount": "8,220,100,000,000"},
+                {"account_nm": "영업이익", "thstrm_amount": "1,488,800,000,000", "frmtrm_amount": "1,304,700,000,000"},
+                {"account_nm": "당기순이익", "thstrm_amount": "988,000,000,000", "frmtrm_amount": "673,200,000,000"},
+                {"account_nm": "자산총계", "thstrm_amount": "33,890,000,000,000", "frmtrm_amount": "31,450,000,000,000"},
+                {"account_nm": "부채총계", "thstrm_amount": "10,200,000,000,000", "frmtrm_amount": "9,600,000,000,000"},
+                {"account_nm": "자본총계", "thstrm_amount": "23,690,000,000,000", "frmtrm_amount": "21,850,000,000,000"}
+            ],
+            "starbucks": [
+                {"account_nm": "수익(매출액)", "thstrm_amount": "2,929,500,000,000", "frmtrm_amount": "2,593,900,000,000"},
+                {"account_nm": "매출원가", "thstrm_amount": "1,450,000,000,000", "frmtrm_amount": "1,310,000,000,000"},
+                {"account_nm": "매출총이익", "thstrm_amount": "1,479,500,000,000", "frmtrm_amount": "1,283,900,000,000"},
+                {"account_nm": "판매비와관리비", "thstrm_amount": "1,339,700,000,000", "frmtrm_amount": "1,161,500,000,000"},
+                {"account_nm": "영업이익", "thstrm_amount": "139,800,000,000", "frmtrm_amount": "122,400,000,000"},
+                {"account_nm": "당기순이익", "thstrm_amount": "98,000,000,000", "frmtrm_amount": "99,300,000,000"},
+                {"account_nm": "자산총계", "thstrm_amount": "1,680,000,000,000", "frmtrm_amount": "1,550,000,000,000"},
+                {"account_nm": "부채총계", "thstrm_amount": "1,120,000,000,000", "frmtrm_amount": "1,040,000,000,000"},
+                {"account_nm": "자본총계", "thstrm_amount": "560,000,000,000", "frmtrm_amount": "510,000,000,000"}
+            ],
             "daiso": [
                 {"account_nm": "수익(매출액)", "thstrm_amount": "3,460,400,000,000", "frmtrm_amount": "2,945,800,000,000"},
                 {"account_nm": "매출원가", "thstrm_amount": "2,180,000,000,000", "frmtrm_amount": "1,890,000,000,000"},
@@ -440,16 +470,6 @@ class DartService:
                 {"account_nm": "자산총계", "thstrm_amount": "1,750,000,000,000", "frmtrm_amount": "1,510,000,000,000"},
                 {"account_nm": "부채총계", "thstrm_amount": "680,000,000,000", "frmtrm_amount": "620,000,000,000"},
                 {"account_nm": "자본총계", "thstrm_amount": "1,070,000,000,000", "frmtrm_amount": "890,000,000,000"}
-            ],
-            "starbucks": [
-                {"account_nm": "수익(매출액)", "thstrm_amount": "2,929,500,000,000", "frmtrm_amount": "2,593,900,000,000"},
-                {"account_nm": "매출원가", "thstrm_amount": "1,450,000,000,000", "frmtrm_amount": "1,310,000,000,000"},
-                {"account_nm": "판매비와관리비", "thstrm_amount": "1,339,700,000,000", "frmtrm_amount": "1,161,500,000,000"},
-                {"account_nm": "영업이익", "thstrm_amount": "139,800,000,000", "frmtrm_amount": "122,400,000,000"},
-                {"account_nm": "당기순이익", "thstrm_amount": "98,000,000,000", "frmtrm_amount": "99,300,000,000"},
-                {"account_nm": "자산총계", "thstrm_amount": "1,680,000,000,000", "frmtrm_amount": "1,550,000,000,000"},
-                {"account_nm": "부채총계", "thstrm_amount": "1,120,000,000,000", "frmtrm_amount": "1,040,000,000,000"},
-                {"account_nm": "자본총계", "thstrm_amount": "560,000,000,000", "frmtrm_amount": "510,000,000,000"}
             ],
             "baemin": [
                 {"account_nm": "수익(매출액)", "thstrm_amount": "3,415,500,000,000", "frmtrm_amount": "2,947,100,000,000"},

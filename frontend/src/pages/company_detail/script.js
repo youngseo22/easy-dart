@@ -391,6 +391,102 @@ const FALLBACK_DART_TABLES = {
       { account_nm: '부채총계', easy_name: '회사가 갚아야 할 빚', description: '글로벌 조달 채권, 할부금융 부채 등 갚아야 할 빚이에요.', thstrm_amount: '184,184,893,000,000', frmtrm_amount: '170,050,477,000,000', growth_rate: '+8.3%' },
       { account_nm: '자본총계', easy_name: '진짜 순수한 내 돈 (순자산)', description: '총 자산에서 부채를 뺀 현대차의 순수 자본이에요.', thstrm_amount: '98,278,462,000,000', frmtrm_amount: '85,691,985,000,000', growth_rate: '+14.7%' }
     ]
+  },
+  musinsa: {
+    '2025': [
+      { account_nm: '수익(매출액)', easy_name: '손님이 낸 돈 (매출액)', description: '무신사 및 29CM 플랫폼에서 발생한 총 매출액이에요.', thstrm_amount: '1,450,000,000,000', frmtrm_amount: '1,250,000,000,000', growth_rate: '+16.0%' },
+      { account_nm: '매출원가', easy_name: '물건 떼온 값 (원가 밑천)', description: '무신사 스탠다드 의류 제작 원가 및 직매입 원가예요.', thstrm_amount: '530,000,000,000', frmtrm_amount: '450,000,000,000', growth_rate: '+17.8%' },
+      { account_nm: '매출총이익', easy_name: '기본 마진 (원가 뺀 돈)', description: '매출액에서 직매입 상품 원가를 뺀 1차 마진이에요.', thstrm_amount: '920,000,000,000', frmtrm_amount: '800,000,000,000', growth_rate: '+15.0%' },
+      { account_nm: '판매비와관리비', easy_name: '매장 굴리는 데 든 비용 (판관비)', description: '오프라인 플래그십 임대료, 개발자 인건비, 마케팅비예요.', thstrm_amount: '790,000,000,000', frmtrm_amount: '695,000,000,000', growth_rate: '+13.7%' },
+      { account_nm: '영업이익', easy_name: '본업 장사로 남긴 돈 (영업이익)', description: '패션 플랫폼 본업으로 남긴 알짜 영업이익이에요.', thstrm_amount: '130,000,000,000', frmtrm_amount: '105,000,000,000', growth_rate: '+23.8%' },
+      { account_nm: '당기순이익', easy_name: '진짜 내 금고에 남은 돈 (순이익)', description: '세금까지 모두 납부하고 무신사 금고에 남은 순이익이에요.', thstrm_amount: '102,000,000,000', frmtrm_amount: '82,000,000,000', growth_rate: '+24.4%' },
+      { account_nm: '자산총계', easy_name: '회사의 모든 재산 총합', description: '현금, 오프라인 매장 자산 등 무신사의 총 자산이에요.', thstrm_amount: '1,650,000,000,000', frmtrm_amount: '1,400,000,000,000', growth_rate: '+17.9%' },
+      { account_nm: '부채총계', easy_name: '회사가 갚아야 할 빚', description: '입점 브랜드 정산 예정 대금, 임차보증금 부채 등이에요.', thstrm_amount: '550,000,000,000', frmtrm_amount: '480,000,000,000', growth_rate: '+14.6%' },
+      { account_nm: '자본총계', easy_name: '진짜 순수한 내 돈 (순자산)', description: '총 자산에서 부채를 뺀 무신사의 순수 자기자본이에요.', thstrm_amount: '1,100,000,000,000', frmtrm_amount: '920,000,000,000', growth_rate: '+19.6%' }
+    ],
+    '2024': [
+      { account_nm: '수익(매출액)', easy_name: '손님이 낸 돈 (매출액)', description: '무신사 및 29CM 플랫폼에서 발생한 총 매출액이에요.', thstrm_amount: '1,250,000,000,000', frmtrm_amount: '993,100,000,000', growth_rate: '+25.9%' },
+      { account_nm: '매출원가', easy_name: '물건 떼온 값 (원가 밑천)', description: '무신사 스탠다드 의류 제작 원가 및 직매입 원가예요.', thstrm_amount: '450,000,000,000', frmtrm_amount: '372,000,000,000', growth_rate: '+21.0%' },
+      { account_nm: '매출총이익', easy_name: '기본 마진 (원가 뺀 돈)', description: '매출액에서 직매입 상품 원가를 뺀 1차 마진이에요.', thstrm_amount: '800,000,000,000', frmtrm_amount: '621,100,000,000', growth_rate: '+28.8%' },
+      { account_nm: '판매비와관리비', easy_name: '매장 굴리는 데 든 비용 (판관비)', description: '오프라인 플래그십 임대료, 개발자 인건비, 마케팅비예요.', thstrm_amount: '695,000,000,000', frmtrm_amount: '535,300,000,000', growth_rate: '+29.8%' },
+      { account_nm: '영업이익', easy_name: '본업 장사로 남긴 돈 (영업이익)', description: '패션 플랫폼 본업으로 남긴 알짜 영업이익이에요.', thstrm_amount: '105,000,000,000', frmtrm_amount: '85,800,000,000', growth_rate: '+22.4%' },
+      { account_nm: '당기순이익', easy_name: '진짜 내 금고에 남은 돈 (순이익)', description: '세금까지 모두 납부하고 무신사 금고에 남은 순이익이에요.', thstrm_amount: '82,000,000,000', frmtrm_amount: '67,000,000,000', growth_rate: '+22.4%' },
+      { account_nm: '자산총계', easy_name: '회사의 모든 재산 총합', description: '현금, 오프라인 매장 자산 등 무신사의 총 자산이에요.', thstrm_amount: '1,400,000,000,000', frmtrm_amount: '1,180,000,000,000', growth_rate: '+18.6%' },
+      { account_nm: '부채총계', easy_name: '회사가 갚아야 할 빚', description: '입점 브랜드 정산 예정 대금, 임차보증금 부채 등이에요.', thstrm_amount: '480,000,000,000', frmtrm_amount: '420,000,000,000', growth_rate: '+14.3%' },
+      { account_nm: '자본총계', easy_name: '진짜 순수한 내 돈 (순자산)', description: '총 자산에서 부채를 뺀 무신사의 순수 자기자본이에요.', thstrm_amount: '920,000,000,000', frmtrm_amount: '760,000,000,000', growth_rate: '+21.1%' }
+    ],
+    '2023': [
+      { account_nm: '수익(매출액)', easy_name: '손님이 낸 돈 (매출액)', description: '무신사 및 29CM 플랫폼에서 발생한 총 매출액이에요.', thstrm_amount: '993,100,000,000', frmtrm_amount: '708,300,000,000', growth_rate: '+40.2%' },
+      { account_nm: '매출원가', easy_name: '물건 떼온 값 (원가 밑천)', description: '무신사 스탠다드 의류 제작 원가 및 직매입 원가예요.', thstrm_amount: '372,000,000,000', frmtrm_amount: '270,000,000,000', growth_rate: '+37.8%' },
+      { account_nm: '매출총이익', easy_name: '기본 마진 (원가 뺀 돈)', description: '매출액에서 직매입 상품 원가를 뺀 1차 마진이에요.', thstrm_amount: '621,100,000,000', frmtrm_amount: '438,300,000,000', growth_rate: '+41.7%' },
+      { account_nm: '판매비와관리비', easy_name: '매장 굴리는 데 든 비용 (판관비)', description: '오프라인 플래그십 임대료, 개발자 인건비, 마케팅비예요.', thstrm_amount: '535,300,000,000', frmtrm_amount: '384,800,000,000', growth_rate: '+39.1%' },
+      { account_nm: '영업이익', easy_name: '본업 장사로 남긴 돈 (영업이익)', description: '패션 플랫폼 본업으로 남긴 알짜 영업이익이에요.', thstrm_amount: '85,800,000,000', frmtrm_amount: '53,500,000,000', growth_rate: '+60.4%' },
+      { account_nm: '당기순이익', easy_name: '진짜 내 금고에 남은 돈 (순이익)', description: '세금까지 모두 납부하고 무신사 금고에 남은 순이익이에요.', thstrm_amount: '67,000,000,000', frmtrm_amount: '36,000,000,000', growth_rate: '+86.1%' },
+      { account_nm: '자산총계', easy_name: '회사의 모든 재산 총합', description: '현금, 오프라인 매장 자산 등 무신사의 총 자산이에요.', thstrm_amount: '1,180,000,000,000', frmtrm_amount: '950,000,000,000', growth_rate: '+24.2%' },
+      { account_nm: '부채총계', easy_name: '회사가 갚아야 할 빚', description: '입점 브랜드 정산 예정 대금, 임차보증금 부채 등이에요.', thstrm_amount: '420,000,000,000', frmtrm_amount: '340,000,000,000', growth_rate: '+23.5%' },
+      { account_nm: '자본총계', easy_name: '진짜 순수한 내 돈 (순자산)', description: '총 자산에서 부채를 뺀 무신사의 순수 자기자본이에요.', thstrm_amount: '760,000,000,000', frmtrm_amount: '610,000,000,000', growth_rate: '+24.6%' }
+    ]
+  },
+  naver: {
+    '2025': [
+      { account_nm: '수익(매출액)', easy_name: '손님이 낸 돈 (매출액)', description: '검색광고, 커머스, 웹툰, 클라우드 전 부문 총매출이에요.', thstrm_amount: '11,850,000,000,000', frmtrm_amount: '10,730,000,000,000', growth_rate: '+10.4%' },
+      { account_nm: '영업이익', easy_name: '본업 장사로 남긴 돈 (영업이익)', description: '포털 및 플랫폼 본업으로 남긴 순수 영업이익이에요.', thstrm_amount: '2,150,000,000,000', frmtrm_amount: '1,920,000,000,000', growth_rate: '+12.0%' },
+      { account_nm: '당기순이익', easy_name: '진짜 내 금고에 남은 돈 (순이익)', description: '세금과 금융손익을 거쳐 최종 금고에 남은 순이익이에요.', thstrm_amount: '1,450,000,000,000', frmtrm_amount: '1,280,000,000,000', growth_rate: '+13.3%' },
+      { account_nm: '자산총계', easy_name: '회사의 모든 재산 총합', description: '데이터센터, 현금, 계열사 지분 등 네이버 총 자산이에요.', thstrm_amount: '41,200,000,000,000', frmtrm_amount: '37,200,000,000,000', growth_rate: '+10.8%' },
+      { account_nm: '부채총계', easy_name: '회사가 갚아야 할 빚', description: '네이버페이 충전금 부채, 회사채 등 남의 돈이에요.', thstrm_amount: '12,800,000,000,000', frmtrm_amount: '11,500,000,000,000', growth_rate: '+11.3%' },
+      { account_nm: '자본총계', easy_name: '진짜 순수한 내 돈 (순자산)', description: '총 자산에서 부채를 뺀 순수 자기자본 밑천이에요.', thstrm_amount: '28,400,000,000,000', frmtrm_amount: '25,700,000,000,000', growth_rate: '+10.5%' }
+    ],
+    '2024': [
+      { account_nm: '수익(매출액)', easy_name: '손님이 낸 돈 (매출액)', description: '검색광고, 커머스, 웹툰, 클라우드 전 부문 총매출이에요.', thstrm_amount: '10,730,000,000,000', frmtrm_amount: '9,670,600,000,000', growth_rate: '+11.0%' },
+      { account_nm: '영업이익', easy_name: '본업 장사로 남긴 돈 (영업이익)', description: '포털 및 플랫폼 본업으로 남긴 순수 영업이익이에요.', thstrm_amount: '1,920,000,000,000', frmtrm_amount: '1,488,800,000,000', growth_rate: '+29.0%' },
+      { account_nm: '당기순이익', easy_name: '진짜 내 금고에 남은 돈 (순이익)', description: '세금과 금융손익을 거쳐 최종 금고에 남은 순이익이에요.', thstrm_amount: '1,280,000,000,000', frmtrm_amount: '988,000,000,000', growth_rate: '+29.6%' },
+      { account_nm: '자산총계', easy_name: '회사의 모든 재산 총합', description: '데이터센터, 현금, 계열사 지분 등 네이버 총 자산이에요.', thstrm_amount: '37,200,000,000,000', frmtrm_amount: '33,890,000,000,000', growth_rate: '+9.8%' },
+      { account_nm: '부채총계', easy_name: '회사가 갚아야 할 빚', description: '네이버페이 충전금 부채, 회사채 등 남의 돈이에요.', thstrm_amount: '11,500,000,000,000', frmtrm_amount: '10,200,000,000,000', growth_rate: '+12.7%' },
+      { account_nm: '자본총계', easy_name: '진짜 순수한 내 돈 (순자산)', description: '총 자산에서 부채를 뺀 순수 자기자본 밑천이에요.', thstrm_amount: '25,700,000,000,000', frmtrm_amount: '23,690,000,000,000', growth_rate: '+8.5%' }
+    ],
+    '2023': [
+      { account_nm: '수익(매출액)', easy_name: '손님이 낸 돈 (매출액)', description: '검색광고, 커머스, 웹툰, 클라우드 전 부문 총매출이에요.', thstrm_amount: '9,670,600,000,000', frmtrm_amount: '8,220,100,000,000', growth_rate: '+17.6%' },
+      { account_nm: '영업이익', easy_name: '본업 장사로 남긴 돈 (영업이익)', description: '포털 및 플랫폼 본업으로 남긴 순수 영업이익이에요.', thstrm_amount: '1,488,800,000,000', frmtrm_amount: '1,304,700,000,000', growth_rate: '+14.1%' },
+      { account_nm: '당기순이익', easy_name: '진짜 내 금고에 남은 돈 (순이익)', description: '세금과 금융손익을 거쳐 최종 금고에 남은 순이익이에요.', thstrm_amount: '988,000,000,000', frmtrm_amount: '673,200,000,000', growth_rate: '+46.8%' },
+      { account_nm: '자산총계', easy_name: '회사의 모든 재산 총합', description: '데이터센터, 현금, 계열사 지분 등 네이버 총 자산이에요.', thstrm_amount: '33,890,000,000,000', frmtrm_amount: '31,450,000,000,000', growth_rate: '+7.8%' },
+      { account_nm: '부채총계', easy_name: '회사가 갚아야 할 빚', description: '네이버페이 충전금 부채, 회사채 등 남의 돈이에요.', thstrm_amount: '10,200,000,000,000', frmtrm_amount: '9,600,000,000,000', growth_rate: '+6.3%' },
+      { account_nm: '자본총계', easy_name: '진짜 순수한 내 돈 (순자산)', description: '총 자산에서 부채를 뺀 순수 자기자본 밑천이에요.', thstrm_amount: '23,690,000,000,000', frmtrm_amount: '21,850,000,000,000', growth_rate: '+8.4%' }
+    ]
+  },
+  starbucks: {
+    '2025': [
+      { account_nm: '수익(매출액)', easy_name: '손님이 낸 돈 (매출액)', description: '전국 1,900여 개 직영점에서 고객들이 결제한 총금액이에요.', thstrm_amount: '3,350,000,000,000', frmtrm_amount: '3,120,000,000,000', growth_rate: '+7.4%' },
+      { account_nm: '매출원가', easy_name: '물건 떼온 값 (원가 밑천)', description: '원두 수입비, 우유 및 텀블러 MD 상품 제조 원가예요.', thstrm_amount: '1,620,000,000,000', frmtrm_amount: '1,530,000,000,000', growth_rate: '+5.9%' },
+      { account_nm: '매출총이익', easy_name: '기본 마진 (원가 뺀 돈)', description: '음료 판매액에서 원두/우유 밑천만 뺀 1차 마진이에요.', thstrm_amount: '1,730,000,000,000', frmtrm_amount: '1,590,000,000,000', growth_rate: '+8.8%' },
+      { account_nm: '판매비와관리비', easy_name: '매장 굴리는 데 든 비용 (판관비)', description: '전국 1,900개 매장 임대료, 바리스타 직원 월급, 전기세예요.', thstrm_amount: '1,530,000,000,000', frmtrm_amount: '1,418,000,000,000', growth_rate: '+7.9%' },
+      { account_nm: '영업이익', easy_name: '본업 장사로 남긴 돈 (영업이익)', description: '커피 팔아서 순수 본업으로 남긴 알짜배기 이익이에요.', thstrm_amount: '200,000,000,000', frmtrm_amount: '172,000,000,000', growth_rate: '+16.3%' },
+      { account_nm: '당기순이익', easy_name: '진짜 내 금고에 남은 돈 (순이익)', description: '세금까지 싹 내고 최종적으로 스타벅스 금고에 남은 돈이에요.', thstrm_amount: '140,000,000,000', frmtrm_amount: '118,000,000,000', growth_rate: '+18.6%' },
+      { account_nm: '자산총계', easy_name: '회사의 모든 재산 총합', description: '매장 인테리어 설비, 현금, 선불충전금 등 총 재산이에요.', thstrm_amount: '1,920,000,000,000', frmtrm_amount: '1,790,000,000,000', growth_rate: '+7.3%' },
+      { account_nm: '부채총계', easy_name: '회사가 갚아야 할 빚', description: '스타벅스 카드 선불충전금(약 3,500억), 매장 리스부채예요.', thstrm_amount: '1,240,000,000,000', frmtrm_amount: '1,180,000,000,000', growth_rate: '+5.1%' },
+      { account_nm: '자본총계', easy_name: '진짜 순수한 내 돈 (순자산)', description: '총 자산에서 부채를 뺀 스타벅스(SCK)의 순수 자본이에요.', thstrm_amount: '680,000,000,000', frmtrm_amount: '610,000,000,000', growth_rate: '+11.5%' }
+    ],
+    '2024': [
+      { account_nm: '수익(매출액)', easy_name: '손님이 낸 돈 (매출액)', description: '전국 1,890여 개 직영점에서 고객들이 결제한 총금액이에요.', thstrm_amount: '3,120,000,000,000', frmtrm_amount: '2,929,500,000,000', growth_rate: '+6.5%' },
+      { account_nm: '매출원가', easy_name: '물건 떼온 값 (원가 밑천)', description: '원두 수입비, 우유 및 텀블러 MD 상품 제조 원가예요.', thstrm_amount: '1,530,000,000,000', frmtrm_amount: '1,450,000,000,000', growth_rate: '+5.5%' },
+      { account_nm: '매출총이익', easy_name: '기본 마진 (원가 뺀 돈)', description: '음료 판매액에서 원두/우유 밑천만 뺀 1차 마진이에요.', thstrm_amount: '1,590,000,000,000', frmtrm_amount: '1,479,500,000,000', growth_rate: '+7.5%' },
+      { account_nm: '판매비와관리비', easy_name: '매장 굴리는 데 든 비용 (판관비)', description: '전국 1,890개 매장 임대료, 바리스타 직원 월급, 전기세예요.', thstrm_amount: '1,418,000,000,000', frmtrm_amount: '1,339,700,000,000', growth_rate: '+5.8%' },
+      { account_nm: '영업이익', easy_name: '본업 장사로 남긴 돈 (영업이익)', description: '커피 팔아서 순수 본업으로 남긴 알짜배기 이익이에요.', thstrm_amount: '172,000,000,000', frmtrm_amount: '139,800,000,000', growth_rate: '+23.0%' },
+      { account_nm: '당기순이익', easy_name: '진짜 내 금고에 남은 돈 (순이익)', description: '세금까지 싹 내고 최종적으로 스타벅스 금고에 남은 돈이에요.', thstrm_amount: '118,000,000,000', frmtrm_amount: '98,000,000,000', growth_rate: '+20.4%' },
+      { account_nm: '자산총계', easy_name: '회사의 모든 재산 총합', description: '매장 인테리어 설비, 현금, 선불충전금 등 총 재산이에요.', thstrm_amount: '1,790,000,000,000', frmtrm_amount: '1,680,000,000,000', growth_rate: '+6.5%' },
+      { account_nm: '부채총계', easy_name: '회사가 갚아야 할 빚', description: '스타벅스 카드 선불충전금(약 3,000억), 매장 리스부채예요.', thstrm_amount: '1,180,000,000,000', frmtrm_amount: '1,120,000,000,000', growth_rate: '+5.4%' },
+      { account_nm: '자본총계', easy_name: '진짜 순수한 내 돈 (순자산)', description: '총 자산에서 부채를 뺀 스타벅스(SCK)의 순수 자본이에요.', thstrm_amount: '610,000,000,000', frmtrm_amount: '560,000,000,000', growth_rate: '+8.9%' }
+    ],
+    '2023': [
+      { account_nm: '수익(매출액)', easy_name: '손님이 낸 돈 (매출액)', description: '전국 1,890여 개 직영점에서 고객들이 결제한 총금액이에요.', thstrm_amount: '2,929,500,000,000', frmtrm_amount: '2,593,900,000,000', growth_rate: '+12.9%' },
+      { account_nm: '매출원가', easy_name: '물건 떼온 값 (원가 밑천)', description: '원두 수입비, 우유 및 텀블러 MD 상품 제조 원가예요.', thstrm_amount: '1,450,000,000,000', frmtrm_amount: '1,310,000,000,000', growth_rate: '+10.7%' },
+      { account_nm: '매출총이익', easy_name: '기본 마진 (원가 뺀 돈)', description: '음료 판매액에서 원두/우유 밑천만 뺀 1차 마진이에요.', thstrm_amount: '1,479,500,000,000', frmtrm_amount: '1,283,900,000,000', growth_rate: '+15.2%' },
+      { account_nm: '판매비와관리비', easy_name: '매장 굴리는 데 든 비용 (판관비)', description: '전국 1,890개 매장 임대료, 바리스타 직원 월급, 전기세예요.', thstrm_amount: '1,339,700,000,000', frmtrm_amount: '1,161,500,000,000', growth_rate: '+15.3%' },
+      { account_nm: '영업이익', easy_name: '본업 장사로 남긴 돈 (영업이익)', description: '커피 팔아서 순수 본업으로 남긴 알짜배기 이익이에요.', thstrm_amount: '139,800,000,000', frmtrm_amount: '122,400,000,000', growth_rate: '+14.2%' },
+      { account_nm: '당기순이익', easy_name: '진짜 내 금고에 남은 돈 (순이익)', description: '세금까지 싹 내고 최종적으로 스타벅스 금고에 남은 돈이에요.', thstrm_amount: '98,000,000,000', frmtrm_amount: '99,300,000,000', growth_rate: '-1.3%' },
+      { account_nm: '자산총계', easy_name: '회사의 모든 재산 총합', description: '매장 인테리어 설비, 현금, 선불충전금 등 총 재산이에요.', thstrm_amount: '1,680,000,000,000', frmtrm_amount: '1,550,000,000,000', growth_rate: '+8.4%' },
+      { account_nm: '부채총계', easy_name: '회사가 갚아야 할 빚', description: '스타벅스 카드 선불충전금(약 3,000억), 매장 리스부채예요.', thstrm_amount: '1,120,000,000,000', frmtrm_amount: '1,040,000,000,000', growth_rate: '+7.7%' },
+      { account_nm: '자본총계', easy_name: '진짜 순수한 내 돈 (순자산)', description: '총 자산에서 부채를 뺀 스타벅스(SCK)의 순수 자본이에요.', thstrm_amount: '560,000,000,000', frmtrm_amount: '510,000,000,000', growth_rate: '+9.8%' }
+    ]
   }
 };
 
@@ -472,6 +568,27 @@ function renderDartTable(rows, companyInfo = null) {
     // 올리브영: 2023년=25기, 2024년=26기, 2025년=27기
     const gisu = 25 + (yr - 2023);
     if (corpHeaderEl) corpHeaderEl.innerText = '씨제이올리브영 주식회사 (01423068)';
+    if (docTitleEl) docTitleEl.innerText = `제 ${gisu} 기 연결재무제표 (손익계산서)`;
+    if (thstrmColHeader) thstrmColHeader.innerText = `제 ${gisu} 기 (${yr}년)`;
+    if (frmtrmColHeader) frmtrmColHeader.innerText = `제 ${gisu - 1} 기 (${prevYr}년)`;
+  } else if (compId === 'musinsa') {
+    // 무신사: 2023년=12기, 2024년=13기, 2025년=14기
+    const gisu = 12 + (yr - 2023);
+    if (corpHeaderEl) corpHeaderEl.innerText = '주식회사 무신사 (01185521)';
+    if (docTitleEl) docTitleEl.innerText = `제 ${gisu} 기 연결재무제표 (손익계산서)`;
+    if (thstrmColHeader) thstrmColHeader.innerText = `제 ${gisu} 기 (${yr}년)`;
+    if (frmtrmColHeader) frmtrmColHeader.innerText = `제 ${gisu - 1} 기 (${prevYr}년)`;
+  } else if (compId === 'naver') {
+    // 네이버: 2023년=25기, 2024년=26기, 2025년=27기
+    const gisu = 25 + (yr - 2023);
+    if (corpHeaderEl) corpHeaderEl.innerText = '네이버 주식회사 (00266961)';
+    if (docTitleEl) docTitleEl.innerText = `제 ${gisu} 기 연결재무제표 (포괄손익계산서)`;
+    if (thstrmColHeader) thstrmColHeader.innerText = `제 ${gisu} 기 (${yr}년)`;
+    if (frmtrmColHeader) frmtrmColHeader.innerText = `제 ${gisu - 1} 기 (${prevYr}년)`;
+  } else if (compId === 'starbucks') {
+    // 스타벅스(SCK): 2023년=26기, 2024년=27기, 2025년=28기
+    const gisu = 26 + (yr - 2023);
+    if (corpHeaderEl) corpHeaderEl.innerText = '주식회사 에스씨케이컴퍼니 (00257325)';
     if (docTitleEl) docTitleEl.innerText = `제 ${gisu} 기 연결재무제표 (손익계산서)`;
     if (thstrmColHeader) thstrmColHeader.innerText = `제 ${gisu} 기 (${yr}년)`;
     if (frmtrmColHeader) frmtrmColHeader.innerText = `제 ${gisu - 1} 기 (${prevYr}년)`;
@@ -853,6 +970,8 @@ function updateLiveSpendMetaphor(companyId, spendAmount) {
   if (companyId === 'hyundai') approxRev = 175000000000000;
   if (companyId === 'olive') approxRev = 4800000000000;
   if (companyId === 'musinsa') approxRev = 1000000000000;
+  if (companyId === 'naver') approxRev = 10000000000000;
+  if (companyId === 'starbucks') approxRev = 3000000000000;
 
   const contributionPct = ((spendAmount / approxRev) * 100).toFixed(7);
   if (spendContribEl) {
@@ -1257,6 +1376,69 @@ async function loadCompanyDetails(id, year = '') {
           op_profit: { growth_yoy: '+54.0%' },
           net_profit: { growth_yoy: '+53.7%' }
         }
+      },
+      musinsa: {
+        company: { name: '무신사', icon: '👕', category_name: '패션 & 커머스', highlight: '거래액 4조 돌파 🛍️' },
+        financials: {
+          revenue: '9,931억', cost: '9,073억', operating_profit: '858억 (8.6%)', net_profit: '670억 (6.7%)',
+          raw_revenue: 993100000000, raw_cost: 907300000000, raw_op_profit: 85800000000, raw_net_profit: 67000000000
+        },
+        ai_summary: {
+          summary: [
+            '연간 거래액 4조 원을 돌파하며 국내 1등 패션 플랫폼으로 확고히 자리잡았습니다.',
+            '29CM 합병 시너지로 여성 패션 카테고리 점유율을 크게 확대했습니다.',
+            '무신사 스탠다드 오프라인 매장 확장을 통해 O2O 시너지를 극대화하고 있습니다.'
+          ],
+          good_points: ['1030 세대 패션 시장 지배력과 막강한 팬덤', '자체 PB(무신사 스탠다드)의 고마진 성장'],
+          risks: ['C-커머스 초저가 패션 공세', '오프라인 매장 출점에 따른 고정비 부담']
+        },
+        visual_pipeline: {
+          revenue: { growth_yoy: '+40.2%' },
+          op_profit: { growth_yoy: '+60.4%' },
+          net_profit: { growth_yoy: '+86.1%' }
+        }
+      },
+      naver: {
+        company: { name: '네이버', icon: '🟢', category_name: '포털 & 커머스 & AI', highlight: '연간 매출 9.6조 🌐' },
+        financials: {
+          revenue: '9조 6,706억', cost: '8조 1,818억', operating_profit: '1조 4,888억 (15.4%)', net_profit: '9,880억 (10.2%)',
+          raw_revenue: 9670600000000, raw_cost: 8181800000000, raw_op_profit: 1488800000000, raw_net_profit: 988000000000
+        },
+        ai_summary: {
+          summary: [
+            '검색, 커머스, 핀테크, 콘텐츠 전 사업부가 고르게 성장해 역대 최대 매출을 기록했습니다.',
+            '네이버페이와 스마트스토어의 강력한 결합으로 커머스 생태계를 락인했습니다.',
+            '생성형 AI 하이퍼클로바X를 중심으로 B2B AI 솔루션 사업을 확장하고 있습니다.'
+          ],
+          good_points: ['국내 1위 검색 포털 기반의 강력한 트래픽 락인', '네이버웹툰 미국 상장 등 글로벌 콘텐츠 IP 파워'],
+          risks: ['빅테크 AI 경쟁 심화', '유튜브/SNS로의 검색 트래픽 분산 우려']
+        },
+        visual_pipeline: {
+          revenue: { growth_yoy: '+17.6%' },
+          op_profit: { growth_yoy: '+14.1%' },
+          net_profit: { growth_yoy: '+46.8%' }
+        }
+      },
+      starbucks: {
+        company: { name: '스타벅스 (SCK컴퍼니)', icon: '☕', category_name: '식음료 & 카페', highlight: '커피 프랜차이즈 1위 ☕' },
+        financials: {
+          revenue: '2조 9,295억', cost: '2조 7,897억', operating_profit: '1,398억 (4.8%)', net_profit: '980억 (3.3%)',
+          raw_revenue: 2929500000000, raw_cost: 2789700000000, raw_op_profit: 139800000000, raw_net_profit: 98000000000
+        },
+        ai_summary: {
+          summary: [
+            '연간 매출 약 2조 9,295억 원으로 국내 커피 전문점 시장 1위 독주 체제를 유지했습니다.',
+            '원두 및 원자재 가격 상승에도 사이렌오더와 MD 굿즈 판매로 실적을 방어했습니다.',
+            '전국 1,890여 개 매장 100% 직영 운영을 통해 고품질 서비스를 균일하게 제공합니다.'
+          ],
+          good_points: ['스타벅스 카드 선불충전금(약 3,000억) 기반의 막강한 현금 유동성', '두터운 매니아 고객층'],
+          risks: ['저가 커피 프랜차이즈의 빠른 점포 확장', '원자재 원가 상승에 따른 마진율 압박']
+        },
+        visual_pipeline: {
+          revenue: { growth_yoy: '+12.9%' },
+          op_profit: { growth_yoy: '+14.2%' },
+          net_profit: { growth_yoy: '-1.3%' }
+        }
       }
     };
 
@@ -1367,6 +1549,26 @@ const FALLBACK_QUIZZES = {
       { text: '배송비 전액 유료화 정책', is_correct: false }
     ],
     explanation: '무신사는 20대 패션 플랫폼 1위 지배력을 바탕으로 중개 수수료와 가성비/고품질 PB인 무신사 스탠다드 오프라인 매장 확장을 통해 성장하고 있습니다.'
+  },
+  naver: {
+    question: '네이버의 연간 매출이 9.6조 원을 돌파하며 역대 최대를 기록할 수 있었던 주요 요인은 무엇일까요?',
+    options: [
+      { text: '검색 광고, 커머스(스마트스토어), 네이버페이, 웹툰 등 전 사업부의 고른 성장', is_correct: true },
+      { text: '네이버 검색 서비스를 전면 유료 구독제로 전환했기 때문', is_correct: false },
+      { text: '국내 모든 포털 사이트를 강제 인수합병했기 때문', is_correct: false },
+      { text: '스마트폰 하드웨어 자체 제조 및 판매 수익 덕분', is_correct: false }
+    ],
+    explanation: '네이버는 핵심 검색 광고뿐만 아니라 네이버페이, 스마트스토어 커머스, 글로벌 네이버웹툰 성장에 힘입어 사상 최대 실적을 달성했습니다.'
+  },
+  starbucks: {
+    question: '스타벅스 코리아(SCK컴퍼니)의 전국 1,890여 개 매장 운영 방식의 가장 큰 특징은 무엇일까요?',
+    options: [
+      { text: '개인 가맹점 없이 전 매장을 100% 본사 직영으로만 운영', is_correct: true },
+      { text: '모든 매장을 100% 개인 가맹점으로만 운영', is_correct: false },
+      { text: '배달 전용 공유주방 형태로만 운영', is_correct: false },
+      { text: '주말에만 오픈하는 팝업스토어 형태 운영', is_correct: false }
+    ],
+    explanation: '스타벅스 코리아는 철저한 품질 및 브랜드 관리를 위해 가맹 사업을 하지 않고 전 매장을 100% 본사 직영점으로 운영합니다.'
   }
 };
 
